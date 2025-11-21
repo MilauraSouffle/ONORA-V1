@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  @apply bg-gradient-to-br from-[#002C5F] via-[#001a3d] to-[#000814] text-white;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-[#FF7F50] to-[#FFB380] bg-clip-text text-transparent;
+  }
+  
+  .border-gradient {
+    border-image: linear-gradient(135deg, #FF7F50, #002C5F) 1;
+  }
+}
+
+main {
+  min-height: calc(100vh - 5rem); /* Adjust 5rem based on footer height */
+}
