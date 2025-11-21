@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import StaticNoise from './StaticNoise';
 
 // --- ASSETS ---
 const ASSETS = {
     robotVideo: "https://ik.imagekit.io/bupjuxqi6/Design%20sans%20titre.mp4",
     mainLogo: "https://ik.imagekit.io/bupjuxqi6/ONORA%20log%20de%CC%81toure%CC%81.png?updatedAt=1763629897161",
-    logoSkriib: "https://ik.imagekit.io/bupjuxqi6/logo%20SkriiB%20copie.png?updatedAt=1763629897597",
-    logoSiion: "https://ik.imagekit.io/bupjuxqi6/logo%20SiioN.png?updatedAt=1763629897926",
-    logoCliip: "https://ik.imagekit.io/bupjuxqi6/logo%20CliiP%20copie.png?updatedAt=1763629897887",
-    logoHackiing: "https://ik.imagekit.io/bupjuxqi6/Logo%20HackiinG.png?updatedAt=1763629897814"
+    logoSkriib: "https://ik.imagekit.io/bupjuxqi6/logo%20SkriiB%20(1).png?updatedAt=1763629897296",
+    logoSiion: "https://ik.imagekit.io/bupjuxqi6/logo%20SiioN%20(1).png?updatedAt=1763629897489",
+    logoCliip: "https://ik.imagekit.io/bupjuxqi6/logo%20CliiP%20(1)%20copie.png?updatedAt=1763629897294",
+    logoHackiing: "https://ik.imagekit.io/bupjuxqi6/Logo%20HackiinG%20(1).png?updatedAt=1763629897494"
 };
-
-import StaticNoise from './StaticNoise';
 
 // --- CARTE APP ---
 const AppCard = ({ title, logo, link }) => (
@@ -19,13 +18,16 @@ const AppCard = ({ title, logo, link }) => (
         href={link}
         target="_blank"
         rel="noopener noreferrer"
-        whileHover={{ scale: 1.05, y: -5 }}
+        whileHover={{ scale: 1.1, rotate: 2 }}
         whileTap={{ scale: 0.95 }}
-        className="relative group cursor-pointer flex flex-col items-center"
+        className="relative group cursor-pointer flex flex-col items-center justify-center"
     >
-        <div className="relative w-20 h-20 md:w-28 md:h-28 rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-white/5 backdrop-blur-sm transition-all duration-500 group-hover:border-blue-400/50 group-hover:shadow-[0_0_30px_rgba(59,130,246,0.2)]">
-            <img src={logo} alt={title} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
-        </div>
+        {/* Image seule, sans cadre, taille augmentée */}
+        <img
+            src={logo}
+            alt={title}
+            className="w-32 h-32 md:w-56 md:h-56 object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-all duration-500 group-hover:drop-shadow-[0_0_30px_rgba(59,130,246,0.6)]"
+        />
         <h3 className="mt-3 text-gray-400 text-xs tracking-[0.2em] uppercase group-hover:text-white transition-colors">{title}</h3>
     </motion.a>
 );
@@ -101,7 +103,7 @@ export default function OnoraIntro({ onComplete }) {
                         <img
                             src={ASSETS.mainLogo}
                             alt="ONORA"
-                            className="h-20 md:h-24 object-contain cursor-pointer hover:opacity-80 transition-opacity"
+                            className="h-32 md:h-48 object-contain cursor-pointer hover:opacity-80 transition-opacity"
                             onClick={() => window.location.reload()}
                         />
                         <button
@@ -115,6 +117,7 @@ export default function OnoraIntro({ onComplete }) {
                     {/* VIDEO BACKGROUND */}
                     <motion.div
                         className="absolute inset-0 z-0"
+                        initial={{ opacity: 0 }}
                         animate={{ opacity: phase === 'apps' ? 0 : 1 }}
                         transition={{ duration: 1.5, ease: "easeInOut" }}
                     >
@@ -145,13 +148,25 @@ export default function OnoraIntro({ onComplete }) {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ duration: 1 }}
-                            className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[radial-gradient(circle_at_center,#1a1a1a_0%,#000000_100%)]"
+                            className="absolute inset-0 z-20 flex flex-col items-center justify-center overflow-hidden"
                         >
+                            {/* Dynamic AI Background (Aurora Effect) */}
+                            <div className="absolute inset-0 bg-black">
+                                <motion.div
+                                    animate={{
+                                        scale: [1, 1.2, 1],
+                                        rotate: [0, 15, -15, 0],
+                                    }}
+                                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                                    className="absolute -top-[50%] -left-[50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.15)_0%,transparent_50%),radial-gradient(circle_at_top_right,rgba(99,102,241,0.15)_0%,transparent_50%),radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.15)_0%,transparent_50%)] blur-[100px]"
+                                />
+                            </div>
+
                             <motion.div
                                 initial={{ scale: 0.8, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
                                 transition={{ delay: 0.2, duration: 1.2, ease: "easeOut" }}
-                                className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16"
+                                className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 relative z-10"
                             >
                                 <AppCard title="SKriiB" logo={ASSETS.logoSkriib} link="#" />
                                 <AppCard title="SiiON" logo={ASSETS.logoSiion} link="#" />
@@ -159,15 +174,20 @@ export default function OnoraIntro({ onComplete }) {
                                 <AppCard title="HACKiinG" logo={ASSETS.logoHackiing} link="#" />
                             </motion.div>
 
-                            {/* Scroll Indicator */}
+                            {/* Modern Scroll Indicator (Mouse Animation) */}
                             <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 1.5, duration: 1 }}
-                                className="absolute bottom-10 flex flex-col items-center gap-2 opacity-50 animate-bounce"
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 2, duration: 1 }}
+                                className="absolute bottom-6 flex flex-col items-center gap-3 z-20 opacity-60 mix-blend-difference"
                             >
-                                <span className="text-[10px] uppercase tracking-widest">Scroll to Explore</span>
-                                <div className="w-[1px] h-8 bg-gradient-to-b from-white to-transparent"></div>
+                                <div className="w-[20px] h-[32px] border-[1.5px] border-white/80 rounded-full flex justify-center p-1">
+                                    <motion.div
+                                        animate={{ y: [0, 6, 0] }}
+                                        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                                        className="w-[2px] h-[6px] bg-white rounded-full"
+                                    />
+                                </div>
                             </motion.div>
                         </motion.div>
                     )}
