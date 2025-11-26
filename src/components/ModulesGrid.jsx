@@ -47,7 +47,7 @@ const modules = [
 export default function ModulesGrid() {
   return (
     <div className="w-full mt-16">
-      <p className="text-xs tracking-[0.5em] uppercase text-gray-400 mb-8 text-center font-medium">
+      <p className="text-xs tracking-[0.5em] uppercase text-gray-800 mb-8 text-center font-medium">
         ONORA · MODULES
       </p>
 
@@ -66,17 +66,17 @@ export default function ModulesGrid() {
               whileHover={{ scale: 1.15 }}
               className="relative flex items-center justify-center w-full"
             >
-              {/* Logo seul avec effet glow au hover */}
+              {/* Logo seul avec effet glow SUBTIL au hover */}
               <div className="relative">
                 <img
                   src={m.logo}
                   alt={m.name}
-                  className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 object-contain transition-all duration-300 drop-shadow-2xl"
+                  className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 object-contain transition-all duration-300 drop-shadow-2xl relative z-10"
                 />
                 
-                {/* Effet de glow au hover */}
+                {/* Effet de glow SUBTIL au hover - réduit et moins opaque */}
                 <div
-                  className={`absolute inset-0 opacity-0 group-hover:opacity-100 blur-2xl transition-opacity duration-300 pointer-events-none ${
+                  className={`absolute inset-0 opacity-0 group-hover:opacity-30 blur-xl transition-opacity duration-300 pointer-events-none z-0 ${
                     m.color === "cyan"
                       ? "bg-cyan-400"
                       : m.color === "orange"
@@ -86,22 +86,22 @@ export default function ModulesGrid() {
                       : "bg-purple-400"
                   }`}
                   style={{
-                    transform: 'scale(1.2)',
+                    transform: 'scale(1.05)',
                   }}
                 />
               </div>
             </motion.div>
 
-            {/* Title image EN DEHORS, agrandie x4 */}
-            <div className="flex flex-col items-center gap-4 mt-8 w-full">
+            {/* Title image EN DEHORS, agrandie x3 et remontée */}
+            <div className="flex flex-col items-center gap-4 mt-4 w-full">
               <img
                 src={m.title}
                 alt={`${m.name} Title`}
-                className="h-16 sm:h-20 md:h-24 lg:h-28 xl:h-32 w-auto object-contain opacity-100 transition-opacity duration-300 group-hover:opacity-90"
+                className="h-48 sm:h-56 md:h-64 lg:h-72 xl:h-80 w-auto object-contain opacity-100 transition-opacity duration-300 group-hover:opacity-90"
               />
               
               {/* Slogan en dessous */}
-              <span className="text-sm md:text-base lg:text-lg text-gray-200 text-center max-w-[20rem] leading-tight drop-shadow-md font-medium">
+              <span className="text-sm md:text-base lg:text-lg text-gray-800 text-center max-w-[20rem] leading-tight drop-shadow-md font-medium">
                 {m.tagline}
               </span>
             </div>

@@ -1,6 +1,6 @@
 // src/App.jsx
 import React, { useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import SystemBoot from "./components/SystemBoot";
 import AIAssistant from "./components/AIAssistant";
@@ -18,6 +18,22 @@ import Scan from "./pages/Scan";
 function App() {
   const [bootDone, setBootDone] = useState(false);
   const [isAIActive, setIsAIActive] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogoClick = (e) => {
+    e.preventDefault();
+    if (location.pathname === '/') {
+      // Si on est sur la landing, scroll to top
+      const scrollContainer = document.querySelector('.dashboard-scroll');
+      if (scrollContainer) {
+        scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    } else {
+      // Sinon, retourner à l'accueil
+      navigate('/');
+    }
+  };
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center text-white relative z-10">
@@ -69,14 +85,17 @@ function App() {
             }
           `}
         >
-          <Link to="/" className="flex items-center gap-2 md:gap-3 hover:opacity-80 transition-opacity">
+          <button 
+            onClick={handleLogoClick}
+            className="flex items-center gap-2 md:gap-3 hover:opacity-80 transition-opacity cursor-pointer"
+          >
             <img 
               src="/logo/onora-logo.png" 
               alt="ONORA" 
               className="w-6 h-6 md:w-7 md:h-7 object-contain"
             />
-            <span className="text-[10px] md:text-[11px] text-gray-200 font-medium">ONORA.STUDIO</span>
-          </Link>
+            <span className="text-[10px] md:text-[11px] text-gray-900 font-medium">ONORA.STUDIO</span>
+          </button>
 
           <div className="flex items-center gap-2">
             <AIAssistant isActive={isAIActive} onToggle={() => setIsAIActive(!isAIActive)} />

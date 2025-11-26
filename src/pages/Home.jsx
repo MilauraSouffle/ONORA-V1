@@ -91,7 +91,7 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.6 }}
-                className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)] tracking-tight"
+                className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight drop-shadow-[0_4px_20px_rgba(255,255,255,0.9)] tracking-tight"
               >
                 Les agences sont mortes.
                 <br />
@@ -103,7 +103,7 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6, duration: 0.6 }}
-                className="text-lg md:text-xl lg:text-2xl text-gray-200 max-w-3xl mx-auto leading-relaxed drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]"
+                className="text-lg md:text-xl lg:text-2xl text-gray-800 max-w-3xl mx-auto leading-relaxed drop-shadow-[0_2px_10px_rgba(255,255,255,0.8)]"
               >
                 IA, automatisation, no-code et design spatial pour les petites entreprises ambitieuses.
               </motion.h2>
@@ -117,7 +117,7 @@ export default function Home() {
               >
                 <Link
                   to="#modules"
-                  className="inline-flex items-center justify-center px-8 md:px-12 py-4 md:py-5 rounded-[2rem] bg-white/10 backdrop-blur-2xl border border-white/20 text-white font-semibold text-lg md:text-xl hover:bg-white/15 hover:border-white/30 transition-all duration-300 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.9)]"
+                  className="inline-flex items-center justify-center px-8 md:px-12 py-4 md:py-5 rounded-[2rem] bg-white/10 backdrop-blur-2xl border border-white/20 text-gray-900 font-semibold text-lg md:text-xl hover:bg-white/15 hover:border-white/30 transition-all duration-300 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.9)]"
                 >
                   Découvrir le Système ONORA
                 </Link>
@@ -149,10 +149,10 @@ export default function Home() {
           
           <div className="max-w-6xl mx-auto relative z-10">
             <div className="text-center mb-8 md:mb-12">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 drop-shadow-[0_2px_12px_rgba(255,255,255,0.9)]">
                 Tes studios ONORA
               </h2>
-              <p className="text-base md:text-lg text-gray-300 max-w-3xl mx-auto drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+              <p className="text-base md:text-lg text-gray-800 max-w-3xl mx-auto drop-shadow-[0_2px_8px_rgba(255,255,255,0.8)]">
                 ONORA = SKRIIB (contenu), CLiiP (créa rapide), SiioN (data / IA
                 avancée), HACKiinG (automations & agents IA).
               </p>

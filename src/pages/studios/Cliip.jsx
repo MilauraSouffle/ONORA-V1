@@ -33,7 +33,7 @@ export default function Cliip() {
           <div className="h-16 flex items-center justify-between px-6 border-b border-white/10 bg-white/5 backdrop-blur-md">
             <Link
               to="/"
-              className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors"
+              className="flex items-center gap-2 text-gray-800 hover:text-gray-900 transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
               <span className="text-sm font-medium">Retour</span>
@@ -67,9 +67,9 @@ export default function Cliip() {
                 <img
                   src="/logos/cliip-title.png"
                   alt="CLiiP"
-                  className="h-12 md:h-16 w-auto mx-auto object-contain"
+                  className="h-60 md:h-80 lg:h-96 xl:h-[28rem] w-auto mx-auto object-contain"
                 />
-                <p className="text-lg text-gray-300">Design. Motion. Impact.</p>
+                <p className="text-lg text-gray-800 font-medium">Design. Motion. Impact.</p>
               </motion.div>
 
               {/* Cartes visuelles */}
@@ -82,8 +82,8 @@ export default function Cliip() {
                   className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-6 space-y-4"
                 >
                   <Video className="w-10 h-10 text-orange-400" />
-                  <h3 className="text-xl font-bold text-white">Vidéos & Shorts</h3>
-                  <p className="text-sm text-gray-300">
+                  <h3 className="text-xl font-bold text-gray-900">Vidéos & Shorts</h3>
+                  <p className="text-sm text-gray-800">
                     Contenu vidéo percutant pour maximiser l'engagement.
                   </p>
                 </motion.div>
@@ -96,8 +96,8 @@ export default function Cliip() {
                   className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-6 space-y-4"
                 >
                   <Image className="w-10 h-10 text-orange-400" />
-                  <h3 className="text-xl font-bold text-white">Assets Média</h3>
-                  <p className="text-sm text-gray-300">
+                  <h3 className="text-xl font-bold text-gray-900">Assets Média</h3>
+                  <p className="text-sm text-gray-800">
                     Visuels qui marquent et communiquent ton identité.
                   </p>
                 </motion.div>
@@ -110,8 +110,8 @@ export default function Cliip() {
                   className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-6 space-y-4"
                 >
                   <Palette className="w-10 h-10 text-orange-400" />
-                  <h3 className="text-xl font-bold text-white">Identité Visuelle</h3>
-                  <p className="text-sm text-gray-300">
+                  <h3 className="text-xl font-bold text-gray-900">Identité Visuelle</h3>
+                  <p className="text-sm text-gray-800">
                     Une identité forte qui te démarque de la concurrence.
                   </p>
                 </motion.div>
@@ -124,12 +124,12 @@ export default function Cliip() {
                 transition={{ delay: 0.6 }}
                 className="text-center pt-8 border-t border-white/10"
               >
-                <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
                   Commencer avec CLiiP
                 </h2>
                 <Link
                   to="/#waitlist"
-                  className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white font-semibold hover:bg-white/15 hover:border-white/30 transition-all duration-300"
+                  className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-gray-900 font-semibold hover:bg-white/15 hover:border-white/30 transition-all duration-300"
                 >
                   Parler de CLiiP dans mon audit
                 </Link>
