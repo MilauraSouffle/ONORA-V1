@@ -26,23 +26,24 @@ export default function HackiingSprint() {
   };
 
   return (
-    <section className="w-full py-16 md:py-24 px-4 md:px-6">
-      <div className="max-w-6xl mx-auto">
+    <section className="w-full py-16 md:py-24 px-4 md:px-6 relative">
+      <div className="absolute inset-0 bg-black/15 backdrop-blur-sm pointer-events-none" />
+      
+      <div className="max-w-6xl mx-auto relative z-10">
         {/* Header */}
         <div className="text-center mb-12 md:mb-16">
           <p className="text-xs tracking-[0.35em] uppercase text-gray-400 mb-4">
             HACKiinG · SPRINT 48H
           </p>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
             MVP IA en 48h, calibré sur ton business.
           </h2>
-          <p className="text-base md:text-lg text-gray-400 max-w-3xl mx-auto">
-            HACKiinG = studio "Automations & Agents IA". Tu choisis le secteur,
-            la tâche la plus chronophage, le nombre d'heures perdues → l'IA
-            propose un agent IA concret + gain de temps + ROI estimé.
+          <p className="text-base md:text-lg text-gray-300 max-w-3xl mx-auto drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+            Studio "Automations & Agents IA". MVP IA à partir de 300 €.
+            L'objectif : faire gagner du temps et mesurer un ROI simple.
           </p>
-          <div className="mt-6 text-sm text-gray-500">
-            À partir de 290 € · places limitées / mois
+          <div className="mt-6 text-sm md:text-base text-gray-400">
+            À partir de 300 € · places limitées / mois
           </div>
         </div>
 

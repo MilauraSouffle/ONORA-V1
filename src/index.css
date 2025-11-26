@@ -14,6 +14,26 @@
   box-sizing: border-box;
 }
 
+/* Masquer le curseur natif sauf pour les inputs et mobile */
+@media (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
+
+  input,
+  textarea,
+  select {
+    cursor: text !important;
+  }
+
+  a,
+  button,
+  [role="button"],
+  .cursor-pointer {
+    cursor: none !important;
+  }
+}
+
 body {
   margin: 0;
   padding: 0;
