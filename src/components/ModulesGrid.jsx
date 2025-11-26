@@ -1,5 +1,5 @@
 // src/components/ModulesGrid.jsx
-// Grille d'apps flottantes style VisionOS 2.0
+// Grille de logos flottants style VisionOS 2.0 - Version simplifiée sans cartes
 
 import React from "react";
 import { Link } from "react-router-dom";
@@ -9,7 +9,7 @@ const modules = [
   {
     id: "skriib",
     name: "SKRIIB",
-    logo: "/logos/logo SkriiB.jpg",
+    logo: "/logos/logo-skriib.png",
     title: "/logos/skriib-title.png",
     tagline: "Human. Digital. Intelligent.",
     color: "cyan",
@@ -18,7 +18,7 @@ const modules = [
   {
     id: "cliip",
     name: "CLiiP",
-    logo: "/logos/logo CliiP.jpg",
+    logo: "/logos/logo-cliip.png",
     title: "/logos/cliip-title.png",
     tagline: "Design. Motion. Impact.",
     color: "orange",
@@ -27,7 +27,7 @@ const modules = [
   {
     id: "siion",
     name: "SIION",
-    logo: "/logos/logo SiioN.jpg",
+    logo: "/logos/logo-siion.png",
     title: "/logos/siion-title.png",
     tagline: "Intelligence augmentée.",
     color: "emerald",
@@ -36,7 +36,7 @@ const modules = [
   {
     id: "hackiing",
     name: "HACKiinG",
-    logo: "/logos/logo HackiinG.jpg",
+    logo: "/logos/logo-hackiing.png",
     title: "/logos/hackiing-title.png",
     tagline: "Ton temps, multiplié.",
     color: "purple",
@@ -51,80 +51,57 @@ export default function ModulesGrid() {
         ONORA · MODULES
       </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 place-items-center">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-16 lg:gap-20 place-items-center">
         {modules.map((m, index) => (
           <Link
             key={m.id}
             to={m.path}
-            className="group"
+            className="group flex flex-col items-center w-full"
           >
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ scale: 1.05, y: -8 }}
-              className="relative w-full max-w-[200px] rounded-[2rem] border border-white/10 bg-white/10 backdrop-blur-2xl overflow-hidden transition-all duration-300"
-              style={{
-                boxShadow: '0 25px 50px -12px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.05) inset'
-              }}
+              whileHover={{ scale: 1.15 }}
+              className="relative flex items-center justify-center w-full"
             >
-              {/* Gradient overlay par couleur au hover */}
-              <div
-                className={`absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${
-                  m.color === "cyan"
-                    ? "bg-[radial-gradient(circle_at_center,rgba(34,211,238,0.15),transparent)]"
-                    : m.color === "orange"
-                    ? "bg-[radial-gradient(circle_at_center,rgba(251,146,60,0.15),transparent)]"
-                    : m.color === "emerald"
-                    ? "bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.15),transparent)]"
-                    : "bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.15),transparent)]"
-                }`}
-              />
-
-              {/* Surbrillance interne au hover */}
-              <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent" />
+              {/* Logo seul avec effet glow au hover */}
+              <div className="relative">
+                <img
+                  src={m.logo}
+                  alt={m.name}
+                  className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 object-contain transition-all duration-300 drop-shadow-2xl"
+                />
+                
+                {/* Effet de glow au hover */}
+                <div
+                  className={`absolute inset-0 opacity-0 group-hover:opacity-100 blur-2xl transition-opacity duration-300 pointer-events-none ${
+                    m.color === "cyan"
+                      ? "bg-cyan-400"
+                      : m.color === "orange"
+                      ? "bg-orange-400"
+                      : m.color === "emerald"
+                      ? "bg-emerald-400"
+                      : "bg-purple-400"
+                  }`}
+                  style={{
+                    transform: 'scale(1.2)',
+                  }}
+                />
               </div>
-
-              {/* Contenu de la carte */}
-              <div className="relative p-6 space-y-4">
-                {/* Logo détouré en grand */}
-                <div className="flex justify-center">
-                  <img
-                    src={m.logo}
-                    alt={m.name}
-                    className="w-24 h-24 md:w-28 md:h-28 object-contain transition-transform duration-300 group-hover:scale-110"
-                  />
-                </div>
-
-                {/* Title image */}
-                <div className="flex justify-center">
-                  <img
-                    src={m.title}
-                    alt={`${m.name} Title`}
-                    className="h-8 md:h-10 w-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity"
-                  />
-                </div>
-              </div>
-
-              {/* Effet de glow au hover */}
-              <div
-                className={`absolute -inset-1 opacity-0 group-hover:opacity-40 blur-xl transition-opacity duration-300 ${
-                  m.color === "cyan"
-                    ? "bg-cyan-400"
-                    : m.color === "orange"
-                    ? "bg-orange-400"
-                    : m.color === "emerald"
-                    ? "bg-emerald-400"
-                    : "bg-purple-400"
-                }`}
-              />
             </motion.div>
 
-            {/* Slogan en dessous */}
-            <div className="flex flex-col items-center gap-1.5 mt-4">
-              <span className="text-sm text-gray-200 text-center max-w-[12rem] leading-tight drop-shadow-md">
+            {/* Title image EN DEHORS, agrandie x4 */}
+            <div className="flex flex-col items-center gap-4 mt-8 w-full">
+              <img
+                src={m.title}
+                alt={`${m.name} Title`}
+                className="h-16 sm:h-20 md:h-24 lg:h-28 xl:h-32 w-auto object-contain opacity-100 transition-opacity duration-300 group-hover:opacity-90"
+              />
+              
+              {/* Slogan en dessous */}
+              <span className="text-sm md:text-base lg:text-lg text-gray-200 text-center max-w-[20rem] leading-tight drop-shadow-md font-medium">
                 {m.tagline}
               </span>
             </div>

@@ -59,9 +59,9 @@ export default function Hackiing() {
               >
                 <div className="flex justify-center">
                   <img
-                    src="/logos/logo HackiinG.jpg"
+                    src="/logos/logo-hackiing.png"
                     alt="HACKiinG Logo"
-                    className="w-24 h-24 md:w-32 md:h-32 object-contain"
+                    className="w-32 h-32 md:w-40 md:h-40 object-contain"
                   />
                 </div>
                 <img
