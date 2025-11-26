@@ -6,35 +6,34 @@ const Footer = () => {
 
   const footerLinks = [
     { name: 'Accueil', path: '/' },
-    { name: 'Audit', path: '/audit' },
-    { name: 'Portfolio', path: '/portfolio' },
+    { name: 'À propos', path: '/about' },
     { name: 'Contact', path: '/contact' },
-    { name: 'Mentions légales', path: '/mentions-legales' },
+    { name: 'Mentions légales', path: '/legal' },
   ];
 
   return (
-    <footer className="bg-[#000814] py-12 px-6 border-t border-white/10">
-      <div className="container mx-auto max-w-6xl">
-        <div className="flex flex-col items-center gap-6">
+    <footer className="w-full py-8 md:py-12 px-4 md:px-6 border-t border-white/10 mt-16">
+      <div className="max-w-6xl mx-auto">
+        <div className="flex flex-col items-center gap-4 md:gap-6">
           
-          <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+          <nav className="flex flex-wrap justify-center gap-x-4 md:gap-x-6 gap-y-2">
             {footerLinks.map((link) => (
               <Link
                 key={link.name}
                 to={link.path}
-                className="text-white/60 hover:text-[#FF7F50] transition-colors text-sm"
+                className="text-gray-400 hover:text-cyan-400 transition-colors text-xs md:text-sm"
               >
                 {link.name}
               </Link>
             ))}
           </nav>
 
-          <p className="text-white/60 text-sm text-center">
-            Propulsé par IA. Créé avec SkriiB.
+          <p className="text-gray-500 text-xs md:text-sm text-center">
+            Propulsé par IA. Créé avec ONORA.
           </p>
 
-          <p className="text-white/40 text-sm">
-            © {currentYear} SkriiB
+          <p className="text-gray-600 text-xs">
+            © {currentYear} ONORA
           </p>
         </div>
       </div>

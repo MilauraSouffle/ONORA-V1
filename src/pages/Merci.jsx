@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { CheckCircle, ArrowLeft } from 'lucide-react';
 
@@ -14,8 +14,9 @@ const Merci = () => {
       className="container mx-auto px-6 py-16 flex items-center justify-center min-h-[calc(100vh-10rem)]"
     >
       <Helmet>
-        <title>Merci ! Ton audit est en préparation - SkriiB</title>
-        <meta name="description" content="Confirmation de ta demande d'audit digital chez SkriiB. Notre équipe analyse ton site et te notifie sous 48h." />
+        <title>Merci ! Ton audit est en préparation - ONORA</title>
+        <meta name="description" content="Confirmation de ta demande d'audit digital chez ONORA. Notre équipe analyse ton site et te notifie sous 48h." />
+        <meta name="robots" content="noindex" />
       </Helmet>
 
       <div className="text-center bg-white/5 p-8 md:p-12 rounded-2xl border border-white/10 max-w-2xl">

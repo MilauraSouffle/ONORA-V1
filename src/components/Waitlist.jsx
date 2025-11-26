@@ -99,9 +99,10 @@ const Waitlist = () => {
     return (
       <section
         id="waitlist"
-        className="py-24 px-6 bg-gradient-to-b from-[#001a3d] to-[#002C5F]"
+        className="w-full py-16 md:py-24 px-4 md:px-6"
       >
-        <div className="container mx-auto max-w-2xl text-center">
+        <div className="max-w-6xl mx-auto">
+          <div className="max-w-2xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -112,10 +113,11 @@ const Waitlist = () => {
               <span className="text-4xl">✓</span>
             </div>
             <h3 className="text-3xl font-bold mb-4 text-gradient">Merci !</h3>
-            <p className="text-xl text-white/80">
+            <p className="text-base md:text-lg text-gray-300">
               Ton audit est en préparation. Tu seras notifié dès qu&apos;il sera prêt.
             </p>
           </motion.div>
+          </div>
         </div>
       </section>
     );
@@ -124,9 +126,9 @@ const Waitlist = () => {
   return (
     <section
       id="waitlist"
-      className="py-24 px-6 bg-gradient-to-b from-[#001a3d] to-[#002C5F]"
+      className="w-full py-16 md:py-24 px-4 md:px-6"
     >
-      <div className="container mx-auto max-w-2xl">
+      <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -134,13 +136,14 @@ const Waitlist = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Rejoins la première <span className="text-gradient">waitlist IA</span> du
-            Luxembourg
+          <p className="text-xs tracking-[0.35em] uppercase text-gray-400 mb-4">
+            WAITLIST · AUDIT IA
+          </p>
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Rejoins la waitlist
           </h2>
-          <p className="text-xl text-white/70">
-            Inscris ta société, accède à un espace dédié, reçois ton audit et ton plan
-            d&apos;action personnalisé.
+          <p className="text-base md:text-lg text-gray-400 max-w-2xl mx-auto">
+            Laisse ton email, reçois un audit actionnable (site, visibilité, IA).
           </p>
         </motion.div>
 
@@ -150,7 +153,7 @@ const Waitlist = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
           onSubmit={handleSubmit}
-          className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 space-y-6"
+          className="bg-black/20 backdrop-blur-md rounded-xl p-6 md:p-8 border border-white/10 space-y-6 max-w-2xl mx-auto"
         >
           <div className="space-y-2">
             <Label htmlFor="company" className="text-white">

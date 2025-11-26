@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,7 +14,7 @@ const PageWrapper = ({ children }) => (
     animate={{ opacity: 1, y: 0 }}
     exit={{ opacity: 0, y: -20 }}
     transition={{ duration: 0.5 }}
-    className="container mx-auto px-6 py-16"
+    className="max-w-6xl mx-auto px-4 md:px-6 py-12 md:py-16"
   >
     {children}
   </motion.div>
@@ -34,8 +34,9 @@ const Contact = () => {
   return (
     <PageWrapper>
       <Helmet>
-        <title>Contact - Contactez un expert SkriiB</title>
-        <meta name="description" content="Discutons de ton projet et des opportunités IA pour ton business. Contactez le studio SkriiB pour toute question ou pour démarrer un projet." />
+        <title>Contact ONORA · Metz & Luxembourg</title>
+        <meta name="description" content="Contactez ONORA : studio IA & no-code à Metz et Luxembourg. Prise de RDV, audit, sprint 48h. Discutons de votre projet et des opportunités IA pour votre business." />
+        <meta name="keywords" content="contact ONORA, Metz, Luxembourg, studio IA, audit, sprint 48h, rendez-vous" />
       </Helmet>
 
       <div className="text-center mb-16">

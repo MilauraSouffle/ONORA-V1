@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 
 const PageWrapper = ({ children }) => (
   <motion.div
@@ -8,7 +8,7 @@ const PageWrapper = ({ children }) => (
     animate={{ opacity: 1, y: 0 }}
     exit={{ opacity: 0, y: -20 }}
     transition={{ duration: 0.5 }}
-    className="container mx-auto px-6 py-16"
+    className="max-w-6xl mx-auto px-4 md:px-6 py-12 md:py-16"
   >
     {children}
   </motion.div>
@@ -18,7 +18,8 @@ const Legal = () => {
   return (
     <PageWrapper>
       <Helmet>
-        <title>Mentions Légales & RGPD - SkriiB</title>
+        <title>Mentions Légales & RGPD - ONORA</title>
+        <meta name="description" content="Mentions légales et politique de confidentialité RGPD d'ONORA, studio IA & no-code à Metz et Luxembourg." />
         <meta name="robots" content="noindex" />
       </Helmet>
 

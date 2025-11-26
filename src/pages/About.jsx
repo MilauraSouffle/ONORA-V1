@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { Feather, BrainCircuit, Users, Bot, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -25,10 +25,11 @@ const teamMembers = [
 const About = () => {
   return (
     <PageWrapper>
-      <div className="container mx-auto px-6 py-16">
+      <div className="max-w-6xl mx-auto px-4 md:px-6 py-12 md:py-16">
         <Helmet>
-          <title>Notre Mission - Humaniser la Digitalisation | SkriiB</title>
-          <meta name="description" content="Découvrez notre mission : rendre la technologie IA accessible et pragmatique pour les PME au Luxembourg. Human. Digital. Intelligent." />
+          <title>À propos d'ONORA · Studio IA & No-Code</title>
+          <meta name="description" content="Découvrez ONORA : studio IA & no-code à Metz et Luxembourg. Notre mission : rendre la technologie IA accessible et pragmatique pour les PME du Grand Est." />
+          <meta name="keywords" content="ONORA, studio IA, no-code, Metz, Luxembourg, Grand Est, PME, automatisation, agents IA" />
         </Helmet>
 
         {/* --- H1 & Intro --- */}
