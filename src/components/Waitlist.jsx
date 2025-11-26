@@ -1,3 +1,7 @@
+// src/components/Waitlist.jsx
+// Composant UI officiel pour la waitlist - Utilise waitlistService
+// Version "Candidature" avec champ motivation
+
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -11,13 +15,7 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
-
-// 1) À REMPLIR AVEC TES VALEURS
-// Copie l'URL exacte de la fonction dans Edge Functions > waitlist-submit > Details
-const WAITLIST_FUNCTION_URL = 'https://vdvozheydssbkpzupgmr.supabase.co/functions/v1/waitlist-submit';
-
-// Copie la clé "anon public" depuis Settings > API Keys
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkdm96aGV5ZHNzYmtwenVwZ21yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4MjI2OTIsImV4cCI6MjA3ODM5ODY5Mn0.OiJPWBspCWZ2atYxftY70hpYAWEpwMsfPwghwXy_Gho';
+import { submitWaitlist } from '@/lib/waitlistService';
 
 const Waitlist = () => {
   const { toast } = useToast();
@@ -26,98 +24,108 @@ const Waitlist = () => {
     company: '',
     website: '',
     sector: '',
-    email: ''
+    email: '',
+    motivation: ''
   });
 
   const [submitted, setSubmitted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // validation simple
-    if (!formData.company || !formData.website || !formData.sector || !formData.email) {
+    // Validation simple - inclure motivation
+    if (!formData.company || !formData.website || !formData.sector || !formData.email || !formData.motivation) {
       toast({
         title: 'Champs manquants',
-        description: 'Merci de remplir tous les champs obligatoires.',
+        description: 'Merci de remplir tous les champs obligatoires, notamment ta motivation.',
         variant: 'destructive'
       });
       return;
     }
 
-    setIsLoading(true);
+    // Vérifier que motivation n'est pas vide après trim
+    if (!formData.motivation.trim()) {
+      toast({
+        title: 'Motivation requise',
+        description: 'Merci d\'expliquer pourquoi ton business mérite une place dans le système ONORA.',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    // Réinitialiser les états
+    setIsSubmitting(true);
+    setError(null);
 
     try {
-      const response = await fetch(WAITLIST_FUNCTION_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          // autorisation via la clé anon (safe côté front)
-          Authorization: `Bearer ${SUPABASE_ANON_KEY}`
-        },
-        body: JSON.stringify({
-          company: formData.company,
-          website: formData.website,
-          sector: formData.sector,
-          email: formData.email,
-          source: 'site_horizon'
-        })
-      });
+      // Construire le payload propre
+      const payload = {
+        company: formData.company.trim(),
+        website: formData.website.trim(),
+        sector: formData.sector,
+        email: formData.email.trim(),
+        motivation: formData.motivation.trim(),
+        source: 'site_onora'
+      };
 
-      const data = await response.json().catch(() => null);
+      // Appeler le service centralisé
+      await submitWaitlist(payload);
 
-      if (!response.ok || !data?.ok) {
-        const errorMessage =
-          data?.error?.message ||
-          data?.error ||
-          'Une erreur est survenue pendant l’enregistrement.';
-
-        throw new Error(errorMessage);
-      }
-
+      // Succès : réinitialiser et afficher le message de succès
       setSubmitted(true);
+      setFormData({ company: '', website: '', sector: '', email: '', motivation: '' });
 
       toast({
-        title: 'Merci ! 🎉',
-        description: "Ton audit est en préparation. Tu seras notifié dès qu'il sera prêt."
+        title: 'Candidature reçue ✓',
+        description: "Ton dossier vient d'entrer dans le système."
       });
-    } catch (error) {
-      console.error('Erreur waitlist:', error);
+    } catch (err) {
+      // Gérer l'erreur
+      const errorMessage =
+        err.message || 'Une erreur est survenue. Réessaie dans quelques instants.';
+      setError(errorMessage);
 
       toast({
         title: 'Oups…',
         description:
-          "Impossible d’enregistrer ton audit pour le moment. Réessaie dans quelques minutes, ou contacte SkriiB si le problème persiste.",
+          errorMessage ||
+          "Impossible d'enregistrer ta candidature pour le moment. Réessaie dans quelques minutes, ou contacte-nous si le problème persiste.",
         variant: 'destructive'
       });
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
   };
 
+  // Écran de succès - Nouveau message "Candidature reçue"
   if (submitted) {
     return (
-      <section
-        id="waitlist"
-        className="w-full py-16 md:py-24 px-4 md:px-6"
-      >
-        <div className="max-w-6xl mx-auto">
-          <div className="max-w-2xl mx-auto text-center">
+      <section id="waitlist" className="w-full py-16 md:py-24 px-4 md:px-6 relative">
+        <div className="absolute inset-0 bg-black/15 backdrop-blur-sm pointer-events-none" />
+        
+        <div className="max-w-6xl mx-auto relative z-10">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6 }}
-            className="bg-white/5 backdrop-blur-sm rounded-2xl p-12 border border-[#FF7F50]/30"
+            className="bg-white/5 backdrop-blur-sm rounded-2xl p-12 border border-[#FF7F50]/30 text-center"
           >
             <div className="w-20 h-20 bg-gradient-to-br from-[#FF7F50] to-[#FFB380] rounded-full flex items-center justify-center mx-auto mb-6">
               <span className="text-4xl">✓</span>
             </div>
-            <h3 className="text-3xl font-bold mb-4 text-gradient">Merci !</h3>
-            <p className="text-base md:text-lg text-gray-300">
-              Ton audit est en préparation. Tu seras notifié dès qu&apos;il sera prêt.
+            <h3 className="text-3xl font-bold mb-4 text-white">Candidature reçue.</h3>
+            <p className="text-base md:text-lg text-gray-300 mb-2">
+              Merci, ton dossier vient d'entrer dans le système.
+            </p>
+            <p className="text-base md:text-lg text-gray-300 mb-2">
+              Si ton profil matche avec ce qu'on construit, tu recevras un audit détaillé + un plan d'attaque sous 24 à 48h.
+            </p>
+            <p className="mt-4 text-sm text-gray-400">
+              Je préfère te dire non franchement plutôt que te laisser dans l'attente. Tu sauras exactement où tu en es.
             </p>
           </motion.div>
-          </div>
         </div>
       </section>
     );
@@ -165,6 +173,13 @@ const Waitlist = () => {
           onSubmit={handleSubmit}
           className="bg-black/30 backdrop-blur-md rounded-xl p-6 md:p-8 border border-white/10 space-y-6 max-w-2xl mx-auto"
         >
+          {/* Message d'erreur */}
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/50 rounded-lg p-3 text-sm text-red-400">
+              {error}
+            </div>
+          )}
+
           <div className="space-y-2">
             <Label htmlFor="company" className="text-white">
               Nom de la société *
@@ -182,6 +197,7 @@ const Waitlist = () => {
               className="bg-white/10 border-white/20 text-white placeholder:text-white/40"
               placeholder="Ma Super Entreprise"
               required
+              disabled={isSubmitting}
             />
           </div>
 
@@ -202,6 +218,7 @@ const Waitlist = () => {
               className="bg-white/10 border-white/20 text-white placeholder:text-white/40"
               placeholder="https://monsite.lu"
               required
+              disabled={isSubmitting}
             />
           </div>
 
@@ -217,6 +234,7 @@ const Waitlist = () => {
                   sector: value
                 })
               }
+              disabled={isSubmitting}
             >
               <SelectTrigger className="bg-white/10 border-white/20 text-white">
                 <SelectValue placeholder="Sélectionner un secteur" />
@@ -248,15 +266,44 @@ const Waitlist = () => {
               className="bg-white/10 border-white/20 text-white placeholder:text-white/40"
               placeholder="contact@monentreprise.lu"
               required
+              disabled={isSubmitting}
             />
+          </div>
+
+          {/* Nouveau champ motivation */}
+          <div className="space-y-2">
+            <Label htmlFor="motivation" className="text-white">
+              Pourquoi toi, en 2 phrases max ? *
+            </Label>
+            <textarea
+              id="motivation"
+              value={formData.motivation}
+              onChange={(e) =>
+                setFormData({ ...formData, motivation: e.target.value })
+              }
+              className="bg-white/10 border-white/20 text-white placeholder:text-white/40 w-full h-28 p-3 rounded-lg resize-none focus:outline-none focus:border-cyan-400 transition-colors"
+              placeholder="Explique-moi en quoi ton business mérite une place dans le système ONORA."
+              required
+              disabled={isSubmitting}
+            />
+            <p className="text-xs text-white/40">
+              Écris avec tes mots. N'utilise pas d'IA, je le verrai. Je veux comprendre qui tu es.
+            </p>
           </div>
 
           <Button
             type="submit"
-            disabled={isLoading}
+            disabled={isSubmitting}
             className="w-full bg-gradient-to-r from-[#FF7F50] to-[#FFB380] text-white font-semibold py-6 text-lg hover:shadow-xl hover:shadow-[#FF7F50]/50 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            {isLoading ? 'Envoi en cours…' : 'Lancer mon audit gratuit'}
+            {isSubmitting ? (
+              <span className="flex items-center justify-center gap-2">
+                <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Envoi en cours…
+              </span>
+            ) : (
+              'Lancer mon audit gratuit'
+            )}
           </Button>
 
           <p className="text-center text-sm text-white/60">

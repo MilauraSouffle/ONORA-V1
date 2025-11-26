@@ -1,3 +1,7 @@
+// LEGACY COMPONENT - Ne plus utiliser directement dans l'UI.
+// La logique de soumission est désormais centralisée dans src/lib/waitlistService.js.
+// Ce fichier reste comme référence du code Supabase direct pour le fallback du service.
+
 import React, { useState, useEffect } from 'react';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { motion } from 'framer-motion';

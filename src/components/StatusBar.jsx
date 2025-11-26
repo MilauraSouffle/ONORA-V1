@@ -20,7 +20,7 @@ export default function StatusBar({ onWaitlistClick }) {
       </div>
       <button
         onClick={onWaitlistClick}
-        className="text-red-400 md:text-orange-400 hover:text-orange-400 md:hover:text-red-400 font-mono tracking-wider cursor-pointer cursor-hover transition-colors duration-200"
+        className="text-red-400 md:text-orange-400 hover:text-orange-400 md:hover:text-red-400 font-mono tracking-wider cursor-pointer transition-colors duration-200"
       >
         OFFRE AMBASSADEUR : 87 PLACES RESTANTES
       </button>

@@ -1,8 +1,8 @@
 // src/App.jsx
 import React, { useState } from "react";
 import { Routes, Route } from "react-router-dom";
+import { Link } from "react-router-dom";
 import SystemBoot from "./components/SystemBoot";
-import IACursor from "./components/ui/IACursor";
 import AIAssistant from "./components/AIAssistant";
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -13,6 +13,7 @@ import Skriib from "./pages/studios/Skriib";
 import Cliip from "./pages/studios/Cliip";
 import Siion from "./pages/studios/Siion";
 import Hackiing from "./pages/studios/Hackiing";
+import Scan from "./pages/Scan";
 
 function App() {
   const [bootDone, setBootDone] = useState(false);
@@ -20,59 +21,65 @@ function App() {
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center text-white relative z-10">
-      {/* Curseur IA custom */}
-      {bootDone && <IACursor />}
-      
       {/* Animation de boot système */}
       {!bootDone && <SystemBoot onFinish={() => setBootDone(true)} />}
 
-      {/* Fenêtre principale type OS / Dashboard - STYLE LIQUIDE GLASS APPLE */}
+      {/* Fenêtre principale type OS / Dashboard - STYLE VISIONOS GLASS */}
       <div
           className={`
           relative z-20
           w-[96vw] max-w-6xl 
           h-[90vh] max-h-[90vh]
-          rounded-[32px]
+          rounded-[2rem]
           border
-          bg-black/5
-          backdrop-blur-xl
+          bg-white/8
+          backdrop-blur-2xl
+          -webkit-backdrop-filter: blur(2rem)
           overflow-hidden
           transition-all duration-1000 ease-out
           ${bootDone ? "opacity-100 glitch-appear" : "opacity-0"}
           ${
             isAIActive
-              ? "border-transparent bg-gradient-to-r from-cyan-500/10 via-orange-500/10 to-cyan-500/10 shadow-[0_0_80px_rgba(0,0,0,0.9),0_0_60px_rgba(34,211,238,0.2)]"
-              : "border-white/12 shadow-[0_0_80px_rgba(0,0,0,0.9)]"
+              ? "border-transparent bg-gradient-to-r from-cyan-500/15 via-orange-500/15 to-cyan-500/15 shadow-[0_0_100px_rgba(0,0,0,1),0_0_80px_rgba(34,211,238,0.3),0_0_0_1px_rgba(255,255,255,0.1)_inset]"
+              : "border-white/10 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.9),0_0_0_1px_rgba(255,255,255,0.05)_inset]"
           }
         `}
+        style={{
+          boxShadow: isAIActive
+            ? '0 0 100px rgba(0,0,0,1), 0 0 80px rgba(34,211,238,0.3), 0 0 0 1px rgba(255,255,255,0.1) inset'
+            : '0 25px 50px -12px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.05) inset'
+        }}
       >
-        {/* Barre du haut - Header transparent et bleuté */}
+        {/* Barre du haut - Header VisionOS Glass */}
         <header
           className={`
             h-14
             w-full
             flex items-center justify-between
             px-4 md:px-6
-            bg-slate-950/25
-            border-b backdrop-blur-3xl
+            bg-white/5
+            backdrop-blur-2xl
+            border-b
             text-xs tracking-[0.25em] uppercase
             transition-all duration-500
             ${
               isAIActive
-                ? "border-transparent bg-gradient-to-r from-cyan-500/20 via-orange-500/20 to-cyan-500/20 shadow-[0_0_30px_rgba(34,211,238,0.3)]"
+                ? "border-transparent bg-gradient-to-r from-cyan-500/20 via-orange-500/20 to-cyan-500/20 shadow-[0_0_40px_rgba(34,211,238,0.4)]"
                 : "border-white/10"
             }
           `}
         >
-          <div className="flex items-center gap-2 md:gap-3">
-            <div className="w-4 h-4 md:w-5 md:h-5 rounded-full border border-white/15 bg-white/5 shadow-[0_0_12px_rgba(255,255,255,0.4)]" />
-            <span className="text-[9px] md:text-[10px] text-gray-200">ONORA · SYSTEM</span>
-          </div>
+          <Link to="/" className="flex items-center gap-2 md:gap-3 hover:opacity-80 transition-opacity">
+            <img 
+              src="/logo/onora-logo.png" 
+              alt="ONORA" 
+              className="w-6 h-6 md:w-7 md:h-7 object-contain"
+            />
+            <span className="text-[10px] md:text-[11px] text-gray-200 font-medium">ONORA.STUDIO</span>
+          </Link>
 
-          <div className="flex items-center gap-1 md:gap-2 text-[9px] md:text-[10px]">
+          <div className="flex items-center gap-2">
             <AIAssistant isActive={isAIActive} onToggle={() => setIsAIActive(!isAIActive)} />
-            <span className="text-gray-300 mr-1 hidden sm:inline">AI READY</span>
-            <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.9)]" />
           </div>
         </header>
 
@@ -93,6 +100,7 @@ function App() {
               <Route path="/contact" element={<Contact />} />
               <Route path="/legal" element={<Legal />} />
               <Route path="/merci" element={<Merci />} />
+              <Route path="/scan" element={<Scan />} />
               <Route path="/studios/skriib" element={<Skriib />} />
               <Route path="/studios/cliip" element={<Cliip />} />
               <Route path="/studios/siion" element={<Siion />} />
