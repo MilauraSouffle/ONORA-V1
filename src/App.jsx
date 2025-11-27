@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
+import ScrollHint from "./components/ScrollHint";
+import CarouselPager from "./components/CarouselPager";
 
 // Imports existants
 import SystemBoot from "./components/SystemBoot";
-import AIAssistant from "./components/AIAssistant";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -15,6 +16,9 @@ import Cliip from "./pages/studios/Cliip";
 import Siion from "./pages/studios/Siion";
 import Hackiing from "./pages/studios/Hackiing";
 import Scan from "./pages/Scan";
+import UseCases from "./pages/UseCases";
+import Login from "./pages/Login";
+import Socials from "./pages/Socials";
 
 function App() {
   // --- LOGIQUE D'INITIALISATION (NO FLASH) ---
@@ -29,10 +33,42 @@ function App() {
   const shouldSkip = checkShouldSkip();
 
   const [showIntro, setShowIntro] = useState(!shouldSkip);
-  const [isAIActive, setIsAIActive] = useState(false);
+  const [activeDesktopSlide, setActiveDesktopSlide] = useState(0);
 
   const location = useLocation();
   const navigate = useNavigate();
+
+  // Écouter les changements de slide pour la navigation
+  useEffect(() => {
+    if (location.pathname !== "/") return;
+
+    const desktopSlider = document.querySelector(".onora-desktop-slider");
+    if (!desktopSlider) return;
+
+    const handleScroll = () => {
+      const { scrollLeft, clientWidth } = desktopSlider;
+      if (!clientWidth) return;
+      const index = Math.round(scrollLeft / clientWidth);
+      setActiveDesktopSlide(index);
+    };
+
+    desktopSlider.addEventListener("scroll", handleScroll);
+    handleScroll(); // Initial call
+
+    return () => {
+      desktopSlider.removeEventListener("scroll", handleScroll);
+    };
+  }, [location.pathname]);
+
+  const scrollToDesktopSlide = (index) => {
+    const desktopSlider = document.querySelector(".onora-desktop-slider");
+    if (!desktopSlider) return;
+    const width = desktopSlider.clientWidth;
+    desktopSlider.scrollTo({
+      left: width * index,
+      behavior: "smooth",
+    });
+  };
 
   const handleIntroFinish = () => {
     setShowIntro(false);
@@ -69,7 +105,7 @@ function App() {
   };
 
   return (
-    <div className="relative min-h-screen w-full flex items-center justify-center text-white overflow-hidden">
+    <div className="relative min-h-screen w-full flex items-center justify-center text-gray-900 overflow-hidden">
       {/* Background est géré par CSS (#root::before) */}
 
       {/* INTRO SYSTEMBOOT */}
@@ -91,37 +127,11 @@ function App() {
         `}
       >
         <div
-          className={`
-            relative
-            w-[96vw] max-w-6xl 
-            h-[90vh] max-h-[90vh]
-            rounded-[2rem]
-            border
-            bg-white/10
-            backdrop-blur-2xl
-            -webkit-backdrop-filter: blur(24px)
-            overflow-hidden
-            transition-all duration-500 ease-out
-            ${
-              isAIActive
-                ? "border-transparent bg-gradient-to-r from-cyan-500/10 via-orange-500/10 to-cyan-500/10 shadow-[0_0_80px_rgba(0,0,0,0.8),0_0_40px_rgba(34,211,238,0.2),0_0_0_1px_rgba(255,255,255,0.1)_inset]"
-                : "border-white/10 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.8),0_0_0_1px_rgba(255,255,255,0.05)_inset]"
-            }
-          `}
+            className="relative w-[96vw] max-w-6xl h-[90vh] max-h-[90vh] rounded-[2rem] border border-white/10 bg-white/10 backdrop-blur-2xl overflow-hidden shadow-[0_20px_40px_-10px_rgba(0,0,0,0.8),0_0_0_1px_rgba(255,255,255,0.05)_inset"
         >
           {/* HEADER */}
           <header
-            className={`
-              h-14 w-full flex items-center justify-between px-4 md:px-6
-              bg-white/8 backdrop-blur-xl border-b
-              text-xs tracking-[0.25em] uppercase
-              transition-all duration-500
-              ${
-                isAIActive
-                  ? "border-transparent bg-gradient-to-r from-cyan-500/20 via-orange-500/20 to-cyan-500/20 shadow-[0_0_40px_rgba(34,211,238,0.4)]"
-                  : "border-white/10"
-              }
-            `}
+              className="h-14 w-full flex items-center justify-between px-4 md:px-6 bg-white/8 backdrop-blur-xl border-b border-white/10 text-xs tracking-[0.25em] uppercase"
           >
             <button
               onClick={handleLogoClick}
@@ -138,10 +148,13 @@ function App() {
             </button>
 
             <div className="flex items-center gap-2">
-              <AIAssistant
-                isActive={isAIActive}
-                onToggle={() => setIsAIActive(!isAIActive)}
-              />
+              {/* Menu flottant intégré dans le header */}
+              <div className="hidden md:flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/70 backdrop-blur-2xl border border-white/10 text-[9px] md:text-[11px] text-gray-300">
+                <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-cyan-400 shadow-[0_0_12px_rgba(34,211,238,0.9)] flex-shrink-0" />
+                <span className="whitespace-nowrap">
+                  Menu ONORA · Home · Studios · Dashboard · Audit
+                </span>
+              </div>
             </div>
           </header>
 
@@ -157,30 +170,29 @@ function App() {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/legal" element={<Legal />} />
                 <Route path="/merci" element={<Merci />} />
-                <Route path="/scan" element={<Scan />} />
-                <Route path="/studios/skriib" element={<Skriib />} />
-                <Route path="/studios/cliip" element={<Cliip />} />
-                <Route path="/studios/siion" element={<Siion />} />
-                <Route path="/studios/hackiing" element={<Hackiing />} />
+                  <Route path="/scan" element={<Scan />} />
+                  <Route path="/usecases" element={<UseCases />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/socials" element={<Socials />} />
+                  <Route path="/studios/skriib" element={<Skriib />} />
+                  <Route path="/studios/cliip" element={<Cliip />} />
+                  <Route path="/studios/siion" element={<Siion />} />
+                  <Route path="/studios/hackiing" element={<Hackiing />} />
               </Routes>
             </div>
+            
+            {/* Navigation et Scroll Hint - En arrière-plan, visible à travers les bulles */}
+            {location.pathname === "/" && (
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-[1] flex items-center justify-center gap-4 pointer-events-auto">
+                <ScrollHint />
+                <CarouselPager
+                  totalSlides={5}
+                  activeIndex={activeDesktopSlide}
+                  onSlideChange={scrollToDesktopSlide}
+                />
+              </div>
+            )}
           </main>
-        </div>
-
-        {/* MENU FLOTTANT */}
-        <div className="fixed bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 z-50 w-[95vw] md:w-auto">
-          <div
-            className="
-              flex items-center gap-2 md:gap-4 px-4 md:px-6 py-2 rounded-full
-              bg-black/70 backdrop-blur-2xl border border-white/10 shadow-[0_18px_60px_rgba(0,0,0,0.8)]
-              text-[9px] md:text-[11px] text-gray-300 overflow-x-auto scrollbar-hide
-            "
-          >
-            <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-cyan-400 shadow-[0_0_12px_rgba(34,211,238,0.9)] flex-shrink-0" />
-            <span className="whitespace-nowrap">
-              Menu flottant ONORA · Home · Studios · Dashboard · Audit · IA
-            </span>
-          </div>
         </div>
       </div>
     </div>

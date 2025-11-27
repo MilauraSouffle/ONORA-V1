@@ -81,8 +81,8 @@ export default function WaitlistForm() {
 
             {/* Titre Formulaire */}
             <div className="mb-8 text-center">
-                <h3 className="text-xl font-bold text-white tracking-widest uppercase mb-2">Candidature Partenaire</h3>
-                <p className="text-gray-500 text-sm">Remplissez ce formulaire pour initialiser votre fiche client.</p>
+                <h3 className="text-xl font-bold text-gray-900 tracking-widest uppercase mb-2">Candidature Partenaire</h3>
+                <p className="text-gray-900 text-sm">Remplissez ce formulaire pour initialiser votre fiche client.</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -90,22 +90,22 @@ export default function WaitlistForm() {
                 {/* Ligne 1 : Entreprise & Site */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                        <label className="text-xs uppercase tracking-widest text-gray-500 flex items-center gap-2">
+                        <label className="text-xs uppercase tracking-widest text-gray-900 flex items-center gap-2">
                             <Building2 className="w-3 h-3" /> Entreprise
                         </label>
                         <input
                             required name="company_name" value={formData.company_name} onChange={handleChange}
-                            className="w-full bg-white/5 border border-white/10 p-3 text-white focus:border-blue-500 focus:outline-none rounded transition-colors"
+                            className="w-full bg-white/5 border border-white/10 p-3 text-gray-900 focus:border-blue-500 focus:outline-none rounded transition-colors"
                             placeholder="Nom de la structure"
                         />
                     </div>
                     <div className="space-y-2">
-                        <label className="text-xs uppercase tracking-widest text-gray-500 flex items-center gap-2">
+                        <label className="text-xs uppercase tracking-widest text-gray-900 flex items-center gap-2">
                             <Globe className="w-3 h-3" /> Site Web (Optionnel)
                         </label>
                         <input
                             name="website_url" value={formData.website_url} onChange={handleChange}
-                            className="w-full bg-white/5 border border-white/10 p-3 text-white focus:border-blue-500 focus:outline-none rounded transition-colors"
+                            className="w-full bg-white/5 border border-white/10 p-3 text-gray-900 focus:border-blue-500 focus:outline-none rounded transition-colors"
                             placeholder="https://..."
                         />
                     </div>
@@ -114,22 +114,22 @@ export default function WaitlistForm() {
                 {/* Ligne 2 : Email & Secteur */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                        <label className="text-xs uppercase tracking-widest text-gray-500 flex items-center gap-2">
+                        <label className="text-xs uppercase tracking-widest text-gray-900 flex items-center gap-2">
                             <Mail className="w-3 h-3" /> Email Pro
                         </label>
                         <input
                             required type="email" name="email" value={formData.email} onChange={handleChange}
-                            className="w-full bg-white/5 border border-white/10 p-3 text-white focus:border-blue-500 focus:outline-none rounded transition-colors"
+                            className="w-full bg-white/5 border border-white/10 p-3 text-gray-900 focus:border-blue-500 focus:outline-none rounded transition-colors"
                             placeholder="contact@entreprise.com"
                         />
                     </div>
                     <div className="space-y-2">
-                        <label className="text-xs uppercase tracking-widest text-gray-500 flex items-center gap-2">
+                        <label className="text-xs uppercase tracking-widest text-gray-900 flex items-center gap-2">
                             <Briefcase className="w-3 h-3" /> Secteur
                         </label>
                         <select
                             required name="sector" value={formData.sector} onChange={handleChange}
-                            className="w-full bg-white/5 border border-white/10 p-3 text-white focus:border-blue-500 focus:outline-none rounded transition-colors appearance-none"
+                            className="w-full bg-white/5 border border-white/10 p-3 text-gray-900 focus:border-blue-500 focus:outline-none rounded transition-colors appearance-none"
                         >
                             <option value="" className="bg-black">Sélectionner...</option>
                             <option value="e-commerce" className="bg-black">E-commerce</option>
@@ -143,7 +143,7 @@ export default function WaitlistForm() {
 
                 {/* Ligne 3 : Besoins (Tags) */}
                 <div className="space-y-3">
-                    <label className="text-xs uppercase tracking-widest text-gray-500 flex items-center gap-2">
+                    <label className="text-xs uppercase tracking-widest text-gray-900 flex items-center gap-2">
                         <Layers className="w-3 h-3" /> Besoins Prioritaires
                     </label>
                     <div className="flex flex-wrap gap-3">
@@ -152,8 +152,8 @@ export default function WaitlistForm() {
                                 key={need} type="button"
                                 onClick={() => toggleNeed(need)}
                                 className={`px-4 py-2 text-xs uppercase tracking-wide border rounded transition-all ${formData.needs.includes(need)
-                                        ? 'bg-blue-500 border-blue-500 text-white'
-                                        : 'bg-transparent border-white/20 text-gray-400 hover:border-white/50'
+                                        ? 'bg-blue-500 border-blue-500 text-gray-900'
+                                        : 'bg-transparent border-white/20 text-gray-900 hover:border-white/50'
                                     }`}
                             >
                                 {need}
@@ -165,7 +165,7 @@ export default function WaitlistForm() {
                 {/* Bouton Submit */}
                 <button
                     type="submit" disabled={status === 'loading' || status === 'success'}
-                    className={`w-full py-4 font-bold uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 rounded mt-4 ${status === 'success' ? 'bg-green-600 text-white' : 'bg-white text-black hover:bg-gray-200'
+                    className={`w-full py-4 font-bold uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 rounded mt-4 ${status === 'success' ? 'bg-green-600 text-gray-900' : 'bg-white text-black hover:bg-gray-200'
                         }`}
                 >
                     {status === 'loading' ? <Loader2 className="animate-spin" /> : status === 'success' ? <Check /> : "SOUMETTRE LE DOSSIER"}

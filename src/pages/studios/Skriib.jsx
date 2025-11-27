@@ -33,7 +33,7 @@ export default function Skriib() {
           <div className="h-16 flex items-center justify-between px-6 border-b border-white/10 bg-white/5 backdrop-blur-md">
             <Link
               to="/"
-              className="flex items-center gap-2 text-gray-800 hover:text-gray-900 transition-colors"
+              className="flex items-center gap-2 text-gray-900 hover:text-gray-900 transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
               <span className="text-sm font-medium">Retour</span>
@@ -69,7 +69,7 @@ export default function Skriib() {
                   alt="SKRiiB"
                   className="h-60 md:h-80 lg:h-96 xl:h-[28rem] w-auto mx-auto object-contain"
                 />
-                <p className="text-lg text-gray-800 font-medium">Human. Digital. Intelligent.</p>
+                <p className="text-lg text-gray-900 font-medium">Human. Digital. Intelligent.</p>
               </motion.div>
 
               {/* Cartes visuelles */}
@@ -83,7 +83,7 @@ export default function Skriib() {
                 >
                   <Code2 className="w-10 h-10 text-cyan-400" />
                   <h3 className="text-xl font-bold text-gray-900">Architecture Digitale</h3>
-                  <p className="text-sm text-gray-800">
+                  <p className="text-sm text-gray-900">
                     Sites web modernes, rapides et optimisés pour la conversion.
                   </p>
                 </motion.div>
@@ -97,7 +97,7 @@ export default function Skriib() {
                 >
                   <FileSearch className="w-10 h-10 text-cyan-400" />
                   <h3 className="text-xl font-bold text-gray-900">Contenu Stratégique</h3>
-                  <p className="text-sm text-gray-800">
+                  <p className="text-sm text-gray-900">
                     Contenu qui raconte ton histoire et génère des leads.
                   </p>
                 </motion.div>
@@ -111,7 +111,7 @@ export default function Skriib() {
                 >
                   <Globe className="w-10 h-10 text-cyan-400" />
                   <h3 className="text-xl font-bold text-gray-900">Visibilité SEO</h3>
-                  <p className="text-sm text-gray-800">
+                  <p className="text-sm text-gray-900">
                     Optimisation pour être trouvé par tes clients.
                   </p>
                 </motion.div>

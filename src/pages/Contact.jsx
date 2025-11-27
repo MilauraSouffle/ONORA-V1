@@ -43,7 +43,7 @@ const Contact = () => {
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
           Contacte un expert <span className="text-gradient">SkriiB</span>
         </h1>
-        <p className="text-xl text-white/70 max-w-3xl mx-auto">
+        <p className="text-xl text-gray-900/70 max-w-3xl mx-auto">
           Discutons de ton projet et des opportunités IA pour ton business.
         </p>
       </div>
@@ -51,24 +51,24 @@ const Contact = () => {
       <div className="grid lg:grid-cols-5 gap-12 items-start max-w-6xl mx-auto">
         {/* Form Section */}
         <div className="lg:col-span-3 bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 space-y-6">
-          <h2 className="text-2xl font-bold text-white">Envoyez-nous un message</h2>
+          <h2 className="text-2xl font-bold text-gray-900">Envoyez-nous un message</h2>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="name" className="text-white/80">Nom</Label>
-              <Input id="name" placeholder="Votre nom complet" className="bg-transparent text-white border-white/20 focus:ring-[#FF7F50] focus:border-[#FF7F50]" />
+              <Label htmlFor="name" className="text-gray-900/80">Nom</Label>
+              <Input id="name" placeholder="Votre nom complet" className="bg-transparent text-gray-900 border-white/20 focus:ring-[#FF7F50] focus:border-[#FF7F50]" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-white/80">Email</Label>
-              <Input id="email" type="email" placeholder="Votre email professionnel" className="bg-transparent text-white border-white/20 focus:ring-[#FF7F50] focus:border-[#FF7F50]" />
+              <Label htmlFor="email" className="text-gray-900/80">Email</Label>
+              <Input id="email" type="email" placeholder="Votre email professionnel" className="bg-transparent text-gray-900 border-white/20 focus:ring-[#FF7F50] focus:border-[#FF7F50]" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="message" className="text-white/80">Message</Label>
-              <Textarea id="message" placeholder="Parlez-nous de votre projet..." className="bg-transparent text-white border-white/20 focus:ring-[#FF7F50] focus:border-[#FF7F50]" />
+              <Label htmlFor="message" className="text-gray-900/80">Message</Label>
+              <Textarea id="message" placeholder="Parlez-nous de votre projet..." className="bg-transparent text-gray-900 border-white/20 focus:ring-[#FF7F50] focus:border-[#FF7F50]" />
             </div>
             <Button
               type="submit"
               size="lg"
-              className="w-full bg-gradient-to-r from-[#FF7F50] to-[#FFB380] text-white font-semibold py-3 text-base hover:shadow-xl hover:shadow-[#FF7F50]/50 transition-all"
+              className="w-full bg-gradient-to-r from-[#FF7F50] to-[#FFB380] text-gray-900 font-semibold py-3 text-base hover:shadow-xl hover:shadow-[#FF7F50]/50 transition-all"
             >
               Envoyer
             </Button>
@@ -81,22 +81,22 @@ const Contact = () => {
             <Mail className="w-8 h-8 text-[#FF7F50] flex-shrink-0 mt-1"/>
             <div>
               <h3 className="font-bold text-lg">Email</h3>
-              <a href="mailto:contact@skriib.lu" className="text-white/70 hover:text-[#FF7F50] break-all">contact@skriib.lu</a>
+              <a href="mailto:contact@skriib.lu" className="text-gray-900/70 hover:text-[#FF7F50] break-all">contact@skriib.lu</a>
             </div>
           </div>
           <div className="bg-white/5 p-6 rounded-2xl border border-white/10 flex items-start gap-4">
             <MapPin className="w-8 h-8 text-[#FF7F50] flex-shrink-0 mt-1"/>
             <div>
               <h3 className="font-bold text-lg">Adresse</h3>
-              <p className="text-white/70">Luxembourg, G.D.</p>
-              <p className="text-sm text-white/50">Disponible sur rendez-vous</p>
+              <p className="text-gray-900/70">Luxembourg, G.D.</p>
+              <p className="text-sm text-gray-900/50">Disponible sur rendez-vous</p>
             </div>
           </div>
            <div className="bg-white/5 p-6 rounded-2xl border border-white/10">
              <h3 className="font-bold text-lg mb-4">Réseaux sociaux</h3>
              <div className="flex items-center gap-4">
-               <a href="#" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-[#FF7F50] transition-colors p-2 bg-white/5 rounded-full"><Linkedin className="w-5 h-5" /></a>
-               <a href="#" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-[#FF7F50] transition-colors p-2 bg-white/5 rounded-full"><Twitter className="w-5 h-5" /></a>
+               <a href="#" target="_blank" rel="noopener noreferrer" className="text-gray-900/70 hover:text-[#FF7F50] transition-colors p-2 bg-white/5 rounded-full"><Linkedin className="w-5 h-5" /></a>
+               <a href="#" target="_blank" rel="noopener noreferrer" className="text-gray-900/70 hover:text-[#FF7F50] transition-colors p-2 bg-white/5 rounded-full"><Twitter className="w-5 h-5" /></a>
              </div>
            </div>
            <div className="aspect-w-16 aspect-h-9 bg-gray-700 rounded-lg overflow-hidden border border-white/10">

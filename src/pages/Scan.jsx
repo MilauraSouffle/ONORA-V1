@@ -75,14 +75,14 @@ export default function Scan() {
           <div className="h-16 flex items-center justify-between px-6 border-b border-white/10 bg-white/5 backdrop-blur-md">
             <Link
               to="/"
-              className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors"
+              className="flex items-center gap-2 text-gray-900 hover:text-gray-900 transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
               <span className="text-sm font-medium">Retour</span>
             </Link>
             <div className="flex items-center gap-2">
               <Radar className="w-5 h-5 text-cyan-400" />
-              <span className="text-sm font-medium text-white">Scan IA</span>
+              <span className="text-sm font-medium text-gray-900">Scan IA</span>
             </div>
           </div>
 
@@ -101,10 +101,10 @@ export default function Scan() {
                     <Radar className="w-10 h-10 text-cyan-400" />
                   </div>
                 </div>
-                <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight">
+                <h1 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight">
                   Tu es sûr d'être devant tes concurrents ?
                 </h1>
-                <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
+                <p className="text-lg md:text-xl text-gray-900 max-w-2xl mx-auto">
                   Analyse IA complète de ton site. Audit de visibilité, SEO, performance et positionnement concurrentiel.
                 </p>
               </motion.div>
@@ -146,7 +146,7 @@ export default function Scan() {
                 <div>
                   <label
                     htmlFor="scan-url"
-                    className="block text-sm text-gray-300 mb-2 font-medium"
+                    className="block text-sm text-gray-900 mb-2 font-medium"
                   >
                     URL de ton site *
                   </label>
@@ -158,7 +158,7 @@ export default function Scan() {
                       setFormData({ ...formData, url: e.target.value })
                     }
                     placeholder="https://monsite.lu"
-                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-gray-500 focus:outline-none focus:border-cyan-400/50 focus:bg-white/10 transition-all backdrop-blur-sm"
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-gray-900 placeholder:text-gray-900 focus:outline-none focus:border-cyan-400/50 focus:bg-white/10 transition-all backdrop-blur-sm"
                     required
                     disabled={isSubmitting}
                   />
@@ -167,7 +167,7 @@ export default function Scan() {
                 <div>
                   <label
                     htmlFor="scan-email"
-                    className="block text-sm text-gray-300 mb-2 font-medium"
+                    className="block text-sm text-gray-900 mb-2 font-medium"
                   >
                     Email professionnel *
                   </label>
@@ -179,7 +179,7 @@ export default function Scan() {
                       setFormData({ ...formData, email: e.target.value })
                     }
                     placeholder="contact@monentreprise.lu"
-                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-gray-500 focus:outline-none focus:border-cyan-400/50 focus:bg-white/10 transition-all backdrop-blur-sm"
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-gray-900 placeholder:text-gray-900 focus:outline-none focus:border-cyan-400/50 focus:bg-white/10 transition-all backdrop-blur-sm"
                     required
                     disabled={isSubmitting}
                   />
@@ -188,7 +188,7 @@ export default function Scan() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full px-8 py-4 rounded-full bg-gradient-to-r from-cyan-400/20 to-orange-500/20 border border-cyan-400/50 text-white font-semibold text-lg hover:from-cyan-400/30 hover:to-orange-500/30 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed shadow-[0_0_30px_rgba(34,211,238,0.3)]"
+                  className="w-full px-8 py-4 rounded-full bg-gradient-to-r from-cyan-400/20 to-orange-500/20 border border-cyan-400/50 text-gray-900 font-semibold text-lg hover:from-cyan-400/30 hover:to-orange-500/30 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed shadow-[0_0_30px_rgba(34,211,238,0.3)]"
                 >
                   {isSubmitting ? (
                     <span className="flex items-center justify-center gap-2">
@@ -200,7 +200,7 @@ export default function Scan() {
                   )}
                 </button>
 
-                <p className="text-xs text-center text-gray-400">
+                <p className="text-xs text-center text-gray-900">
                   Tu recevras ton audit IA détaillé sous 24 à 48h par email.
                 </p>
               </motion.form>

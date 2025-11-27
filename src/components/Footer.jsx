@@ -8,6 +8,7 @@ const Footer = () => {
     { name: 'Accueil', path: '/' },
     { name: 'À propos', path: '/about' },
     { name: 'Contact', path: '/contact' },
+    { name: 'Réseaux', path: '/socials' },
     { name: 'Mentions légales', path: '/legal' },
   ];
 
@@ -21,18 +22,18 @@ const Footer = () => {
               <Link
                 key={link.name}
                 to={link.path}
-                className="text-gray-400 hover:text-cyan-400 transition-colors text-xs md:text-sm"
+                className="text-gray-900 hover:text-cyan-400 transition-colors text-xs md:text-sm"
               >
                 {link.name}
               </Link>
             ))}
           </nav>
 
-          <p className="text-gray-500 text-xs md:text-sm text-center">
+          <p className="text-gray-900 text-xs md:text-sm text-center">
             Propulsé par IA. Créé avec ONORA.
           </p>
 
-          <p className="text-gray-600 text-xs">
+          <p className="text-gray-900 text-xs">
             © {currentYear} ONORA
           </p>
         </div>

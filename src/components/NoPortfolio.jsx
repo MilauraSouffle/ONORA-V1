@@ -124,16 +124,16 @@ export default function NoPortfolio() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <span className="inline-block py-1 px-3 rounded-full bg-white/5 border border-white/10 text-[10px] md:text-xs font-mono tracking-[0.2em] uppercase text-gray-400 mb-6 backdrop-blur-md">
+            <span className="inline-block py-1 px-3 rounded-full bg-white/5 border border-white/10 text-[10px] md:text-xs font-mono tracking-[0.2em] uppercase text-gray-900 mb-6 backdrop-blur-md">
               Use Cases · Reality Check
             </span>
-            <h2 className="text-4xl md:text-6xl font-bold text-white mb-6 tracking-tight">
+            <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 tracking-tight">
               Pas de portfolio.<br/>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">
                 Des résultats.
               </span>
             </h2>
-            <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto font-light leading-relaxed">
+            <p className="text-lg md:text-xl text-gray-900 max-w-2xl mx-auto font-light leading-relaxed">
               On ne vend pas des maquettes. On résout des problèmes business.
               <br className="hidden md:block" />
               Voici ce qui se passe quand on branche le système ONORA.
@@ -169,7 +169,7 @@ export default function NoPortfolio() {
               </div>
 
               {/* Titre */}
-              <h3 className="text-xl md:text-2xl font-bold text-white mb-8 leading-tight group-hover:text-white/90 transition-colors">
+              <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-8 leading-tight group-hover:text-gray-900/90 transition-colors">
                 {item.title}
               </h3>
 
@@ -179,7 +179,7 @@ export default function NoPortfolio() {
                 {/* Problème */}
                 <div className="flex gap-3 items-start opacity-70 group-hover:opacity-100 transition-opacity duration-300">
                   <AlertTriangle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
-                  <p className="text-sm text-gray-300 leading-snug">
+                  <p className="text-sm text-gray-900 leading-snug">
                     <span className="block text-xs uppercase tracking-wider text-red-400/80 mb-1 font-semibold">Problème</span>
                     {item.problem}
                   </p>
@@ -188,7 +188,7 @@ export default function NoPortfolio() {
                 {/* Solution */}
                 <div className="flex gap-3 items-start opacity-80 group-hover:opacity-100 transition-opacity duration-300">
                   <Zap className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
-                  <p className="text-sm text-gray-200 leading-snug">
+                  <p className="text-sm text-gray-900 leading-snug">
                     <span className="block text-xs uppercase tracking-wider text-cyan-400/80 mb-1 font-semibold">Solution ONORA</span>
                     {item.solution}
                   </p>
@@ -200,7 +200,7 @@ export default function NoPortfolio() {
                     <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
                     <div>
                       <span className="block text-xs uppercase tracking-wider text-emerald-400 mb-1 font-semibold">Résultat</span>
-                      <p className="text-base font-bold text-white leading-snug">
+                      <p className="text-base font-bold text-gray-900 leading-snug">
                         {item.result}
                       </p>
                     </div>
@@ -214,7 +214,7 @@ export default function NoPortfolio() {
 
         {/* CTA Section */}
         <div className="mt-20 text-center">
-          <p className="text-gray-400 mb-6 text-sm">
+          <p className="text-gray-900 mb-6 text-sm">
             Vous avez un problème similaire ?
           </p>
           <a

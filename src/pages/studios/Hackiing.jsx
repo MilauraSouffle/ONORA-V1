@@ -33,7 +33,7 @@ export default function Hackiing() {
           <div className="h-16 flex items-center justify-between px-6 border-b border-white/10 bg-white/5 backdrop-blur-md">
             <Link
               to="/"
-              className="flex items-center gap-2 text-gray-800 hover:text-gray-900 transition-colors"
+              className="flex items-center gap-2 text-gray-900 hover:text-gray-900 transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
               <span className="text-sm font-medium">Retour</span>
@@ -69,7 +69,7 @@ export default function Hackiing() {
                   alt="HACKiinG"
                   className="h-60 md:h-80 lg:h-96 xl:h-[28rem] w-auto mx-auto object-contain"
                 />
-                <p className="text-lg text-gray-800 font-medium">Ton temps, multiplié.</p>
+                <p className="text-lg text-gray-900 font-medium">Ton temps, multiplié.</p>
               </motion.div>
 
               {/* Cartes visuelles */}
@@ -83,7 +83,7 @@ export default function Hackiing() {
                 >
                   <Bot className="w-10 h-10 text-purple-400" />
                   <h3 className="text-xl font-bold text-gray-900">Agents IA</h3>
-                  <p className="text-sm text-gray-800">
+                  <p className="text-sm text-gray-900">
                     Automatisation intelligente de tes tâches chronophages.
                   </p>
                 </motion.div>
@@ -97,7 +97,7 @@ export default function Hackiing() {
                 >
                   <Clock className="w-10 h-10 text-purple-400" />
                   <h3 className="text-xl font-bold text-gray-900">MVP en 48h</h3>
-                  <p className="text-sm text-gray-800">
+                  <p className="text-sm text-gray-900">
                     Sprint rapide pour tester et mesurer un ROI.
                   </p>
                 </motion.div>
@@ -111,7 +111,7 @@ export default function Hackiing() {
                 >
                   <Zap className="w-10 h-10 text-purple-400" />
                   <h3 className="text-xl font-bold text-gray-900">Automations Métier</h3>
-                  <p className="text-sm text-gray-800">
+                  <p className="text-sm text-gray-900">
                     Connecte tous tes outils et automatise tes processus.
                   </p>
                 </motion.div>

@@ -14,7 +14,7 @@ export default function StatusBar({ onWaitlistClick }) {
     >
       <div className="flex items-center gap-2">
         <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
-        <span className="text-gray-300 font-mono tracking-wider">
+        <span className="text-gray-900 font-mono tracking-wider">
           SYSTEM STATUS: ONLINE
         </span>
       </div>

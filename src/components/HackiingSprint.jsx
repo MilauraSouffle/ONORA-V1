@@ -34,13 +34,13 @@ export default function HackiingSprint({ onCtaClick }) {
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Header minimaliste */}
         <div className="text-center mb-12 md:mb-16">
-          <p className="text-xs tracking-[0.5em] uppercase text-gray-400 mb-4 font-medium">
+          <p className="text-xs tracking-[0.5em] uppercase text-gray-900 mb-4 font-medium">
             HACKiinG · SPRINT 48H
           </p>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 tracking-tight">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 tracking-tight">
             MVP IA en 48h
           </h2>
-          <p className="text-sm text-gray-400 tracking-wide">
+          <p className="text-sm text-gray-900 tracking-wide">
             calibré sur ton business
           </p>
         </div>
@@ -67,7 +67,7 @@ export default function HackiingSprint({ onCtaClick }) {
                   whileInView={{ scale: 1, opacity: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                  className="text-8xl md:text-9xl font-light text-white tracking-tight mb-2"
+                  className="text-8xl md:text-9xl font-light text-gray-900 tracking-tight mb-2"
                 >
                   48H
                 </motion.div>
@@ -91,7 +91,7 @@ export default function HackiingSprint({ onCtaClick }) {
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/10 bg-white/5 backdrop-blur-md"
               >
                 <Zap className="w-4 h-4 text-purple-400" />
-                <span className="text-xs tracking-[0.3em] uppercase text-gray-300 font-medium">
+                <span className="text-xs tracking-[0.3em] uppercase text-gray-900 font-medium">
                   MVP PROTOCOL READY
                 </span>
               </motion.div>
@@ -106,7 +106,7 @@ export default function HackiingSprint({ onCtaClick }) {
               className="space-y-6"
             >
               <div>
-                <p className="text-sm text-gray-400 mb-4 tracking-wide">
+                <p className="text-sm text-gray-900 mb-4 tracking-wide">
                   Quel est le problème ?
                 </p>
                 <div className="flex flex-wrap gap-3">
@@ -118,8 +118,8 @@ export default function HackiingSprint({ onCtaClick }) {
                       whileTap={{ scale: 0.95 }}
                       className={`px-6 py-3 rounded-full border text-sm font-medium transition-all duration-300 ${
                         selectedProblem === problem
-                          ? "bg-white/12 border-white/30 text-white shadow-[0_0_20px_rgba(168,85,247,0.3)]"
-                          : "bg-white/5 border-white/10 text-gray-300 hover:bg-white/8 hover:border-white/20"
+                          ? "bg-white/12 border-white/30 text-gray-900 shadow-[0_0_20px_rgba(168,85,247,0.3)]"
+                          : "bg-white/5 border-white/10 text-gray-900 hover:bg-white/8 hover:border-white/20"
                       }`}
                     >
                       {problem}
@@ -138,7 +138,7 @@ export default function HackiingSprint({ onCtaClick }) {
                     exit={{ opacity: 0, y: -10 }}
                     className="rounded-[1.5rem] border border-white/10 bg-white/5 backdrop-blur-md p-6 space-y-4"
                   >
-                    <div className="flex items-center gap-3 text-gray-300">
+                    <div className="flex items-center gap-3 text-gray-900">
                       <Loader2 className="w-5 h-5 animate-spin text-purple-400" />
                       <span className="text-sm tracking-wide">
                         Calcul de rentabilité...
@@ -176,20 +176,20 @@ export default function HackiingSprint({ onCtaClick }) {
                     
                     <div className="space-y-3">
                       <div>
-                        <p className="text-xs text-gray-400 mb-1">Agent proposé</p>
-                        <p className="text-base text-white font-medium">{result.agent}</p>
+                        <p className="text-xs text-gray-900 mb-1">Agent proposé</p>
+                        <p className="text-base text-gray-900 font-medium">{result.agent}</p>
                       </div>
                       <div className="flex gap-6">
                         <div>
-                          <p className="text-xs text-gray-400 mb-1">Gain de temps</p>
+                          <p className="text-xs text-gray-900 mb-1">Gain de temps</p>
                           <p className="text-2xl text-emerald-400 font-light">{result.gainTemps}</p>
                         </div>
                         <div>
-                          <p className="text-xs text-gray-400 mb-1">ROI estimé</p>
+                          <p className="text-xs text-gray-900 mb-1">ROI estimé</p>
                           <p className="text-2xl text-cyan-400 font-light">{result.roi}</p>
                         </div>
                       </div>
-                      <p className="text-xs text-gray-300 leading-relaxed">
+                      <p className="text-xs text-gray-900 leading-relaxed">
                         {result.description}
                       </p>
                     </div>
@@ -206,7 +206,7 @@ export default function HackiingSprint({ onCtaClick }) {
             onClick={onCtaClick}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="inline-flex items-center justify-center px-8 py-4 rounded-[2rem] border border-white/10 bg-white/8 backdrop-blur-2xl text-sm tracking-[0.3em] uppercase text-white font-medium hover:bg-white/12 hover:border-white/20 transition-all duration-300"
+            className="inline-flex items-center justify-center px-8 py-4 rounded-[2rem] border border-white/10 bg-white/8 backdrop-blur-2xl text-sm tracking-[0.3em] uppercase text-gray-900 font-medium hover:bg-white/12 hover:border-white/20 transition-all duration-300"
             style={{
               boxShadow: '0 25px 50px -12px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.05) inset'
             }}

@@ -33,7 +33,7 @@ export default function Cliip() {
           <div className="h-16 flex items-center justify-between px-6 border-b border-white/10 bg-white/5 backdrop-blur-md">
             <Link
               to="/"
-              className="flex items-center gap-2 text-gray-800 hover:text-gray-900 transition-colors"
+              className="flex items-center gap-2 text-gray-900 hover:text-gray-900 transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
               <span className="text-sm font-medium">Retour</span>
@@ -69,7 +69,7 @@ export default function Cliip() {
                   alt="CLiiP"
                   className="h-60 md:h-80 lg:h-96 xl:h-[28rem] w-auto mx-auto object-contain"
                 />
-                <p className="text-lg text-gray-800 font-medium">Design. Motion. Impact.</p>
+                <p className="text-lg text-gray-900 font-medium">Design. Motion. Impact.</p>
               </motion.div>
 
               {/* Cartes visuelles */}
@@ -83,7 +83,7 @@ export default function Cliip() {
                 >
                   <Video className="w-10 h-10 text-orange-400" />
                   <h3 className="text-xl font-bold text-gray-900">Vidéos & Shorts</h3>
-                  <p className="text-sm text-gray-800">
+                  <p className="text-sm text-gray-900">
                     Contenu vidéo percutant pour maximiser l'engagement.
                   </p>
                 </motion.div>
@@ -97,7 +97,7 @@ export default function Cliip() {
                 >
                   <Image className="w-10 h-10 text-orange-400" />
                   <h3 className="text-xl font-bold text-gray-900">Assets Média</h3>
-                  <p className="text-sm text-gray-800">
+                  <p className="text-sm text-gray-900">
                     Visuels qui marquent et communiquent ton identité.
                   </p>
                 </motion.div>
@@ -111,7 +111,7 @@ export default function Cliip() {
                 >
                   <Palette className="w-10 h-10 text-orange-400" />
                   <h3 className="text-xl font-bold text-gray-900">Identité Visuelle</h3>
-                  <p className="text-sm text-gray-800">
+                  <p className="text-sm text-gray-900">
                     Une identité forte qui te démarque de la concurrence.
                   </p>
                 </motion.div>

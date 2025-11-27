@@ -115,14 +115,14 @@ const Waitlist = () => {
             <div className="w-20 h-20 bg-gradient-to-br from-[#FF7F50] to-[#FFB380] rounded-full flex items-center justify-center mx-auto mb-6">
               <span className="text-4xl">✓</span>
             </div>
-            <h3 className="text-3xl font-bold mb-4 text-white">Candidature reçue.</h3>
-            <p className="text-base md:text-lg text-gray-300 mb-2">
+            <h3 className="text-3xl font-bold mb-4 text-gray-900">Candidature reçue.</h3>
+            <p className="text-base md:text-lg text-gray-900 mb-2">
               Merci, ton dossier vient d'entrer dans le système.
             </p>
-            <p className="text-base md:text-lg text-gray-300 mb-2">
+            <p className="text-base md:text-lg text-gray-900 mb-2">
               Si ton profil matche avec ce qu'on construit, tu recevras un audit détaillé + un plan d'attaque sous 24 à 48h.
             </p>
-            <p className="mt-4 text-sm text-gray-400">
+            <p className="mt-4 text-sm text-gray-900">
               Je préfère te dire non franchement plutôt que te laisser dans l'attente. Tu sauras exactement où tu en es.
             </p>
           </motion.div>
@@ -146,22 +146,22 @@ const Waitlist = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <p className="text-xs tracking-[0.35em] uppercase text-gray-400 mb-4">
+          <p className="text-xs tracking-[0.35em] uppercase text-gray-900 mb-4">
             WAITLIST · AUDIT IA
           </p>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
             Rejoins la waitlist ONORA
           </h2>
-          <p className="text-base md:text-lg lg:text-xl text-gray-300 max-w-2xl mx-auto mb-2 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+          <p className="text-base md:text-lg lg:text-xl text-gray-900 max-w-2xl mx-auto mb-2 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
             Audit site + visibilité + IA offert pour les 100 premiers.
           </p>
-          <p className="text-sm md:text-base text-gray-400 max-w-2xl mx-auto">
+          <p className="text-sm md:text-base text-gray-900 max-w-2xl mx-auto">
             Tu recevras ton audit sous 24–48h.
           </p>
         </motion.div>
 
         {/* Micro-copie */}
-        <p className="text-center text-xs md:text-sm text-gray-500 mb-4 max-w-2xl mx-auto">
+        <p className="text-center text-xs md:text-sm text-gray-900 mb-4 max-w-2xl mx-auto">
           On te répond à la main, pas avec un robot.
         </p>
 
@@ -181,7 +181,7 @@ const Waitlist = () => {
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="company" className="text-white">
+            <Label htmlFor="company" className="text-gray-900">
               Nom de la société *
             </Label>
             <Input
@@ -194,7 +194,7 @@ const Waitlist = () => {
                   company: e.target.value
                 })
               }
-              className="bg-white/10 border-white/20 text-white placeholder:text-white/40"
+              className="bg-white/10 border-white/20 text-gray-900 placeholder:text-gray-900/40"
               placeholder="Ma Super Entreprise"
               required
               disabled={isSubmitting}
@@ -202,7 +202,7 @@ const Waitlist = () => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="website" className="text-white">
+            <Label htmlFor="website" className="text-gray-900">
               Site web *
             </Label>
             <Input
@@ -215,7 +215,7 @@ const Waitlist = () => {
                   website: e.target.value
                 })
               }
-              className="bg-white/10 border-white/20 text-white placeholder:text-white/40"
+              className="bg-white/10 border-white/20 text-gray-900 placeholder:text-gray-900/40"
               placeholder="https://monsite.lu"
               required
               disabled={isSubmitting}
@@ -223,7 +223,7 @@ const Waitlist = () => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="sector" className="text-white">
+            <Label htmlFor="sector" className="text-gray-900">
               Secteur d&apos;activité *
             </Label>
             <Select
@@ -236,7 +236,7 @@ const Waitlist = () => {
               }
               disabled={isSubmitting}
             >
-              <SelectTrigger className="bg-white/10 border-white/20 text-white">
+              <SelectTrigger className="bg-white/10 border-white/20 text-gray-900">
                 <SelectValue placeholder="Sélectionner un secteur" />
               </SelectTrigger>
               <SelectContent>
@@ -250,7 +250,7 @@ const Waitlist = () => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-white">
+            <Label htmlFor="email" className="text-gray-900">
               Email professionnel *
             </Label>
             <Input
@@ -263,7 +263,7 @@ const Waitlist = () => {
                   email: e.target.value
                 })
               }
-              className="bg-white/10 border-white/20 text-white placeholder:text-white/40"
+              className="bg-white/10 border-white/20 text-gray-900 placeholder:text-gray-900/40"
               placeholder="contact@monentreprise.lu"
               required
               disabled={isSubmitting}
@@ -272,7 +272,7 @@ const Waitlist = () => {
 
           {/* Nouveau champ motivation */}
           <div className="space-y-2">
-            <Label htmlFor="motivation" className="text-white">
+            <Label htmlFor="motivation" className="text-gray-900">
               Pourquoi toi, en 2 phrases max ? *
             </Label>
             <textarea
@@ -281,12 +281,12 @@ const Waitlist = () => {
               onChange={(e) =>
                 setFormData({ ...formData, motivation: e.target.value })
               }
-              className="bg-white/10 border-white/20 text-white placeholder:text-white/40 w-full h-28 p-3 rounded-lg resize-none focus:outline-none focus:border-cyan-400 transition-colors"
+              className="bg-white/10 border-white/20 text-gray-900 placeholder:text-gray-900/40 w-full h-28 p-3 rounded-lg resize-none focus:outline-none focus:border-cyan-400 transition-colors"
               placeholder="Explique-moi en quoi ton business mérite une place dans le système ONORA."
               required
               disabled={isSubmitting}
             />
-            <p className="text-xs text-white/40">
+            <p className="text-xs text-gray-900/40">
               Écris avec tes mots. N'utilise pas d'IA, je le verrai. Je veux comprendre qui tu es.
             </p>
           </div>
@@ -294,7 +294,7 @@ const Waitlist = () => {
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-gradient-to-r from-[#FF7F50] to-[#FFB380] text-white font-semibold py-6 text-lg hover:shadow-xl hover:shadow-[#FF7F50]/50 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full bg-gradient-to-r from-[#FF7F50] to-[#FFB380] text-gray-900 font-semibold py-6 text-lg hover:shadow-xl hover:shadow-[#FF7F50]/50 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {isSubmitting ? (
               <span className="flex items-center justify-center gap-2">
@@ -306,7 +306,7 @@ const Waitlist = () => {
             )}
           </Button>
 
-          <p className="text-center text-sm text-white/60">
+          <p className="text-center text-sm text-gray-900/60">
             Tu recevras ton audit personnalisé sous 24 à 48h.
           </p>
         </motion.form>

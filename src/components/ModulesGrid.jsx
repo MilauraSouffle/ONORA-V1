@@ -47,7 +47,7 @@ const modules = [
 export default function ModulesGrid() {
   return (
     <div className="w-full mt-16">
-      <p className="text-xs tracking-[0.5em] uppercase text-gray-800 mb-8 text-center font-medium">
+      <p className="text-xs tracking-[0.5em] uppercase text-gray-900 mb-8 text-center font-medium">
         ONORA · MODULES
       </p>
 
@@ -101,7 +101,7 @@ export default function ModulesGrid() {
               />
               
               {/* Slogan en dessous */}
-              <span className="text-sm md:text-base lg:text-lg text-gray-800 text-center max-w-[20rem] leading-tight drop-shadow-md font-medium">
+              <span className="text-sm md:text-base lg:text-lg text-gray-900 text-center max-w-[20rem] leading-tight drop-shadow-md font-medium">
                 {m.tagline}
               </span>
             </div>

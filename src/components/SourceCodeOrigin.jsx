@@ -25,38 +25,38 @@ export default function SourceCodeOrigin() {
           </div>
 
           <div className="max-w-4xl">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-6 md:mb-8">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-6 md:mb-8">
               SOURCE CODE : ORIGIN
             </h2>
 
             {/* Profil / Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-12">
               <div className="bg-white/5 rounded-lg p-4 border border-white/10">
-                <p className="text-xs uppercase tracking-wider text-gray-400 mb-2">
+                <p className="text-xs uppercase tracking-wider text-gray-900 mb-2">
                   XP
                 </p>
-                <p className="text-2xl font-bold text-white">20 ans</p>
+                <p className="text-2xl font-bold text-gray-900">20 ans</p>
               </div>
               <div className="bg-white/5 rounded-lg p-4 border border-white/10">
-                <p className="text-xs uppercase tracking-wider text-gray-400 mb-2">
+                <p className="text-xs uppercase tracking-wider text-gray-900 mb-2">
                   Rôle
                 </p>
-                <p className="text-lg font-semibold text-white">
+                <p className="text-lg font-semibold text-gray-900">
                   Entrepreneur – Builder & Survivor
                 </p>
               </div>
               <div className="bg-white/5 rounded-lg p-4 border border-white/10">
-                <p className="text-xs uppercase tracking-wider text-gray-400 mb-2">
+                <p className="text-xs uppercase tracking-wider text-gray-900 mb-2">
                   Spécialité
                 </p>
-                <p className="text-lg font-semibold text-white">
+                <p className="text-lg font-semibold text-gray-900">
                   Résilience, vision business, IA & no-code
                 </p>
               </div>
             </div>
 
             {/* Texte storytelling */}
-            <div className="space-y-4 md:space-y-6 text-base md:text-lg text-gray-300 leading-relaxed">
+            <div className="space-y-4 md:space-y-6 text-base md:text-lg text-gray-900 leading-relaxed">
               <p>
                 Il y a 20 ans, je lançais mes premières boutiques. Un million
                 d'euros de CA, des équipes, la vitesse, l'ambition. Le succès.
@@ -70,7 +70,7 @@ export default function SourceCodeOrigin() {
                 et le no-code. Des outils que je n'avais pas au moment du crash.
                 Des outils qui auraient tout changé.
               </p>
-              <p className="text-white font-semibold">
+              <p className="text-gray-900 font-semibold">
                 ONORA, c'est l'arme que je construis pour que d'autres n'aient
                 pas à tomber. Pour que les petites entreprises ambitieuses aient
                 accès aux mêmes leviers que les grandes. Sans bullshit. Sans

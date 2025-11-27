@@ -33,7 +33,7 @@ export default function Siion() {
           <div className="h-16 flex items-center justify-between px-6 border-b border-white/10 bg-white/5 backdrop-blur-md">
             <Link
               to="/"
-              className="flex items-center gap-2 text-gray-800 hover:text-gray-900 transition-colors"
+              className="flex items-center gap-2 text-gray-900 hover:text-gray-900 transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
               <span className="text-sm font-medium">Retour</span>
@@ -69,7 +69,7 @@ export default function Siion() {
                   alt="SiioN"
                   className="h-60 md:h-80 lg:h-96 xl:h-[28rem] w-auto mx-auto object-contain"
                 />
-                <p className="text-lg text-gray-800 font-medium">Intelligence augmentée.</p>
+                <p className="text-lg text-gray-900 font-medium">Intelligence augmentée.</p>
               </motion.div>
 
               {/* Cartes visuelles */}
@@ -83,7 +83,7 @@ export default function Siion() {
                 >
                   <Database className="w-10 h-10 text-emerald-400" />
                   <h3 className="text-xl font-bold text-gray-900">Analyse de Données</h3>
-                  <p className="text-sm text-gray-800">
+                  <p className="text-sm text-gray-900">
                     Insights actionnables pour prendre les bonnes décisions.
                   </p>
                 </motion.div>
@@ -97,7 +97,7 @@ export default function Siion() {
                 >
                   <Brain className="w-10 h-10 text-emerald-400" />
                   <h3 className="text-xl font-bold text-gray-900">IA Avancée</h3>
-                  <p className="text-sm text-gray-800">
+                  <p className="text-sm text-gray-900">
                     Modèles d'IA personnalisés pour ton secteur.
                   </p>
                 </motion.div>
@@ -111,7 +111,7 @@ export default function Siion() {
                 >
                   <TrendingUp className="w-10 h-10 text-emerald-400" />
                   <h3 className="text-xl font-bold text-gray-900">Stratégie & Vision</h3>
-                  <p className="text-sm text-gray-800">
+                  <p className="text-sm text-gray-900">
                     Vision long terme basée sur les données.
                   </p>
                 </motion.div>

@@ -37,7 +37,7 @@ const About = () => {
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Notre mission : <span className="text-gradient">humaniser la digitalisation</span> des PME.
           </h1>
-          <p className="text-lg text-white/70 max-w-3xl mx-auto">
+          <p className="text-lg text-gray-900/70 max-w-3xl mx-auto">
             Chez SkriiB, nous croyons que la technologie la plus avancée n'est rien sans une compréhension profonde de l'humain qu'elle sert.
           </p>
         </div>
@@ -57,7 +57,7 @@ const About = () => {
                     alt="Vue moderne de la ville de Luxembourg avec des superpositions numériques"
                  src="https://images.unsplash.com/photo-1682795946301-1bbbfb220f5c" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                <div className="absolute bottom-4 left-4 text-white">
+                <div className="absolute bottom-4 left-4 text-gray-900">
                     <p className="font-bold text-lg">Ancré au Luxembourg</p>
                     <p className="text-sm">Au coeur de l'Europe</p>
                 </div>
@@ -71,7 +71,7 @@ const About = () => {
           >
             <Feather className="w-12 h-12 text-[#FF7F50] mb-4"/>
             <h2 className="text-3xl font-bold mb-4">Notre histoire</h2>
-            <p className="text-white/80 leading-relaxed">
+            <p className="text-gray-900/80 leading-relaxed">
               Fondé au Luxembourg, SkriiB est né d'un constat simple : les PME locales méritent les mêmes outils que les grandes entreprises, mais avec une approche plus personnelle et agile. Nous avons donc créé un studio qui combine l'excellence technologique avec une connaissance intime du tissu économique local, pour des solutions qui ont un impact réel.
             </p>
           </motion.div>
@@ -80,24 +80,24 @@ const About = () => {
         {/* --- Bloc 2: Approche IA --- */}
         <div className="text-center mb-24">
           <h2 className="text-3xl font-bold mb-4">Une IA pragmatique et à votre service</h2>
-          <p className="text-lg text-white/70 max-w-3xl mx-auto mb-12">
+          <p className="text-lg text-gray-900/70 max-w-3xl mx-auto mb-12">
             Notre philosophie tient en trois mots :
           </p>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white/5 p-8 rounded-2xl border border-white/10 text-center">
               <Users className="w-12 h-12 mx-auto text-[#FF7F50] mb-4"/>
               <h3 className="text-2xl font-bold mb-2">Human.</h3>
-              <p className="text-white/70">Votre réalité et vos clients sont toujours notre point de départ.</p>
+              <p className="text-gray-900/70">Votre réalité et vos clients sont toujours notre point de départ.</p>
             </div>
             <div className="bg-white/5 p-8 rounded-2xl border border-white/10 text-center">
               <Bot className="w-12 h-12 mx-auto text-[#FF7F50] mb-4"/>
               <h3 className="text-2xl font-bold mb-2">Digital.</h3>
-              <p className="text-white/70">Nous créons des écosystèmes en ligne performants et esthétiques.</p>
+              <p className="text-gray-900/70">Nous créons des écosystèmes en ligne performants et esthétiques.</p>
             </div>
             <div className="bg-white/5 p-8 rounded-2xl border border-white/10 text-center">
               <BrainCircuit className="w-12 h-12 mx-auto text-[#FF7F50] mb-4"/>
               <h3 className="text-2xl font-bold mb-2">Intelligent.</h3>
-              <p className="text-white/70">L'IA est notre levier pour automatiser, optimiser et accélérer.</p>
+              <p className="text-gray-900/70">L'IA est notre levier pour automatiser, optimiser et accélérer.</p>
             </div>
           </div>
         </div>
@@ -105,7 +105,7 @@ const About = () => {
         {/* --- Bloc 3: Équipe --- */}
         <div className="text-center mb-24">
           <h2 className="text-3xl font-bold mb-4">Une équipe d'experts passionnés</h2>
-          <p className="text-lg text-white/70 max-w-3xl mx-auto mb-12">
+          <p className="text-lg text-gray-900/70 max-w-3xl mx-auto mb-12">
             La force de SkriiB réside dans son capital humain. Nous sommes un collectif de talents complémentaires.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
@@ -134,7 +134,7 @@ const About = () => {
         {/* --- Bloc 4: CTA --- */}
         <div className="bg-gradient-to-r from-[#FF7F50]/80 to-[#002C5F]/80 p-12 rounded-2xl text-center">
           <h2 className="text-3xl font-bold mb-4">Prêt à passer au niveau supérieur ?</h2>
-          <p className="text-white/90 mb-8 max-w-2xl mx-auto">
+          <p className="text-gray-900/90 mb-8 max-w-2xl mx-auto">
             Voyons ensemble comment nos modules IA peuvent s'intégrer à votre stratégie pour générer des résultats concrets.
           </p>
           <Button size="lg" asChild className="bg-white text-black font-bold hover:bg-white/90">
