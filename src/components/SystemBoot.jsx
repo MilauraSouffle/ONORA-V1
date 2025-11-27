@@ -1,10 +1,20 @@
-// src/components/SystemBoot.jsx
 import React, { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function SystemBoot({ onFinish }) {
+  // --- 1. SÉCURITÉ SEO & UX (Smart Skip) ---
+  const shouldSkip = () => {
+    if (typeof window === "undefined") return false;
+    return (
+      window.location.search.includes("no-intro") || 
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches || 
+      sessionStorage.getItem("hasSeenIntro")
+    );
+  };
+
+  const [visible, setVisible] = useState(!shouldSkip());
+  
   const [phase, setPhase] = useState("chaos");
-  const [visible, setVisible] = useState(true);
   const [terminalLines, setTerminalLines] = useState([]);
   
   const canvasRef = useRef(null);
@@ -13,6 +23,15 @@ export default function SystemBoot({ onFinish }) {
   const audioContextRef = useRef(null);
   const activeAudioSourcesRef = useRef([]); 
   const noiseIntervalRef = useRef(null);
+
+  // --- 2. GESTION DU SKIP AUTOMATIQUE ---
+  useEffect(() => {
+    if (!visible) {
+      if (onFinish) onFinish();
+    } else {
+      sessionStorage.setItem("hasSeenIntro", "true");
+    }
+  }, []);
 
   const terminalMessages = [
     "> initialisation du systeme...",
@@ -110,12 +129,13 @@ export default function SystemBoot({ onFinish }) {
     activeAudioSourcesRef.current.push(noise, sub, osc);
   };
 
-  // --- INIT ---
+  // --- INIT AUDIO ---
   useEffect(() => {
+    if (!visible) return;
     try { audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)(); } 
     catch (e) {}
     return () => stopAllSounds();
-  }, []);
+  }, [visible]);
 
   const handleSkip = () => {
     stopAllSounds();
@@ -129,15 +149,14 @@ export default function SystemBoot({ onFinish }) {
 
   // --- CANVAS NOISE ---
   useEffect(() => {
+    if (!visible) return;
     if (phase !== "chaos" && phase !== "extinction") return;
     const canvas = canvasRef.current;
     if (!canvas) return;
-    // Note: alpha: false est vital pour les perfs mobile
     const ctx = canvas.getContext("2d", { alpha: false });
     
     let frame;
     const resize = () => { 
-        // Résolution réduite sur mobile pour sauver la batterie et le GPU
         canvas.width = window.innerWidth / (window.innerWidth < 768 ? 3 : 2); 
         canvas.height = window.innerHeight / (window.innerWidth < 768 ? 3 : 2); 
     };
@@ -165,10 +184,11 @@ export default function SystemBoot({ onFinish }) {
       cancelAnimationFrame(frame);
       stopAllSounds();
     };
-  }, [phase]);
+  }, [phase, visible]);
 
   // --- TERMINAL ---
   useEffect(() => {
+    if (!visible) return;
     if (phase !== "terminal") return;
     resumeAudioContext();
     stopAllSounds();
@@ -189,18 +209,20 @@ export default function SystemBoot({ onFinish }) {
     };
     interval = setInterval(type, 30);
     return () => { clearInterval(interval); clearTimeout(timeout); };
-  }, [phase]);
+  }, [phase, visible]);
 
   // --- GLITCH TRIGGER ---
   useEffect(() => {
+    if (!visible) return;
     if (phase === "title_glitch") {
         resumeAudioContext();
         playDataBreachSound();
     }
-  }, [phase]);
+  }, [phase, visible]);
 
   // --- TIMELINE ---
   useEffect(() => {
+    if (!visible) return;
     if (hasStartedRef.current) return;
     hasStartedRef.current = true;
     const timers = [];
@@ -222,7 +244,7 @@ export default function SystemBoot({ onFinish }) {
 
     skipTimeoutRef.current = timers;
     return () => timers.forEach(clearTimeout);
-  }, [onFinish]);
+  }, [onFinish, visible]);
 
   if (!visible) return null;
 
@@ -234,7 +256,7 @@ export default function SystemBoot({ onFinish }) {
           className="fixed inset-0 z-[9999] bg-black overflow-hidden font-mono"
           exit={{ opacity: 0, transition: { duration: 1 } }} 
         >
-          {/* BOUTON SKIP - Positionnement et taille mobile adaptés */}
+          {/* BOUTON SKIP */}
           <div className="absolute top-4 right-4 md:top-6 md:right-6 z-[10000]">
             <button
               onClick={handleSkip}
@@ -261,7 +283,7 @@ export default function SystemBoot({ onFinish }) {
             />
           )}
 
-          {/* LAYER 2: TERMINAL - Padding et Text Size adaptés mobile */}
+          {/* LAYER 2: TERMINAL */}
           {phase === "terminal" && (
             <div className="absolute inset-0 flex items-center justify-center p-4 md:p-8">
               <div className="w-full max-w-2xl text-left space-y-2">
@@ -278,11 +300,10 @@ export default function SystemBoot({ onFinish }) {
             </div>
           )}
 
-          {/* LAYER 3: TITLE SEQUENCE - Responsive Text Sizes */}
+          {/* LAYER 3: TITLE SEQUENCE */}
           {(phase === "title_clean" || phase === "title_glitch") && (
             <div className="absolute inset-0 flex items-center justify-center bg-black px-4">
                 <div className="relative z-20 w-full flex justify-center">
-                    {/* Le texte Principal : Utilisation de whitespace-nowrap pour éviter la casse */}
                     <motion.h1
                         className="
                           font-black text-white tracking-widest text-center whitespace-nowrap
@@ -301,7 +322,6 @@ export default function SystemBoot({ onFinish }) {
                         [ BIENVENUE HUMAIN. ]
                     </motion.h1>
 
-                    {/* Glitch Overlay */}
                     {phase === "title_glitch" && (
                         <>
                             <motion.h1

@@ -26,26 +26,41 @@ export default function Home() {
   const mobileHeroRef = useRef(null);
   const [activeMobileSlide, setActiveMobileSlide] = useState(0);
 
-  // Suivi du breakpoint desktop (lg)
-  const [isDesktop, setIsDesktop] = useState(
-    typeof window !== "undefined"
-      ? window.matchMedia("(min-width: 1024px)").matches
-      : false
-  );
-
   const scrollToWaitlist = () => {
-    waitlistRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (typeof window !== "undefined" && window.innerWidth >= 1024) {
+      // sur desktop, on va d'abord sur la dernière carte
+      scrollToDesktopSlide(4);
+      setTimeout(() => {
+        waitlistRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 400);
+    } else {
+      // mobile : scroll vertical normal
+      waitlistRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
-  // Transforme le scroll vertical en horizontal sur desktop
+  const scrollToDesktopSlide = (index) => {
+    const container = desktopScrollRef.current;
+    if (!container) return;
+    const width = container.clientWidth;
+    container.scrollTo({
+      left: width * index,
+      behavior: "smooth",
+    });
+  };
+
+  // Transforme le scroll vertical en horizontal sur desktop,
+  // sauf quand la molette est au-dessus d'une bulle .card-scroll
   useEffect(() => {
     const container = desktopScrollRef.current;
     if (!container) return;
 
     const handleWheel = (e) => {
-      // si l'utilisateur fait déjà un scroll horizontal natif, on ne touche pas
-      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+      // si on scroll dans une bulle de contenu, on laisse le scroll vertical
+      const inCard = e.target.closest(".card-scroll");
+      if (inCard) return;
 
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
       e.preventDefault();
       container.scrollBy({
         left: e.deltaY * 1.1,
@@ -69,50 +84,6 @@ export default function Home() {
     };
   }, []);
 
-  const scrollToDesktopSlide = (index) => {
-    const container = desktopScrollRef.current;
-    if (!container) return;
-    const width = container.clientWidth;
-    container.scrollTo({
-      left: width * index,
-      behavior: "smooth",
-    });
-  };
-
-  // Suivi du breakpoint lg (pour reset la position quand tu changes de taille)
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const mq = window.matchMedia("(min-width: 1024px)");
-
-    const handleChange = (e) => {
-      setIsDesktop(e.matches);
-    };
-
-    // init
-    setIsDesktop(mq.matches);
-    mq.addEventListener("change", handleChange);
-
-    return () => {
-      mq.removeEventListener("change", handleChange);
-    };
-  }, []);
-
-  // Dès qu'on bascule mobile ↔ desktop, on revient au Hero proprement
-  useEffect(() => {
-    const container = desktopScrollRef.current;
-
-    if (isDesktop && container) {
-      container.scrollTo({ left: 0, behavior: "auto" });
-      setActiveDesktopSlide(0);
-    }
-
-    // on remonte aussi la page globale
-    if (typeof window !== "undefined") {
-      window.scrollTo(0, 0);
-    }
-  }, [isDesktop]);
-
   // Suivi du slider mobile
   useEffect(() => {
     const el = mobileHeroRef.current;
@@ -128,17 +99,6 @@ export default function Home() {
     el.addEventListener("scroll", onScroll);
     return () => el.removeEventListener("scroll", onScroll);
   }, []);
-
-  // Scroll vers un slide mobile au clic sur un bullet
-  const scrollToMobileSlide = (index) => {
-    const el = mobileHeroRef.current;
-    if (!el) return;
-    const width = el.clientWidth;
-    el.scrollTo({
-      left: width * index,
-      behavior: "smooth",
-    });
-  };
 
   const mobileSlidesCount = 2;
   const desktopSlidesCount = 5; // Hero, Studios, Sprint, Use Cases, Origin+Waitlist
@@ -178,18 +138,18 @@ export default function Home() {
       <div className="w-full min-h-full flex flex-col">
         {/* ========== LAYOUT DESKTOP HORIZONTAL ========== */}
         <div className="hidden lg:flex flex-col flex-1">
-          {/* Bandeau principal horizontal */}
           <div
             ref={desktopScrollRef}
             className="
+              onora-desktop-slider
               flex-1 flex overflow-x-auto overflow-y-hidden snap-x snap-mandatory scroll-smooth
               [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']
             "
           >
             {/* SLIDE 1 – HERO / PROMESSE */}
             <section className="w-full h-[calc(100vh-64px)] flex-shrink-0 snap-start flex items-center px-10 xl:px-20 relative">
-              <div className="absolute inset-0 bg-black/35 backdrop-blur-xl pointer-events-none" />
-              <div className="relative z-10 w-full max-w-6xl mx-auto">
+              <div className="absolute inset-0 bg-black/10 backdrop-blur-md pointer-events-none" />
+              <div className="relative z-10 w-full max-w-6xl mx-auto card-scroll overflow-y-auto max-h-[calc(100vh-64px-40px)] pr-2">
                 <div className="grid gap-12 grid-cols-[minmax(0,1.05fr)_minmax(0,1.2fr)] items-center">
                   {/* Logo ONORA */}
                   <motion.div
@@ -275,7 +235,7 @@ export default function Home() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 1, duration: 0.6 }}
-                  className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none"
+                  className="mt-10 flex flex-col items-center gap-2 pointer-events-none"
                 >
                   <div className="w-10 h-10 rounded-full border border-white/30 bg-white/5 backdrop-blur-md flex items-center justify-center">
                     <ChevronDown className="w-5 h-5 text-white rotate-90" />
@@ -289,8 +249,8 @@ export default function Home() {
 
             {/* SLIDE 2 – STUDIOS GRID */}
             <section className="w-full h-[calc(100vh-64px)] flex-shrink-0 snap-start px-10 xl:px-20 py-16 relative">
-              <div className="absolute inset-0 bg-black/20 backdrop-blur-sm pointer-events-none" />
-              <div className="relative z-10 w-full max-w-6xl mx-auto flex flex-col justify-center">
+              <div className="absolute inset-0 bg-black/8 backdrop-blur-sm pointer-events-none" />
+              <div className="relative z-10 w-full max-w-6xl mx-auto card-scroll overflow-y-auto max-h-[calc(100vh-64px-40px)] pr-2">
                 <div className="text-center mb-10">
                   <h2 className="text-4xl xl:text-5xl font-bold text-white mb-4">
                     Tes studios ONORA
@@ -306,24 +266,24 @@ export default function Home() {
 
             {/* SLIDE 3 – SPRINT 48H */}
             <section className="w-full h-[calc(100vh-64px)] flex-shrink-0 snap-start px-10 xl:px-20 py-16 relative">
-              <div className="absolute inset-0 bg-black/20 backdrop-blur-sm pointer-events-none" />
-              <div className="relative z-10 w-full max-w-6xl mx-auto flex items-center">
+              <div className="absolute inset-0 bg-black/8 backdrop-blur-sm pointer-events-none" />
+              <div className="relative z-10 w-full max-w-6xl mx-auto card-scroll overflow-y-auto max-h-[calc(100vh-64px-40px)] pr-2 flex items-center">
                 <HackiingSprint onCtaClick={scrollToWaitlist} />
               </div>
             </section>
 
             {/* SLIDE 4 – USE CASES */}
-            <section className="w-full h-[calc(100vh-64px)] flex-shrink-0 snap-start px-10 xl:px-20 py-16 relative overflow-y-auto">
-              <div className="absolute inset-0 bg-black/20 backdrop-blur-sm pointer-events-none" />
-              <div className="relative z-10 w-full max-w-6xl mx-auto">
+            <section className="w-full h-[calc(100vh-64px)] flex-shrink-0 snap-start px-10 xl:px-20 py-16 relative">
+              <div className="absolute inset-0 bg-black/8 backdrop-blur-sm pointer-events-none" />
+              <div className="relative z-10 w-full max-w-6xl mx-auto card-scroll overflow-y-auto max-h-[calc(100vh-64px-40px)] pr-2">
                 <NoPortfolio />
               </div>
             </section>
 
             {/* SLIDE 5 – ORIGIN + WAITLIST + FOOTER */}
-            <section className="w-full h-[calc(100vh-64px)] flex-shrink-0 snap-start px-10 xl:px-20 py-16 relative overflow-y-auto">
-              <div className="absolute inset-0 bg-black/20 backdrop-blur-sm pointer-events-none" />
-              <div className="relative z-10 w-full max-w-6xl mx-auto space-y-16">
+            <section className="w-full h-[calc(100vh-64px)] flex-shrink-0 snap-start px-10 xl:px-20 py-16 relative">
+              <div className="absolute inset-0 bg-black/8 backdrop-blur-sm pointer-events-none" />
+              <div className="relative z-10 w-full max-w-6xl mx-auto card-scroll overflow-y-auto max-h-[calc(100vh-64px-40px)] pr-2 space-y-16">
                 <SourceCodeOrigin />
                 <div ref={waitlistRef}>
                   <Waitlist />
@@ -353,7 +313,7 @@ export default function Home() {
         <div className="flex flex-col flex-1 lg:hidden">
           {/* Hero slider horizontal mais page verticale normale */}
           <section className="w-full pt-16 pb-10 px-4 relative">
-            <div className="absolute inset-0 bg-black/35 backdrop-blur-xl pointer-events-none" />
+            <div className="absolute inset-0 bg-black/10 backdrop-blur-md pointer-events-none" />
             <div className="relative z-10 max-w-5xl mx-auto">
               <div
                 ref={mobileHeroRef}
@@ -427,10 +387,8 @@ export default function Home() {
               {/* Bullets hero mobile */}
               <div className="flex justify-center gap-2">
                 {Array.from({ length: mobileSlidesCount }).map((_, idx) => (
-                  <button
+                  <span
                     key={idx}
-                    type="button"
-                    onClick={() => scrollToMobileSlide(idx)}
                     className={`h-2 rounded-full ${
                       activeMobileSlide === idx
                         ? "w-6 bg-cyan-400"
@@ -460,9 +418,9 @@ export default function Home() {
             </div>
           </section>
 
-          {/* Sections classiques en vertical */}
+          {/* Sections verticales classiques */}
           <section id="modules-mobile" className="w-full py-10 px-4 relative">
-            <div className="absolute inset-0 bg-black/18 backdrop-blur-sm pointer-events-none" />
+            <div className="absolute inset-0 bg-black/8 backdrop-blur-sm pointer-events-none" />
             <div className="relative z-10 max-w-6xl mx-auto">
               <div className="text-center mb-8">
                 <h2 className="text-3xl font-bold text-white mb-3">
