@@ -1,7 +1,7 @@
 // src/pages/Home.jsx
 // Dashboard ONORA – layout desktop horizontal + layout mobile vertical
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
@@ -26,46 +26,48 @@ export default function Home() {
   const mobileHeroRef = useRef(null);
   const [activeMobileSlide, setActiveMobileSlide] = useState(0);
 
+  // Suivi du breakpoint desktop (lg)
+  const [isDesktop, setIsDesktop] = useState(
+    typeof window !== "undefined"
+      ? window.matchMedia("(min-width: 1024px)").matches
+      : false
+  );
+
   const scrollToWaitlist = () => {
     waitlistRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // Scroll vertical → horizontal sur desktop (carrousel)
-  const handleDesktopWheel = (e) => {
+  // Transforme le scroll vertical en horizontal sur desktop
+  useEffect(() => {
     const container = desktopScrollRef.current;
     if (!container) return;
 
-    // 1) Si on est dans une zone marquée "vertical-scroll", on ne touche à rien
-    const verticalZone = e.target.closest?.("[data-vertical-scroll='true']");
-    if (verticalZone) return;
+    const handleWheel = (e) => {
+      // si l'utilisateur fait déjà un scroll horizontal natif, on ne touche pas
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
 
-    // 2) Si le scroll est déjà majoritairement horizontal (trackpad), on laisse faire
-    if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+      e.preventDefault();
+      container.scrollBy({
+        left: e.deltaY * 1.1,
+        behavior: "smooth",
+      });
+    };
 
-    const maxScrollLeft = container.scrollWidth - container.clientWidth;
+    const handleScroll = () => {
+      const { scrollLeft, clientWidth } = container;
+      if (!clientWidth) return;
+      const index = Math.round(scrollLeft / clientWidth);
+      setActiveDesktopSlide(index);
+    };
 
-    // 3) Si on est déjà au tout début ou à la toute fin, on ne bloque pas
-    if (
-      (container.scrollLeft <= 0 && e.deltaY < 0) ||
-      (container.scrollLeft >= maxScrollLeft && e.deltaY > 0)
-    ) {
-      return;
-    }
+    container.addEventListener("wheel", handleWheel, { passive: false });
+    container.addEventListener("scroll", handleScroll);
 
-    // 4) Sinon on détourne le scroll vertical vers le scroll horizontal
-    e.preventDefault();
-    container.scrollBy({
-      left: e.deltaY * 1.1,
-      behavior: "smooth",
-    });
-  };
-
-  const handleDesktopScroll = (e) => {
-    const { scrollLeft, clientWidth } = e.currentTarget;
-    if (!clientWidth) return;
-    const index = Math.round(scrollLeft / clientWidth);
-    setActiveDesktopSlide(index);
-  };
+    return () => {
+      container.removeEventListener("wheel", handleWheel);
+      container.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   const scrollToDesktopSlide = (index) => {
     const container = desktopScrollRef.current;
@@ -77,14 +79,57 @@ export default function Home() {
     });
   };
 
-  // Slider mobile – suivi + contrôle par bullets
-  const handleMobileHeroScroll = (e) => {
-    const { scrollLeft, clientWidth } = e.currentTarget;
-    if (!clientWidth) return;
-    const i = Math.round(scrollLeft / clientWidth);
-    setActiveMobileSlide(i);
-  };
+  // Suivi du breakpoint lg (pour reset la position quand tu changes de taille)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
 
+    const mq = window.matchMedia("(min-width: 1024px)");
+
+    const handleChange = (e) => {
+      setIsDesktop(e.matches);
+    };
+
+    // init
+    setIsDesktop(mq.matches);
+    mq.addEventListener("change", handleChange);
+
+    return () => {
+      mq.removeEventListener("change", handleChange);
+    };
+  }, []);
+
+  // Dès qu'on bascule mobile ↔ desktop, on revient au Hero proprement
+  useEffect(() => {
+    const container = desktopScrollRef.current;
+
+    if (isDesktop && container) {
+      container.scrollTo({ left: 0, behavior: "auto" });
+      setActiveDesktopSlide(0);
+    }
+
+    // on remonte aussi la page globale
+    if (typeof window !== "undefined") {
+      window.scrollTo(0, 0);
+    }
+  }, [isDesktop]);
+
+  // Suivi du slider mobile
+  useEffect(() => {
+    const el = mobileHeroRef.current;
+    if (!el) return;
+
+    const onScroll = () => {
+      const { scrollLeft, clientWidth } = el;
+      if (!clientWidth) return;
+      const i = Math.round(scrollLeft / clientWidth);
+      setActiveMobileSlide(i);
+    };
+
+    el.addEventListener("scroll", onScroll);
+    return () => el.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Scroll vers un slide mobile au clic sur un bullet
   const scrollToMobileSlide = (index) => {
     const el = mobileHeroRef.current;
     if (!el) return;
@@ -133,10 +178,9 @@ export default function Home() {
       <div className="w-full min-h-full flex flex-col">
         {/* ========== LAYOUT DESKTOP HORIZONTAL ========== */}
         <div className="hidden lg:flex flex-col flex-1">
+          {/* Bandeau principal horizontal */}
           <div
             ref={desktopScrollRef}
-            onWheel={handleDesktopWheel}
-            onScroll={handleDesktopScroll}
             className="
               flex-1 flex overflow-x-auto overflow-y-hidden snap-x snap-mandatory scroll-smooth
               [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']
@@ -176,7 +220,8 @@ export default function Home() {
                     <div>
                       <span className="inline-flex items-center gap-2 rounded-full bg-white/8 border border-white/20 px-4 py-1 text-xs tracking-[0.25em] uppercase text-gray-200 backdrop-blur-md">
                         <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.9)]" />
-                        Studio IA & no-code · Metz · Nancy · Strasbourg · Luxembourg
+                        Studio IA & no-code · Metz · Nancy · Strasbourg ·
+                        Luxembourg
                       </span>
                     </div>
 
@@ -187,9 +232,10 @@ export default function Home() {
                     </h1>
 
                     <p className="text-lg text-gray-200/90 max-w-xl leading-relaxed">
-                      ONORA recycle le meilleur des designers, marketeurs et devs
-                      avec l&apos;IA. On construit des systèmes qui travaillent pour
-                      toi pendant que tu t&apos;occupes de ton business et de ta vie.
+                      ONORA recycle le meilleur des designers, marketeurs et
+                      devs avec l&apos;IA. On construit des systèmes qui
+                      travaillent pour toi pendant que tu t&apos;occupes de ton
+                      business et de ta vie.
                     </p>
 
                     <div className="space-y-3">
@@ -250,8 +296,8 @@ export default function Home() {
                     Tes studios ONORA
                   </h2>
                   <p className="text-lg text-gray-300 max-w-3xl mx-auto">
-                    ONORA = SKRiiB (contenu), CLiiP (créa rapide), SiioN (data / IA
-                    avancée), HACKiinG (automations & agents IA).
+                    ONORA = SKRiiB (contenu), CLiiP (créa rapide), SiioN (data /
+                    IA avancée), HACKiinG (automations & agents IA).
                   </p>
                 </div>
                 <ModulesGrid />
@@ -266,22 +312,16 @@ export default function Home() {
               </div>
             </section>
 
-            {/* SLIDE 4 – USE CASES (scroll vertical interne) */}
-            <section
-              data-vertical-scroll="true"
-              className="w-full h-[calc(100vh-64px)] flex-shrink-0 snap-start px-10 xl:px-20 py-16 relative overflow-y-auto"
-            >
+            {/* SLIDE 4 – USE CASES */}
+            <section className="w-full h-[calc(100vh-64px)] flex-shrink-0 snap-start px-10 xl:px-20 py-16 relative overflow-y-auto">
               <div className="absolute inset-0 bg-black/20 backdrop-blur-sm pointer-events-none" />
               <div className="relative z-10 w-full max-w-6xl mx-auto">
                 <NoPortfolio />
               </div>
             </section>
 
-            {/* SLIDE 5 – ORIGIN + WAITLIST + FOOTER (scroll vertical interne) */}
-            <section
-              data-vertical-scroll="true"
-              className="w-full h-[calc(100vh-64px)] flex-shrink-0 snap-start px-10 xl:px-20 py-16 relative overflow-y-auto"
-            >
+            {/* SLIDE 5 – ORIGIN + WAITLIST + FOOTER */}
+            <section className="w-full h-[calc(100vh-64px)] flex-shrink-0 snap-start px-10 xl:px-20 py-16 relative overflow-y-auto">
               <div className="absolute inset-0 bg-black/20 backdrop-blur-sm pointer-events-none" />
               <div className="relative z-10 w-full max-w-6xl mx-auto space-y-16">
                 <SourceCodeOrigin />
@@ -317,14 +357,13 @@ export default function Home() {
             <div className="relative z-10 max-w-5xl mx-auto">
               <div
                 ref={mobileHeroRef}
-                onScroll={handleMobileHeroScroll}
                 className="
                   flex overflow-x-auto snap-x snap-mandatory space-x-4 pb-6
                   [-ms-overflow-style:'none'] [scrollbar-width:'none'] [&::-webkit-scrollbar]:hidden
                 "
               >
                 {/* Slide mobile 1 – logo + promesse */}
-                <div className="snap-start min-w-full bg:white/5 bg-white/5 border border-white/15 rounded-[2rem] backdrop-blur-2xl p-6 space-y-6">
+                <div className="snap-start min-w-[90%] bg-white/5 border border-white/15 rounded-[2rem] backdrop-blur-2xl p-6 space-y-6">
                   <div className="flex justify-center">
                     <div className="w-40 h-40 rounded-3xl bg-white/5 border border-white/15 flex items-center justify-center overflow-hidden">
                       <img
@@ -346,14 +385,14 @@ export default function Home() {
                       Tu branches un système.
                     </h1>
                     <p className="text-sm text-gray-200/90 leading-relaxed">
-                      ONORA construit des systèmes IA et no-code qui bossent pour
-                      toi pendant que tu gères ton business et ta vie.
+                      ONORA construit des systèmes IA et no-code qui bossent
+                      pour toi pendant que tu gères ton business et ta vie.
                     </p>
                   </div>
                 </div>
 
                 {/* Slide mobile 2 – studios */}
-                <div className="snap-start min-w-full bg-white/5 border border-white/15 rounded-[2rem] backdrop-blur-2xl p-6 space-y-5">
+                <div className="snap-start min-w-[90%] bg-white/5 border border-white/15 rounded-[2rem] backdrop-blur-2xl p-6 space-y-5">
                   <p className="text-xs text-gray-300 uppercase tracking-[0.2em]">
                     Les studios du système ONORA
                   </p>
@@ -364,10 +403,10 @@ export default function Home() {
                     <div className="px-4 py-2 rounded-full bg-white/8 border border-white/15 backdrop-blur-md text-xs text-white/90">
                       CLiiP · Créa rapide & motion
                     </div>
-                    <div className="px-4 py-2 rounded-full bg-white/8 border border-white/15 backdrop-blur-md text-xs text:white/90 text-white/90">
+                    <div className="px-4 py-2 rounded-full bg-white/8 border border-white/15 backdrop-blur-md text-xs text-white/90">
                       SiioN · Data & IA avancée
                     </div>
-                    <div className="px-4 py-2 rounded-full bg:white/8 bg-white/8 border border-white/15 backdrop-blur-md text-xs text-white/90">
+                    <div className="px-4 py-2 rounded-full bg-white/8 border border-white/15 backdrop-blur-md text-xs text-white/90">
                       HACKiinG · Automations & agents IA
                     </div>
                   </div>
@@ -378,21 +417,21 @@ export default function Home() {
                         .getElementById("modules-mobile")
                         ?.scrollIntoView({ behavior: "smooth" })
                     }
-                    className="mt-2 inline-flex items-center justify-center w-full px-6 py-3 rounded-[2rem] bg:white/90 bg-white/90 text-black text-sm font-semibold shadow-[0_18px_40px_rgba(0,0,0,0.8)] active:scale-[0.98] transition-all duration-150"
+                    className="mt-2 inline-flex items-center justify-center w-full px-6 py-3 rounded-[2rem] bg-white/90 text-black text-sm font-semibold shadow-[0_18px_40px_rgba(0,0,0,0.8)] active:scale-[0.98] transition-all duration-150"
                   >
                     Découvrir le système ONORA
                   </button>
                 </div>
               </div>
 
-              {/* Bullets hero mobile (cliquables) */}
+              {/* Bullets hero mobile */}
               <div className="flex justify-center gap-2">
                 {Array.from({ length: mobileSlidesCount }).map((_, idx) => (
                   <button
                     key={idx}
                     type="button"
                     onClick={() => scrollToMobileSlide(idx)}
-                    className={`h-2 rounded-full transition-all duration-200 ${
+                    className={`h-2 rounded-full ${
                       activeMobileSlide === idx
                         ? "w-6 bg-cyan-400"
                         : "w-2 bg-white/40"
@@ -407,7 +446,11 @@ export default function Home() {
                   <motion.div
                     className="w-1 h-2 rounded-full bg-white/80"
                     animate={{ y: [0, 6, 0], opacity: [1, 0.3, 1] }}
-                    transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
+                    transition={{
+                      repeat: Infinity,
+                      duration: 1.8,
+                      ease: "easeInOut",
+                    }}
                   />
                 </div>
                 <span className="text-[10px] tracking-[0.3em] uppercase text-gray-300">
@@ -426,8 +469,8 @@ export default function Home() {
                   Tes studios ONORA
                 </h2>
                 <p className="text-base text-gray-300 max-w-3xl mx-auto">
-                  ONORA = SKRiiB (contenu), CLiiP (créa rapide), SiioN (data / IA
-                  avancée), HACKiinG (automations & agents IA).
+                  ONORA = SKRiiB (contenu), CLiiP (créa rapide), SiioN (data /
+                  IA avancée), HACKiinG (automations & agents IA).
                 </p>
               </div>
               <ModulesGrid />
