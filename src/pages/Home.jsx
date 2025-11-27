@@ -293,7 +293,7 @@ export default function Home() {
                     <div className="pt-4">
                       <Link
                         to="/studios/hackiing"
-                        className="inline-flex items-center justify-center px-8 py-3.5 rounded-[2rem] bg-purple-500/90 text-gray-900 font-semibold text-sm md:text-base hover:bg-purple-500 active:scale-[0.98] transition-all duration-200 shadow-[0_25px_60px_rgba(147,51,234,0.4)]"
+                        className="inline-flex items-center justify-center px-8 py-3.5 rounded-[2rem] bg-white/10 border border-white/20 text-gray-900 font-semibold text-sm md:text-base hover:bg-white/20 active:scale-[0.98] transition-all duration-200"
                       >
                         Lancer le challenge
                       </Link>

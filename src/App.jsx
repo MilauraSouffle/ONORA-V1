@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation, Link } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import ScrollHint from "./components/ScrollHint";
 import CarouselPager from "./components/CarouselPager";
+import { Twitter, Linkedin, Youtube, Bot } from "lucide-react";
 
 // Imports existants
 import SystemBoot from "./components/SystemBoot";
@@ -131,7 +132,7 @@ function App() {
         >
           {/* HEADER */}
           <header
-              className="h-14 w-full flex items-center justify-between px-4 md:px-6 bg-white/8 backdrop-blur-xl border-b border-white/10 text-xs tracking-[0.25em] uppercase"
+              className="h-14 w-full flex items-center justify-between px-4 md:px-6 bg-white/8 backdrop-blur-xl border-b border-white/10"
           >
             <button
               onClick={handleLogoClick}
@@ -147,15 +148,60 @@ function App() {
               </span>
             </button>
 
-            <div className="flex items-center gap-2">
-              {/* Menu flottant intégré dans le header */}
-              <div className="hidden md:flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/70 backdrop-blur-2xl border border-white/10 text-[9px] md:text-[11px] text-gray-300">
-                <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-cyan-400 shadow-[0_0_12px_rgba(34,211,238,0.9)] flex-shrink-0" />
-                <span className="whitespace-nowrap">
-                  Menu ONORA · Home · Studios · Dashboard · Audit
-                </span>
-              </div>
-            </div>
+            {/* Menu centré */}
+            <nav className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center gap-3 px-4 py-2 rounded-full bg-black/70 backdrop-blur-2xl border border-white/10">
+              <Link
+                to="/contact"
+                className="text-white hover:text-cyan-400 transition-colors text-xs font-medium"
+              >
+                Nous contacter
+              </Link>
+              
+              <div className="w-px h-4 bg-white/20" />
+              
+              <a
+                href="https://x.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white hover:text-cyan-400 transition-colors"
+                aria-label="Twitter / X"
+              >
+                <Twitter className="w-4 h-4" />
+              </a>
+              
+              <a
+                href="https://linkedin.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white hover:text-cyan-400 transition-colors"
+                aria-label="LinkedIn"
+              >
+                <Linkedin className="w-4 h-4" />
+              </a>
+              
+              <a
+                href="https://youtube.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white hover:text-cyan-400 transition-colors"
+                aria-label="YouTube"
+              >
+                <Youtube className="w-4 h-4" />
+              </a>
+              
+              <div className="w-px h-4 bg-white/20" />
+              
+              <Link
+                to="/login"
+                className="text-white hover:text-cyan-400 transition-colors"
+                aria-label="Se connecter"
+              >
+                <Bot className="w-4 h-4" />
+              </Link>
+            </nav>
+
+            {/* Espace vide à droite pour équilibrer */}
+            <div className="w-[120px]" />
           </header>
 
           {/* CONTENU ROUTES */}
