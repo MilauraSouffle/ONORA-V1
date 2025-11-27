@@ -1,54 +1,52 @@
 // src/components/AuditWidget.jsx
-// Widget audit flottant - Redirige vers /scan
+// Bulle d'audit concurrentiel flottante, fixée en bas à droite de l'écran
 
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Radar } from "lucide-react";
 
 export default function AuditWidget() {
-  const [showTooltip, setShowTooltip] = useState(false);
+  const [open, setOpen] = useState(true);
 
+  // Option : léger délai avant d'afficher la bulle pour laisser respirer le hero
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowTooltip(true);
-    }, 3000);
-
+    const timer = setTimeout(() => setOpen(true), 3000);
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <Link to="/scan" className="fixed bottom-20 md:bottom-24 right-4 md:right-6 z-50">
-      <div className="relative flex items-center gap-3">
-        {/* Tooltip contextuel élégant */}
-        <AnimatePresence>
-          {showTooltip && (
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-              className="bg-white/10 backdrop-blur-md border border-white/10 rounded-xl px-4 py-2 text-xs text-white whitespace-nowrap shadow-xl"
-              style={{
-                animation: "float 3s ease-in-out infinite"
-              }}
-            >
-              Tu es sûr d'être devant tes concurrents ?
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Bouton flottant VisionOS */}
-        <motion.div
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/10 backdrop-blur-2xl border-2 border-white/20 flex items-center justify-center text-cyan-400 hover:border-cyan-400/50 transition-all duration-300 shadow-[0_0_30px_rgba(34,211,238,0.3)] flex-shrink-0"
-          style={{
-            boxShadow: '0 25px 50px -12px rgba(0,0,0,0.9), 0 0 30px rgba(34,211,238,0.3)'
+    <AnimatePresence>
+      {open && (
+        <motion.button
+          onClick={() => {
+            const target = document.querySelector("#waitlist");
+            if (target) target.scrollIntoView({ behavior: "smooth" });
           }}
+          initial={{ opacity: 0, y: 40, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 40, scale: 0.9 }}
+          transition={{ duration: 0.4 }}
+          className="
+            fixed bottom-4 right-4 md:bottom-6 md:right-8 z-[60]
+            flex items-center gap-3 px-4 py-3 md:px-5 md:py-3.5
+            rounded-full bg-white/90 text-black
+            shadow-[0_18px_45px_rgba(0,0,0,0.6)]
+            border border-black/5
+            hover:bg-white active:scale-[0.97]
+            transition-all duration-200
+          "
         >
-          <Radar className="w-5 h-5 md:w-6 md:h-6" />
-        </motion.div>
-      </div>
-    </Link>
+          <div className="relative flex items-center justify-center">
+            <div className="absolute inset-0 rounded-full bg-cyan-400/40 blur-md" />
+            <div className="relative w-8 h-8 rounded-full bg-black text-white flex items-center justify-center">
+              <Radar className="w-4 h-4" />
+            </div>
+          </div>
+          <span className="text-xs md:text-sm font-semibold whitespace-nowrap">
+            Tu es sûr d&apos;être devant tes concurrents ?
+          </span>
+        </motion.button>
+      )}
+    </AnimatePresence>
   );
 }

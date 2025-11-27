@@ -1,213 +1,125 @@
 // src/components/SystemBoot.jsx
-// Animation intro immersive : Ancien monde (chaos) → Nouveau monde (futuriste)
-
 import React, { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function SystemBoot({ onFinish }) {
-  const [phase, setPhase] = useState("chaos"); // chaos -> extinction -> reboot -> reveal -> off
+  const [phase, setPhase] = useState("chaos");
   const [visible, setVisible] = useState(true);
   const [terminalLines, setTerminalLines] = useState([]);
+  
   const canvasRef = useRef(null);
   const hasStartedRef = useRef(false);
   const skipTimeoutRef = useRef(null);
   const audioContextRef = useRef(null);
-  const activeAudioSourcesRef = useRef([]); // Stocker toutes les sources audio actives
-  const noiseIntervalRef = useRef(null); // Référence pour l'intervalle de bruit blanc
+  const activeAudioSourcesRef = useRef([]); 
+  const noiseIntervalRef = useRef(null);
 
   const terminalMessages = [
-    "> PURGE ANCIEN MONDE... [OK]",
-    "> INITIALIZING ONORA SYSTEM...",
-    "> CONNECTING TO IA...",
-    "> ACCESS GRANTED.",
-    "",
-    "> BIENVENUE HUMAIN",
+    "> initialisation du systeme...",
+    "> ONORA intelligence démarre...",
+    "> Recherche de vos concurrents...", 
+    "  [Metz, Nancy, Luxembourg, Strasbourg]", 
+    "> êtes vous prêts pour une expérience augmentée ?",
   ];
 
-  // Fonction pour arrêter tous les sons
+  // --- AUDIO ENGINE ---
   const stopAllSounds = () => {
-    // Arrêter l'intervalle de bruit blanc
-    if (noiseIntervalRef.current) {
-      clearInterval(noiseIntervalRef.current);
-      noiseIntervalRef.current = null;
-    }
-    
-    // Arrêter toutes les sources audio actives
-    activeAudioSourcesRef.current.forEach((source) => {
-      try {
-        if (source && typeof source.stop === "function") {
-          source.stop();
-        }
-      } catch (e) {
-        // Ignorer les erreurs si la source est déjà arrêtée
-      }
-    });
+    if (noiseIntervalRef.current) clearInterval(noiseIntervalRef.current);
+    activeAudioSourcesRef.current.forEach((s) => { try { s.stop(); } catch (e) {} });
     activeAudioSourcesRef.current = [];
   };
 
-  // --- GÉNÉRATION DE SONS AVEC WEB AUDIO API ---
-  const generateWhiteNoise = (duration = 0.1) => {
-    if (!audioContextRef.current) return null;
-    const ctx = audioContextRef.current;
-    const bufferSize = ctx.sampleRate * duration;
-    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-    const output = buffer.getChannelData(0);
-
-    for (let i = 0; i < bufferSize; i++) {
-      output[i] = Math.random() * 2 - 1;
-    }
-
-    const whiteNoise = ctx.createBufferSource();
-    const gainNode = ctx.createGain();
-    whiteNoise.buffer = buffer;
-    gainNode.gain.value = 0.12; // Réduit de 0.3 à 0.12 pour être moins agaçant
-    whiteNoise.connect(gainNode);
-    gainNode.connect(ctx.destination);
-    
-    // Stocker la source pour pouvoir l'arrêter
-    activeAudioSourcesRef.current.push(whiteNoise);
-    
-    whiteNoise.start(0);
-    whiteNoise.stop(ctx.currentTime + duration);
-    
-    // Retirer de la liste après la fin
-    whiteNoise.onended = () => {
-      activeAudioSourcesRef.current = activeAudioSourcesRef.current.filter(
-        (s) => s !== whiteNoise
-      );
-    };
-    
-    return whiteNoise;
-  };
-
-  const playZapSound = () => {
-    if (!audioContextRef.current) return;
-    const ctx = audioContextRef.current;
-    const oscillator = ctx.createOscillator();
-    const gainNode = ctx.createGain();
-
-    oscillator.type = "sawtooth";
-    oscillator.frequency.setValueAtTime(800, ctx.currentTime);
-    oscillator.frequency.exponentialRampToValueAtTime(50, ctx.currentTime + 0.3);
-
-    gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
-
-    oscillator.connect(gainNode);
-    gainNode.connect(ctx.destination);
-    
-    activeAudioSourcesRef.current.push(oscillator);
-    
-    oscillator.start();
-    oscillator.stop(ctx.currentTime + 0.3);
-    
-    oscillator.onended = () => {
-      activeAudioSourcesRef.current = activeAudioSourcesRef.current.filter(
-        (s) => s !== oscillator
-      );
-    };
-  };
-
-  const playKeyboardClick = () => {
-    if (!audioContextRef.current) return;
-    const ctx = audioContextRef.current;
-    const oscillator = ctx.createOscillator();
-    const gainNode = ctx.createGain();
-
-    oscillator.type = "square";
-    oscillator.frequency.value = 800 + Math.random() * 400;
-
-    gainNode.gain.setValueAtTime(0.15, ctx.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.05);
-
-    oscillator.connect(gainNode);
-    gainNode.connect(ctx.destination);
-    
-    activeAudioSourcesRef.current.push(oscillator);
-    
-    oscillator.start();
-    oscillator.stop(ctx.currentTime + 0.05);
-    
-    oscillator.onended = () => {
-      activeAudioSourcesRef.current = activeAudioSourcesRef.current.filter(
-        (s) => s !== oscillator
-      );
-    };
-  };
-
-  const playGlitchBoom = () => {
-    if (!audioContextRef.current) return;
-    const ctx = audioContextRef.current;
-    
-    const oscillators = [];
-    
-    // Créer plusieurs oscillateurs pour un son complexe
-    for (let i = 0; i < 3; i++) {
-      const oscillator = ctx.createOscillator();
-      const gainNode = ctx.createGain();
-      
-      oscillator.type = i === 0 ? "square" : "sawtooth";
-      oscillator.frequency.setValueAtTime(100 + i * 50, ctx.currentTime);
-      oscillator.frequency.exponentialRampToValueAtTime(30, ctx.currentTime + 0.4);
-
-      gainNode.gain.setValueAtTime(0.25 / (i + 1), ctx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
-
-      oscillator.connect(gainNode);
-      gainNode.connect(ctx.destination);
-      
-      activeAudioSourcesRef.current.push(oscillator);
-      oscillators.push(oscillator);
-      
-      oscillator.start(ctx.currentTime + i * 0.05);
-      oscillator.stop(ctx.currentTime + 0.4 + i * 0.05);
-      
-      oscillator.onended = () => {
-        activeAudioSourcesRef.current = activeAudioSourcesRef.current.filter(
-          (s) => s !== oscillator
-        );
-      };
-    }
-  };
-
-  // Initialiser AudioContext
-  useEffect(() => {
-    try {
-      audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
-    } catch (e) {
-      console.warn("Web Audio API non supporté");
-    }
-
-    return () => {
-      // Arrêter tous les sons avant de fermer
-      stopAllSounds();
-      if (audioContextRef.current && audioContextRef.current.state !== "closed") {
-        audioContextRef.current.close();
-      }
-    };
-  }, []);
-
-  // Arrêter tous les sons quand la phase change vers "off" ou quand on skip
-  useEffect(() => {
-    if (phase === "off" || !visible) {
-      stopAllSounds();
-    }
-  }, [phase, visible]);
-
-  // Reprendre AudioContext si suspendu
   const resumeAudioContext = () => {
     if (audioContextRef.current && audioContextRef.current.state === "suspended") {
       audioContextRef.current.resume();
     }
   };
 
-  // Fonction pour skip l'animation
+  const generateWhiteNoise = (duration = 0.1) => {
+    if (!audioContextRef.current) return;
+    const ctx = audioContextRef.current;
+    const buffer = ctx.createBuffer(1, ctx.sampleRate * duration, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+    const src = ctx.createBufferSource();
+    src.buffer = buffer;
+    const gain = ctx.createGain();
+    gain.gain.value = 0.08; 
+    src.connect(gain);
+    gain.connect(ctx.destination);
+    src.start(0);
+    activeAudioSourcesRef.current.push(src);
+  };
+
+  const playKeyboardClick = () => {
+    if (!audioContextRef.current) return;
+    const ctx = audioContextRef.current;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "square";
+    osc.frequency.setValueAtTime(800 + Math.random() * 200, ctx.currentTime);
+    gain.gain.setValueAtTime(0.03, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.03);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.03);
+    activeAudioSourcesRef.current.push(osc);
+  };
+
+  const playDataBreachSound = () => {
+    if (!audioContextRef.current) return;
+    const ctx = audioContextRef.current;
+    const t = ctx.currentTime;
+
+    const bufferSize = ctx.sampleRate * 0.4;
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    const noiseGain = ctx.createGain();
+    noiseGain.gain.setValueAtTime(0.4, t);
+    noiseGain.gain.exponentialRampToValueAtTime(0.01, t + 0.3);
+    noise.connect(noiseGain);
+    noiseGain.connect(ctx.destination);
+    noise.start(t);
+
+    const sub = ctx.createOscillator();
+    sub.type = "sine";
+    sub.frequency.setValueAtTime(100, t);
+    sub.frequency.exponentialRampToValueAtTime(30, t + 0.5);
+    const subGain = ctx.createGain();
+    subGain.gain.setValueAtTime(0.8, t);
+    subGain.gain.exponentialRampToValueAtTime(0.01, t + 0.5);
+    sub.connect(subGain);
+    subGain.connect(ctx.destination);
+    sub.start(t);
+
+    const osc = ctx.createOscillator();
+    osc.type = "sawtooth";
+    osc.frequency.setValueAtTime(800, t);
+    osc.frequency.linearRampToValueAtTime(50, t + 0.2);
+    const oscGain = ctx.createGain();
+    oscGain.gain.setValueAtTime(0.1, t);
+    oscGain.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+    osc.connect(oscGain);
+    oscGain.connect(ctx.destination);
+    osc.start(t);
+
+    activeAudioSourcesRef.current.push(noise, sub, osc);
+  };
+
+  // --- INIT ---
+  useEffect(() => {
+    try { audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)(); } 
+    catch (e) {}
+    return () => stopAllSounds();
+  }, []);
+
   const handleSkip = () => {
-    stopAllSounds(); // Arrêter tous les sons immédiatement
-    resumeAudioContext();
-    if (skipTimeoutRef.current) {
-      skipTimeoutRef.current.forEach((timeout) => clearTimeout(timeout));
-    }
+    stopAllSounds();
+    if (skipTimeoutRef.current) skipTimeoutRef.current.forEach(clearTimeout);
     setPhase("off");
     setTimeout(() => {
       setVisible(false);
@@ -215,189 +127,101 @@ export default function SystemBoot({ onFinish }) {
     }, 100);
   };
 
-  // --- PHASE 1 & 2 : Générateur de neige TV (CHAOS + EXTINCTION) ---
+  // --- CANVAS NOISE ---
   useEffect(() => {
-    if (phase !== "chaos" && phase !== "extinction") {
-      stopAllSounds(); // Arrêter le bruit quand on quitte ces phases
-      return;
-    }
-
+    if (phase !== "chaos" && phase !== "extinction") return;
     const canvas = canvasRef.current;
     if (!canvas) return;
+    // Note: alpha: false est vital pour les perfs mobile
     const ctx = canvas.getContext("2d", { alpha: false });
-    if (!ctx) return;
-
-    let animationFrameId;
-
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+    
+    let frame;
+    const resize = () => { 
+        // Résolution réduite sur mobile pour sauver la batterie et le GPU
+        canvas.width = window.innerWidth / (window.innerWidth < 768 ? 3 : 2); 
+        canvas.height = window.innerHeight / (window.innerWidth < 768 ? 3 : 2); 
     };
-
-    const drawNoise = () => {
-      const w = canvas.width;
-      const h = canvas.height;
-      if (w <= 0 || h <= 0) return;
-
+    const draw = () => {
+      const w = canvas.width; const h = canvas.height;
+      if(w===0) return;
       const idata = ctx.createImageData(w, h);
-      const buffer32 = new Uint32Array(idata.data.buffer);
-      const len = buffer32.length;
-
-      for (let i = 0; i < len; i++) {
-        const isWhite = Math.random() > 0.48;
-        const val = isWhite ? 255 : 0;
-        buffer32[i] = (255 << 24) | (val << 16) | (val << 8) | val;
-      }
-
+      const buf = new Uint32Array(idata.data.buffer);
+      for (let i = 0; i < buf.length; i++) buf[i] = Math.random() > 0.5 ? 0xFFFFFFFF : 0xFF000000;
       ctx.putImageData(idata, 0, 0);
-      animationFrameId = requestAnimationFrame(drawNoise);
+      frame = requestAnimationFrame(draw);
     };
-
-    // Son white noise pendant le chaos uniquement (moins fréquent et moins fort)
-    if (phase === "chaos") {
-      resumeAudioContext();
-      stopAllSounds(); // S'assurer qu'il n'y a pas d'autres sons
-      noiseIntervalRef.current = setInterval(() => {
-        generateWhiteNoise(0.08);
-      }, 250); // Moins fréquent : 250ms au lieu de 150ms
-    } else if (phase === "extinction") {
-      // Arrêter le bruit blanc lors de l'extinction
-      stopAllSounds();
-    }
 
     window.addEventListener("resize", resize);
     resize();
-    drawNoise();
+    draw();
+
+    if (phase === "chaos") {
+        resumeAudioContext();
+        noiseIntervalRef.current = setInterval(() => generateWhiteNoise(0.08), 150);
+    } else stopAllSounds();
 
     return () => {
       window.removeEventListener("resize", resize);
-      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      cancelAnimationFrame(frame);
       stopAllSounds();
     };
   }, [phase]);
 
-  // Son zap lors de l'extinction
+  // --- TERMINAL ---
   useEffect(() => {
-    if (phase === "extinction") {
-      resumeAudioContext();
-      setTimeout(() => playZapSound(), 100);
-    }
-  }, [phase]);
-
-  // --- PHASE 3 : Animation Typewriter Terminal ---
-  useEffect(() => {
-    if (phase !== "reboot") return;
-
+    if (phase !== "terminal") return;
     resumeAudioContext();
-    stopAllSounds(); // Arrêter les sons précédents
+    stopAllSounds();
     setTerminalLines([]);
-    let currentLineIndex = 0;
-    let currentCharIndex = 0;
-    let intervalId = null;
-    let timeoutId = null;
-
-    const typeNextChar = () => {
-      if (currentLineIndex >= terminalMessages.length) {
-        if (intervalId) clearInterval(intervalId);
-        return;
-      }
-
-      const currentLine = terminalMessages[currentLineIndex];
-      
-      if (currentLine === "") {
-        setTerminalLines((prev) => [...prev, ""]);
-        currentLineIndex++;
-        currentCharIndex = 0;
-        return;
-      }
-      
-      if (currentCharIndex < currentLine.length) {
-        // Son de clic moins fréquent pour être moins agaçant
-        if (Math.random() > 0.8) {
-          playKeyboardClick();
-        }
-
-        setTerminalLines((prev) => {
-          const newLines = [...prev];
-          if (!newLines[currentLineIndex]) {
-            newLines[currentLineIndex] = "";
-          }
-          newLines[currentLineIndex] = currentLine.slice(0, currentCharIndex + 1);
-          return newLines;
-        });
-        currentCharIndex++;
+    
+    let line=0, char=0, interval, timeout;
+    const type = () => {
+      if (line >= terminalMessages.length) { clearInterval(interval); return; }
+      const currentLine = terminalMessages[line];
+      if (char < currentLine.length) {
+        if(Math.random()>0.5) playKeyboardClick();
+        setTerminalLines(p => { const n=[...p]; n[line]=currentLine.slice(0,char+1); return n; });
+        char++;
       } else {
-        currentLineIndex++;
-        currentCharIndex = 0;
-        if (intervalId) clearInterval(intervalId);
-        timeoutId = setTimeout(() => {
-          intervalId = setInterval(typeNextChar, 30);
-        }, 150);
+        line++; char=0; clearInterval(interval);
+        timeout = setTimeout(() => interval = setInterval(type, 30), 250);
       }
     };
-
-    intervalId = setInterval(typeNextChar, 30);
-
-    return () => {
-      if (intervalId) clearInterval(intervalId);
-      if (timeoutId) clearTimeout(timeoutId);
-      stopAllSounds();
-    };
+    interval = setInterval(type, 30);
+    return () => { clearInterval(interval); clearTimeout(timeout); };
   }, [phase]);
 
-  // Son boom lors du reveal
+  // --- GLITCH TRIGGER ---
   useEffect(() => {
-    if (phase === "reveal") {
-      resumeAudioContext();
-      stopAllSounds(); // Arrêter les sons précédents
-      playGlitchBoom();
+    if (phase === "title_glitch") {
+        resumeAudioContext();
+        playDataBreachSound();
     }
   }, [phase]);
 
-  // --- SÉQUENÇAGE TEMPOREL PRÉCIS ---
+  // --- TIMELINE ---
   useEffect(() => {
     if (hasStartedRef.current) return;
     hasStartedRef.current = true;
-    resumeAudioContext();
+    const timers = [];
 
-    const timeouts = [];
+    timers.push(setTimeout(() => setPhase("extinction"), 2000));
+    timers.push(setTimeout(() => setPhase("terminal"), 2500));
+    
+    const totalChars = terminalMessages.reduce((a,b)=>a+b.length,0);
+    const typingTime = (totalChars*30) + (terminalMessages.length*250) + 800;
+    const startCleanTitle = 2500 + typingTime;
 
-    const t1 = setTimeout(() => {
-      setPhase("extinction");
-    }, 2000);
-    timeouts.push(t1);
+    timers.push(setTimeout(() => setPhase("title_clean"), startCleanTitle));
+    timers.push(setTimeout(() => setPhase("title_glitch"), startCleanTitle + 1200));
 
-    const t2 = setTimeout(() => {
-      setPhase("reboot");
-    }, 2500);
-    timeouts.push(t2);
-
-    const totalChars = terminalMessages.reduce((sum, line) => sum + line.length, 0);
-    const typingDuration = totalChars * 30;
-    const pauseBetweenLines = terminalMessages.length * 100;
-    const totalRebootDuration = typingDuration + pauseBetweenLines + 1000;
-
-    const t3 = setTimeout(() => {
-      setPhase("reveal");
-    }, 2500 + totalRebootDuration);
-    timeouts.push(t3);
-
-    const t4 = setTimeout(() => {
-      stopAllSounds(); // Arrêter tous les sons avant de disparaître
+    timers.push(setTimeout(() => {
       setPhase("off");
-      setTimeout(() => {
-        setVisible(false);
-        if (onFinish) onFinish();
-      }, 600);
-    }, 2500 + totalRebootDuration + 1500);
-    timeouts.push(t4);
+      setTimeout(() => { setVisible(false); if(onFinish) onFinish(); }, 800);
+    }, startCleanTitle + 1200 + 800));
 
-    skipTimeoutRef.current = timeouts;
-
-    return () => {
-      timeouts.forEach((timeout) => clearTimeout(timeout));
-      stopAllSounds();
-    };
+    skipTimeoutRef.current = timers;
+    return () => timers.forEach(clearTimeout);
   }, [onFinish]);
 
   if (!visible) return null;
@@ -406,219 +230,106 @@ export default function SystemBoot({ onFinish }) {
     <AnimatePresence>
       {phase !== "off" && (
         <motion.div
-          key="system-boot"
-          className="fixed inset-0 z-[9999] bg-black"
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.6 }}
+          key="boot"
+          className="fixed inset-0 z-[9999] bg-black overflow-hidden font-mono"
+          exit={{ opacity: 0, transition: { duration: 1 } }} 
         >
-          {/* BOUTON SKIP FUTURISTE - Positionné en haut à droite, responsive et jamais coupé */}
-          <div
-            className="fixed top-4 right-4 sm:top-5 sm:right-5 md:top-6 md:right-6 z-[10000] pointer-events-none"
-            style={{
-              maxWidth: "calc(100vw - 2rem)",
-            }}
-          >
+          {/* BOUTON SKIP - Positionnement et taille mobile adaptés */}
+          <div className="absolute top-4 right-4 md:top-6 md:right-6 z-[10000]">
             <button
               onClick={handleSkip}
-              className="pointer-events-auto
-                         group relative
-                         px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3
-                         bg-black/70 backdrop-blur-md
-                         border border-cyan-400/50
-                         rounded-full
-                         text-cyan-400 text-xs sm:text-sm md:text-base font-bold uppercase tracking-wider
-                         hover:border-cyan-400 hover:text-cyan-300
-                         transition-all duration-300
-                         shadow-[0_0_20px_rgba(34,211,238,0.3)]
-                         hover:shadow-[0_0_30px_rgba(34,211,238,0.6)]
-                         active:scale-95
-                         whitespace-nowrap
-                         before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-cyan-400/10 before:to-transparent
-                         before:translate-x-[-100%] hover:before:translate-x-[100%] before:transition-transform before:duration-700 before:rounded-full"
-              style={{
-                fontFamily:
-                  "'JetBrains Mono', 'Fira Code', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace",
-                boxShadow: "0 0 20px rgba(34, 211, 238, 0.3), inset 0 0 20px rgba(34, 211, 238, 0.1)",
-              }}
+              className="group relative px-4 py-2 md:px-5 md:py-2.5 bg-black/40 backdrop-blur-md border border-white/20 rounded-full
+                         flex items-center gap-2 md:gap-3 transition-all duration-300 hover:border-white/60 hover:bg-black/60"
             >
-              <span className="relative z-10 flex items-center gap-2">
-                <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-cyan-400 animate-pulse flex-shrink-0" />
-                passer l'intro.
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/0 via-cyan-400/20 to-cyan-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+                </span>
+                <span className="text-[10px] md:text-xs text-white/80 font-medium tracking-widest uppercase group-hover:text-white transition-colors">
+                    passer l'intro.
+                </span>
             </button>
           </div>
 
-          {/* PHASE 1 : CHAOS - Neige TV dense */}
+          {/* LAYER 1: CHAOS */}
           {(phase === "chaos" || phase === "extinction") && (
-            <motion.div
-              className="absolute inset-0 bg-white origin-center pointer-events-none"
-              initial={phase === "chaos" ? { scaleY: 1, scaleX: 1 } : false}
-              animate={
-                phase === "extinction"
-                  ? {
-                      scaleY: [1, 0.005, 0.005],
-                      scaleX: [1, 1, 0.005],
-                    }
-                  : { scaleY: 1, scaleX: 1 }
-              }
-              transition={
-                phase === "extinction"
-                  ? {
-                      duration: 0.5,
-                      times: [0, 0.5, 1],
-                      ease: [0.87, 0, 0.13, 1],
-                    }
-                  : {}
-              }
-            >
-              <canvas
-                ref={canvasRef}
-                className="w-full h-full object-cover"
-                style={{ imageRendering: "pixelated" }}
-              />
-            </motion.div>
+            <motion.canvas
+              ref={canvasRef}
+              className="absolute inset-0 w-full h-full object-cover"
+              animate={phase === "extinction" ? { scaleY: 0.002, opacity: 0 } : { scaleY: 1 }}
+              transition={{ duration: 0.4, ease: "easeInOut" }}
+            />
           )}
 
-          {/* PHASE 3 : REBOOT TERMINAL */}
-          {phase === "reboot" && (
-            <motion.div
-              className="absolute inset-0 bg-black flex items-center justify-center pointer-events-none"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="max-w-2xl px-6 md:px-8">
-                <div
-                  className="font-mono text-sm md:text-base space-y-2"
-                  style={{
-                    fontFamily:
-                      "'JetBrains Mono', 'Fira Code', 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace",
-                    color: "#00ff88",
-                    textShadow: "0 0 10px rgba(0, 255, 136, 0.5)",
-                  }}
-                >
-                  {terminalLines.map((line, index) => (
-                    <div key={index} className="flex items-center gap-2">
-                      <span>{line}</span>
-                      {index === terminalLines.length - 1 &&
-                        line.length === (terminalMessages[terminalLines.length - 1]?.length || 0) && (
-                          <span className="animate-pulse text-[#00ff88]">▊</span>
-                        )}
-                      {index === terminalLines.length - 1 &&
-                        line.length < (terminalMessages[terminalLines.length - 1]?.length || 0) && (
-                          <span className="animate-pulse text-[#00ff88]">|</span>
-                        )}
-                    </div>
-                  ))}
-                </div>
+          {/* LAYER 2: TERMINAL - Padding et Text Size adaptés mobile */}
+          {phase === "terminal" && (
+            <div className="absolute inset-0 flex items-center justify-center p-4 md:p-8">
+              <div className="w-full max-w-2xl text-left space-y-2">
+                {terminalLines.map((line, i) => (
+                  <div key={i} className={`
+                    text-xs sm:text-sm md:text-lg tracking-wider font-bold 
+                    break-words whitespace-pre-wrap
+                    ${i === terminalLines.length - 1 ? "text-green-400" : "text-green-600/80"}
+                  `}>
+                    {line}
+                  </div>
+                ))}
               </div>
-            </motion.div>
+            </div>
           )}
 
-          {/* PHASE 4 : REVEAL GLITCH - EFFET RGB SPLIT PRONONCÉ */}
-          {phase === "reveal" && (
-            <div className="absolute inset-0 pointer-events-none">
-              <motion.div
-                className="absolute inset-0 bg-black"
-                animate={{
-                  opacity: [1, 1, 0.95, 1, 0.9, 1, 0.8, 1, 0.6, 0.4, 0.2, 0],
-                  x: [0, -8, 8, -6, 6, -4, 4, -3, 3, -2, 2, 0],
-                  scaleX: [1, 1.02, 0.98, 1.01, 0.99, 1.005, 0.995, 1, 1, 1, 1, 1],
-                }}
-                transition={{
-                  duration: 1.5,
-                  times: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.85, 0.9, 1],
-                  ease: "easeInOut",
-                }}
-              />
+          {/* LAYER 3: TITLE SEQUENCE - Responsive Text Sizes */}
+          {(phase === "title_clean" || phase === "title_glitch") && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black px-4">
+                <div className="relative z-20 w-full flex justify-center">
+                    {/* Le texte Principal : Utilisation de whitespace-nowrap pour éviter la casse */}
+                    <motion.h1
+                        className="
+                          font-black text-white tracking-widest text-center whitespace-nowrap
+                          text-xl sm:text-3xl md:text-5xl lg:text-7xl
+                        "
+                        animate={phase === "title_glitch" ? {
+                            x: [-2, 2, -2, 2, 0],
+                            scale: [1, 1.1, 1.5, 2.5], 
+                            opacity: [1, 0.8, 0], 
+                            filter: ["blur(0px)", "blur(0px)", "blur(12px)"]
+                        } : {
+                            x: 0, scale: 1, opacity: 1, filter: "blur(0px)"
+                        }}
+                        transition={{ duration: 0.8, ease: "easeInOut" }}
+                    >
+                        [ BIENVENUE HUMAIN. ]
+                    </motion.h1>
 
-              <motion.div
-                className="absolute inset-0 bg-red-500 mix-blend-screen"
-                style={{
-                  filter: "brightness(1.5) contrast(1.2)",
-                  clipPath: "inset(0 0 0 0)",
-                }}
-                animate={{
-                  x: [0, 20, -15, 12, -8, 6, -4, 3, -2, 1, 0],
-                  opacity: [0, 0.8, 0.6, 0.7, 0.5, 0.4, 0.3, 0.2, 0.1, 0.05, 0],
-                }}
-                transition={{
-                  duration: 1.5,
-                  times: [0, 0.15, 0.3, 0.45, 0.6, 0.7, 0.8, 0.85, 0.9, 0.95, 1],
-                  ease: "easeOut",
-                }}
-              />
-
-              <motion.div
-                className="absolute inset-0 bg-green-400 mix-blend-screen"
-                style={{
-                  filter: "brightness(1.3) contrast(1.1)",
-                }}
-                animate={{
-                  x: [0, -15, 12, -8, 6, -4, 3, -2, 1, 0],
-                  opacity: [0, 0.7, 0.5, 0.6, 0.4, 0.3, 0.2, 0.1, 0.05, 0],
-                }}
-                transition={{
-                  duration: 1.5,
-                  times: [0, 0.15, 0.3, 0.45, 0.6, 0.7, 0.8, 0.9, 0.95, 1],
-                  ease: "easeOut",
-                }}
-              />
-
-              <motion.div
-                className="absolute inset-0 bg-cyan-400 mix-blend-screen"
-                style={{
-                  filter: "brightness(1.4) contrast(1.15)",
-                }}
-                animate={{
-                  x: [0, -18, 15, -12, 8, -6, 4, -3, 2, 0],
-                  opacity: [0, 0.75, 0.55, 0.65, 0.45, 0.35, 0.25, 0.15, 0.08, 0],
-                }}
-                transition={{
-                  duration: 1.5,
-                  times: [0, 0.15, 0.3, 0.45, 0.6, 0.7, 0.8, 0.9, 0.95, 1],
-                  ease: "easeOut",
-                }}
-              />
-
-              <motion.div
-                className="absolute inset-0"
-                style={{
-                  background: `repeating-linear-gradient(
-                    0deg,
-                    transparent 0px,
-                    transparent 2px,
-                    rgba(255, 0, 0, 0.1) 2px,
-                    rgba(255, 0, 0, 0.1) 4px,
-                    transparent 4px,
-                    transparent 6px
-                  )`,
-                  mixBlendMode: "screen",
-                }}
-                animate={{
-                  y: [0, -10, 10, -8, 8, -5, 5, -3, 3, 0],
-                  opacity: [0, 0.6, 0.4, 0.5, 0.3, 0.2, 0.1, 0.05, 0.02, 0],
-                }}
-                transition={{
-                  duration: 1.5,
-                  times: [0, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 1],
-                  ease: "easeOut",
-                }}
-              />
-
-              <motion.div
-                className="absolute inset-0 bg-white"
-                animate={{
-                  opacity: [0, 0.3, 0, 0.2, 0, 0.15, 0, 0.1, 0, 0.05, 0],
-                }}
-                transition={{
-                  duration: 1.5,
-                  times: [0, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1],
-                  ease: "easeOut",
-                }}
-              />
+                    {/* Glitch Overlay */}
+                    {phase === "title_glitch" && (
+                        <>
+                            <motion.h1
+                                className="absolute top-0 left-0 w-full font-black text-red-600 tracking-widest text-center mix-blend-screen opacity-80 whitespace-nowrap text-xl sm:text-3xl md:text-5xl lg:text-7xl"
+                                animate={{ x: [-5, 5], y: [-2, 2], opacity: [0, 1, 0] }}
+                                transition={{ duration: 0.2, repeat: 4 }}
+                            >
+                                [ BIENVENUE HUMAIN. ]
+                            </motion.h1>
+                             
+                             <motion.h1
+                                className="absolute top-0 left-0 w-full font-black text-cyan-400 tracking-widest text-center mix-blend-screen opacity-80 whitespace-nowrap text-xl sm:text-3xl md:text-5xl lg:text-7xl"
+                                animate={{ x: [5, -5], y: [2, -2], opacity: [0, 1, 0] }}
+                                transition={{ duration: 0.2, repeat: 4, delay: 0.05 }}
+                            >
+                                [ BIENVENUE HUMAIN. ]
+                            </motion.h1>
+                            
+                            <motion.div 
+                                className="absolute inset-0 bg-black mix-blend-hard-light"
+                                animate={{ clipPath: [
+                                    "inset(10% 0 80% 0)", "inset(50% 0 10% 0)", "inset(0 0 0 0)"
+                                ]}}
+                                transition={{ duration: 0.3, repeat: 3 }}
+                            />
+                        </>
+                    )}
+                </div>
             </div>
           )}
         </motion.div>

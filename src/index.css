@@ -4,7 +4,7 @@
 
 :root {
   /* image dans /public */
-  --bg-image: url('/humanoid-bg.png');
+  --bg-image: url('/humanoid-bg.webp');
 }
 
 /* Reset simple */
@@ -40,26 +40,61 @@ body {
   width: 100%;
   height: 100%;
   background: radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.15) 100%);
-  z-index: 1;
+  z-index: 0;
   pointer-events: none;
 }
 
 /* Fond humanoïde fixé derrière tout le site - ATMOSPHÈRE PESANTE */
+/* Positionné pour que les yeux soient juste au-dessus du container */
 #root::before {
   content: "";
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 115vh;
   background-image: var(--bg-image);
   background-size: cover;
-  background-position: center 45%;
+
+  /* C’est CETTE LIGNE qui déplace les yeux */
+  background-position: center -12vh;
+
   background-attachment: fixed;
-  z-index: 0;
-  opacity: 1;              /* Humanoïde à pleine opacité pour être bien visible */
+  background-repeat: no-repeat;
+  z-index: 1;
+  opacity: 1;
   filter: blur(0px) contrast(1.3) brightness(0.95);
   pointer-events: none;
+}
+
+/* Responsive ajustements */
+@media (max-width: 1024px) {
+  #root::before {
+    height: 110vh;
+    background-position: center -8vh;
+  }
+}
+
+@media (max-width: 768px) {
+  #root::before {
+    height: 108vh;
+    background-position: center -4vh;
+  }
+}
+
+/* Responsive ajustements */
+@media (max-width: 1024px) {
+  #root::before {
+    top: -10vh;
+    height: 110vh;
+  }
+}
+
+@media (max-width: 768px) {
+  #root::before {
+    top: -8vh;
+    height: 108vh;
+  }
 }
 
 /* Scrollbar custom uniquement pour les zones de dashboard */
