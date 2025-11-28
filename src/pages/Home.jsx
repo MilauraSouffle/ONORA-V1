@@ -52,11 +52,18 @@ export default function Home() {
     });
   };
 
+  const desktopSlidesCount = 5; // Hero, Studios, Sprint, Use Cases, Origin+Waitlist
+
   // Transforme le scroll vertical en horizontal sur desktop,
-  // optimisé pour trackpad Mac (fluide et réactif)
+  // optimisé pour trackpad Mac avec navigation hook par hook (progressive)
   useEffect(() => {
     const container = desktopScrollRef.current;
     if (!container) return;
+
+    let isScrolling = false;
+    let scrollTimeout = null;
+    let wheelDelta = 0;
+    let lastWheelTime = 0;
 
     const handleWheel = (e) => {
       // si on scroll dans une bulle de contenu, on laisse le scroll vertical
@@ -66,12 +73,108 @@ export default function Home() {
       // Détection : si scroll horizontal prédominant, on laisse faire
       if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
 
-      // Scroll vertical transformé en horizontal avec multiplicateur fluide
       e.preventDefault();
-      container.scrollBy({
-        left: e.deltaY * 0.4,
-        behavior: "auto", // Scroll instantané pour fluidité trackpad
-      });
+
+      const now = Date.now();
+      const timeSinceLastWheel = now - lastWheelTime;
+      lastWheelTime = now;
+
+      // Si trop de temps entre les événements, reset
+      if (timeSinceLastWheel > 200) {
+        wheelDelta = 0;
+      }
+
+      // Accumule le delta pour détecter l'intention de scroll
+      wheelDelta += e.deltaY;
+
+      // Clear timeout précédent
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+      }
+
+      // Détection immédiate si le delta est assez important
+      const immediateThreshold = 80;
+      if (Math.abs(wheelDelta) > immediateThreshold && !isScrolling) {
+        const { scrollLeft, clientWidth } = container;
+        if (!clientWidth) {
+          scrollTimeout = setTimeout(() => {
+            wheelDelta = 0;
+          }, 150);
+          return;
+        }
+
+        const currentIndex = Math.round(scrollLeft / clientWidth);
+        let targetIndex = currentIndex;
+
+        if (wheelDelta > 0) {
+          // Scroll vers le bas → hook suivant
+          targetIndex = Math.min(currentIndex + 1, desktopSlidesCount - 1);
+        } else {
+          // Scroll vers le haut → hook précédent
+          targetIndex = Math.max(currentIndex - 1, 0);
+        }
+
+        // Scroll progressif vers le hook cible (un seul hook à la fois)
+        if (targetIndex !== currentIndex) {
+          isScrolling = true;
+          wheelDelta = 0; // Reset immédiatement pour éviter les sauts multiples
+
+          const targetScroll = targetIndex * clientWidth;
+          
+          container.scrollTo({
+            left: targetScroll,
+            behavior: "smooth",
+          });
+
+          // Reset après l'animation (600ms pour le smooth scroll)
+          setTimeout(() => {
+            isScrolling = false;
+          }, 600);
+        }
+      } else {
+        // Sinon, attend un peu pour accumuler les petits mouvements
+        scrollTimeout = setTimeout(() => {
+          if (isScrolling) {
+            wheelDelta = 0;
+            return;
+          }
+
+          const { scrollLeft, clientWidth } = container;
+          if (!clientWidth) {
+            wheelDelta = 0;
+            return;
+          }
+
+          const currentIndex = Math.round(scrollLeft / clientWidth);
+          let targetIndex = currentIndex;
+
+          // Seuil réduit pour les mouvements accumulés
+          const threshold = 40;
+          if (Math.abs(wheelDelta) > threshold) {
+            if (wheelDelta > 0) {
+              targetIndex = Math.min(currentIndex + 1, desktopSlidesCount - 1);
+            } else {
+              targetIndex = Math.max(currentIndex - 1, 0);
+            }
+
+            if (targetIndex !== currentIndex) {
+              isScrolling = true;
+              const targetScroll = targetIndex * clientWidth;
+              
+              container.scrollTo({
+                left: targetScroll,
+                behavior: "smooth",
+              });
+
+              setTimeout(() => {
+                isScrolling = false;
+              }, 600);
+            }
+          }
+
+          wheelDelta = 0;
+        }, 150);
+      }
     };
 
     const handleScroll = () => {
@@ -86,10 +189,11 @@ export default function Home() {
     container.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
+      if (scrollTimeout) clearTimeout(scrollTimeout);
       container.removeEventListener("wheel", handleWheel);
       container.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [desktopSlidesCount]);
 
   // Suivi du slider mobile
   useEffect(() => {
@@ -108,7 +212,6 @@ export default function Home() {
   }, []);
 
   const mobileSlidesCount = 2;
-  const desktopSlidesCount = 5; // Hero, Studios, Sprint, Use Cases, Origin+Waitlist
 
   return (
     <>
@@ -139,12 +242,18 @@ export default function Home() {
         />
       </Helmet>
 
-      <StatusBar onWaitlistClick={scrollToWaitlist} />
       {/* AuditWidget masqué pour le moment - sera réutilisé plus tard */}
 
       <div className="w-full min-h-full flex flex-col">
         {/* ========== LAYOUT DESKTOP HORIZONTAL ========== */}
         <div className="hidden lg:flex flex-col flex-1 relative">
+          {/* StatusBar flottante avant-plan */}
+          <div className="hidden lg:block absolute top-4 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
+            <div className="pointer-events-auto">
+              <StatusBar onWaitlistClick={scrollToWaitlist} />
+            </div>
+          </div>
+
           <div
             ref={desktopScrollRef}
             className="
@@ -154,12 +263,12 @@ export default function Home() {
             "
           >
             {/* SLIDE 1 – HERO / PROMESSE */}
-            <section className="w-full h-[calc(100vh-64px)] flex-shrink-0 snap-start flex flex-col items-center px-4 relative">
+            <section className="w-full h-full flex-shrink-0 snap-start flex flex-col items-center justify-center px-6 py-6 relative">
               <div className="absolute inset-0 bg-black/10 backdrop-blur-md pointer-events-none" />
               
-              {/* Bulle remontée */}
-              <div className="relative z-10 w-full flex items-center justify-center flex-1" style={{ paddingTop: '4vh', paddingBottom: '15vh' }}>
-                <VisionBubble className="-mt-8">
+              {/* Bulle centrée */}
+              <div className="relative z-10 w-full flex items-center justify-center flex-1 max-w-7xl">
+                <VisionBubble>
                   <div className="grid gap-8 md:gap-12 grid-cols-1 md:grid-cols-[1fr_1.2fr] items-center h-full">
                     {/* Logo ONORA + CTA */}
                     <div className="flex flex-col items-center gap-6">
@@ -210,12 +319,12 @@ export default function Home() {
             </section>
 
             {/* SLIDE 2 – STUDIOS GRID */}
-            <section className="w-full h-[calc(100vh-64px)] flex-shrink-0 snap-start flex flex-col items-center px-4 relative">
+            <section className="w-full h-full flex-shrink-0 snap-start flex flex-col items-center justify-center px-6 py-6 relative">
               <div className="absolute inset-0 bg-black/8 backdrop-blur-sm pointer-events-none" />
               
-              {/* Bulle remontée */}
-              <div className="relative z-10 w-full flex items-center justify-center flex-1" style={{ paddingTop: '4vh', paddingBottom: '15vh' }}>
-                <VisionBubble className="-mt-8">
+              {/* Bulle centrée */}
+              <div className="relative z-10 w-full flex items-center justify-center flex-1 max-w-7xl">
+                <VisionBubble>
                   <div className="space-y-8 h-full flex flex-col">
                     {/* Header */}
                     <div className="text-center">
@@ -279,12 +388,12 @@ export default function Home() {
             </section>
 
             {/* SLIDE 3 – MVP IA 48H */}
-            <section className="w-full h-[calc(100vh-64px)] flex-shrink-0 snap-start flex flex-col items-center px-4 relative">
+            <section className="w-full h-full flex-shrink-0 snap-start flex flex-col items-center justify-center px-6 py-6 relative">
               <div className="absolute inset-0 bg-black/8 backdrop-blur-sm pointer-events-none" />
               
-              {/* Bulle remontée */}
-              <div className="relative z-10 w-full flex items-center justify-center flex-1" style={{ paddingTop: '4vh', paddingBottom: '15vh' }}>
-                <VisionBubble className="-mt-8">
+              {/* Bulle centrée */}
+              <div className="relative z-10 w-full flex items-center justify-center flex-1 max-w-7xl">
+                <VisionBubble>
                   <div className="space-y-8 text-center h-full flex flex-col justify-center">
                     <div>
                       <span className="inline-block py-1 px-3 rounded-full bg-purple-500/20 border border-purple-500/50 text-xs font-mono tracking-wider uppercase text-purple-300 mb-4">
@@ -318,12 +427,12 @@ export default function Home() {
             </section>
 
             {/* SLIDE 4 – USE CASES TEASER */}
-            <section className="w-full h-[calc(100vh-64px)] flex-shrink-0 snap-start flex flex-col items-center px-4 relative">
+            <section className="w-full h-full flex-shrink-0 snap-start flex flex-col items-center justify-center px-6 py-6 relative">
               <div className="absolute inset-0 bg-black/8 backdrop-blur-sm pointer-events-none" />
               
-              {/* Bulle remontée */}
-              <div className="relative z-10 w-full flex items-center justify-center flex-1" style={{ paddingTop: '4vh', paddingBottom: '15vh' }}>
-                <VisionBubble className="-mt-8">
+              {/* Bulle centrée */}
+              <div className="relative z-10 w-full flex items-center justify-center flex-1 max-w-7xl">
+                <VisionBubble>
                   <div className="space-y-8 text-center h-full flex flex-col justify-center">
                     <div>
                       <span className="inline-block py-1 px-3 rounded-full bg-white/5 border border-white/10 text-xs font-mono tracking-wider uppercase text-gray-900 mb-4">
@@ -356,12 +465,12 @@ export default function Home() {
             </section>
 
             {/* SLIDE 5 – ORIGIN */}
-            <section className="w-full h-[calc(100vh-64px)] flex-shrink-0 snap-start flex flex-col items-center px-4 relative">
+            <section className="w-full h-full flex-shrink-0 snap-start flex flex-col items-center justify-center px-6 py-6 relative">
               <div className="absolute inset-0 bg-black/8 backdrop-blur-sm pointer-events-none" />
               
-              {/* Bulle remontée */}
-              <div className="relative z-10 w-full flex items-center justify-center flex-1" style={{ paddingTop: '4vh', paddingBottom: '15vh' }}>
-                <VisionBubble className="-mt-8">
+              {/* Bulle centrée */}
+              <div className="relative z-10 w-full flex items-center justify-center flex-1 max-w-7xl">
+                <VisionBubble>
                   <div className="space-y-6 h-full flex flex-col">
                     {/* Label ACCESS GRANTED */}
                     <div className="flex justify-end">
@@ -429,6 +538,49 @@ export default function Home() {
               </div>
               
             </section>
+          </div>
+
+          {/* Souris + Points de navigation en bas, arrière-plan */}
+          <div className="hidden lg:flex absolute bottom-6 left-1/2 -translate-x-1/2 z-10 items-center gap-4">
+            {/* Souris */}
+            <motion.div
+              className="w-7 h-11 rounded-full border border-gray-900/30 bg-gray-900/10 backdrop-blur-xl flex items-start justify-center p-1 shadow-[0_12px_30px_rgba(0,0,0,0.6)]"
+              animate={{
+                y: [0, 3, 0],
+              }}
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              <motion.div
+                className="w-0.5 h-1.5 rounded-full bg-gray-900/70"
+                animate={{
+                  y: [0, 12, 0],
+                  opacity: [1, 0.3, 1],
+                }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+            </motion.div>
+            {/* Bullets */}
+            <div className="flex items-center gap-2">
+              {Array.from({ length: desktopSlidesCount }).map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => scrollToDesktopSlide(idx)}
+                  className={`h-2 rounded-full transition-all duration-200 ${
+                    activeDesktopSlide === idx
+                      ? "w-6 bg-cyan-400/90 shadow-[0_0_12px_rgba(34,211,238,0.9)]"
+                      : "w-2 bg-white/30"
+                  }`}
+                />
+              ))}
+            </div>
           </div>
         </div>
 

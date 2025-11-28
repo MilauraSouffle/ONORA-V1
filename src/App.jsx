@@ -210,7 +210,7 @@ function App() {
           {/* CONTENU ROUTES */}
           <main className="relative h-[calc(100%-56px)] overflow-hidden">
             <div
-              className="absolute inset-0 overflow-y-auto overscroll-contain dashboard-scroll bg-transparent"
+              className="absolute inset-0 overflow-y-auto lg:overflow-hidden overscroll-contain dashboard-scroll bg-transparent"
               style={{ scrollBehavior: "smooth" }}
             >
               <Routes>
@@ -230,17 +230,19 @@ function App() {
               </Routes>
             </div>
             
-            {/* Navigation et Scroll Hint - En arrière-plan, visible à travers les bulles */}
-            {location.pathname === "/" && (
-              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-[1] flex items-center justify-center gap-4 pointer-events-auto">
+            {/* Navigation et Scroll Hint - Temporairement désactivés */}
+            {/* {location.pathname === "/" && (
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center justify-center gap-4 pointer-events-none">
                 <ScrollHint />
-                <CarouselPager
-                  totalSlides={5}
-                  activeIndex={activeDesktopSlide}
-                  onSlideChange={scrollToDesktopSlide}
-                />
+                <div className="pointer-events-auto">
+                  <CarouselPager
+                    totalSlides={5}
+                    activeIndex={activeDesktopSlide}
+                    onSlideChange={scrollToDesktopSlide}
+                  />
+                </div>
               </div>
-            )}
+            )} */}
           </main>
         </div>
       </div>
