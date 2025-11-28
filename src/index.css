@@ -3,8 +3,16 @@
 @tailwind utilities;
 
 :root {
-  /* image dans /public */
   --bg-image: url('/humanoid-bg.webp');
+
+  /* Teinte VisionOS très légère */
+  --glass-bg: rgba(255, 255, 255, 0.10);
+  --glass-border: rgba(255, 255, 255, 0.20);
+  --glass-highlight: rgba(255, 255, 255, 0.35);
+
+  /* Teinte ONORA bleu clair */
+  --onora-blue: #4fd4ff;
+  --onora-orange: #ff8b4e;
 }
 
 /* Reset simple */
@@ -12,15 +20,15 @@
 *::before,
 *::after {
   box-sizing: border-box;
-}e
+}
 
 body {
   margin: 0;
   padding: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
-  background-color: #0a0a0a; /* Noir profond */
-  color: #f9fafb; /* gray-50 */
-  overflow: hidden; /* Important : on laisse App.jsx gérer le scroll */
+  background-color: #0a0a0a;
+  color: #f9fafb;
+  overflow: hidden;
   min-height: 100vh;
   width: 100vw;
 }
@@ -30,56 +38,47 @@ body {
   position: relative;
 }
 
-/* Animation pour le fade-in du contenu après 1 seconde */
+/* Animation fade-in */
 @keyframes content-fade-in {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
-/* Fond humanoïde fixé derrière tout le site - visible immédiatement */
-/* Positionnement pour que les yeux soient au niveau de la status bar */
+/* Fond humanoïde global */
 #root::before {
   content: "";
   position: fixed;
-  top: -90vh; /* Remonté encore plus pour placer les yeux au niveau de la status bar */
+  top: -90vh;
   left: 0;
   width: 100%;
-  height: 190vh; /* Hauteur augmentée pour compenser le décalage */
+  height: 190vh;
   background-image: var(--bg-image);
   background-size: cover;
-  background-position: center top; /* top = positionne le haut de l'image en haut */
+  background-position: center top;
   background-attachment: fixed;
   background-repeat: no-repeat;
   z-index: 0;
-  opacity: 1; /* Visible immédiatement */
+  opacity: 1;
   filter: blur(0px) contrast(1.3) brightness(0.95);
   pointer-events: none;
 }
 
-/* Responsive ajustements pour positionner les yeux */
+/* Responsive */
 @media (max-width: 1024px) {
   #root::before {
-    top: -85vh; /* Remonté aussi pour écrans moyens */
+    top: -85vh;
     height: 185vh;
-    background-position: center top;
   }
 }
 
 @media (max-width: 768px) {
   #root::before {
-    top: -80vh; /* Remonté aussi pour mobile */
+    top: -80vh;
     height: 180vh;
-    background-position: center top;
   }
 }
 
-/* Couche sombre légère */
+/* Gradient sombre léger */
 #root::after {
   content: "";
   position: fixed;
@@ -87,12 +86,16 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.15) 100%);
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    rgba(0, 0, 0, 0.18) 100%
+  );
   z-index: 0;
   pointer-events: none;
 }
 
-/* Scrollbar fine pour les fenêtres internes */
+/* Scrollbars */
 .dashboard-scroll::-webkit-scrollbar {
   width: 6px;
 }
@@ -101,52 +104,84 @@ body {
   border-radius: 4px;
 }
 .dashboard-scroll::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.25);
   border-radius: 4px;
 }
 .dashboard-scroll::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.4);
 }
 
-/* Masquer la scrollbar pour le slider horizontal */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-}
+/* Slider horizontal */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* Optimisations scroll horizontal fluide pour Mac trackpad */
+/* Optimisation trackpad */
 .onora-desktop-slider {
-  -webkit-overflow-scrolling: touch; /* Momentum scrolling iOS/Mac */
-  overscroll-behavior-x: contain; /* Évite le scroll en cascade */
-  scroll-behavior: auto; /* Scroll instantané géré par JS pour fluidité */
-  will-change: scroll-position; /* Optimisation performance */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scroll-behavior: auto;
+  will-change: scroll-position;
 }
 
-/* Utilitaires VisionOS */
+/* VisionOS style */
 .glass-panel {
-  background: rgba(20, 20, 25, 0.6);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 
-    0 0 0 1px rgba(0, 0, 0, 0.2),
-    0 20px 40px rgba(0, 0, 0, 0.4);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border-radius: 1.75rem;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.15) inset,
+    0 12px 40px rgba(0, 0, 0, 0.35),
+    0 0 50px rgba(79, 212, 255, 0.25);
 }
 
-/* Effet Glitch au démarrage */
+/* Halo ONORA */
+.glass-halo {
+  position: relative;
+}
+.glass-halo::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at center,
+    rgba(79,212,255,0.45),
+    rgba(255,140,78,0.45),
+    transparent 70%
+  );
+  filter: blur(20px);
+  opacity: 0.6;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Effet glitch */
 @keyframes glitch-appear {
   0% { opacity: 0; transform: scale(0.95) skew(2deg); filter: blur(4px); }
   50% { opacity: 0.8; transform: scale(1.01) skew(-1deg); filter: blur(0px); }
-  100% { opacity: 1; transform: scale(1) skew(0deg); }
+  100% { opacity: 1; transform: scale(1); }
 }
 .glitch-appear {
   animation: glitch-appear 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
-/* Masquer le contenu pendant 1 seconde au chargement, puis fade-in */
+/* Timer typewriter */
+.typewriter {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typing 6s infinite linear;
+}
+
+@keyframes typing {
+  0%   { width: 0 }
+  40%  { width: 100% }
+  60%  { width: 100% }
+  100% { width: 0 }
+}
+
+/* Fade-in général */
 .content-delay {
   opacity: 0;
   animation: content-fade-in 0.8s ease-out 1s forwards;
