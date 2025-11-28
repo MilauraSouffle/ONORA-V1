@@ -135,8 +135,9 @@ export default function UseCases() {
         <Link
           to="/"
           className="inline-flex items-center gap-2 text-gray-900 hover:text-gray-900 transition-colors mb-8 group"
+          aria-label="Retourner à la page d'accueil ONORA"
         >
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" aria-hidden="true" />
           <span className="text-sm">Retour à l'accueil</span>
         </Link>
 
@@ -202,10 +203,12 @@ export default function UseCases() {
                   />
                 </div>
 
-                {/* Titre */}
+                {/* Titre - H2 pour SEO */}
                 <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-8 leading-tight group-hover:text-gray-900/90 transition-colors">
                   {item.title}
                 </h2>
+                {/* H3 pour le secteur */}
+                <h3 className="sr-only">{item.vertical}</h3>
 
                 {/* Contenu */}
                 <div className="mt-auto space-y-6">

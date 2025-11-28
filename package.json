@@ -5,8 +5,9 @@
   "private": true,
   "scripts": {
     "dev": "vite --host :: --port 3000",
-    "build": "node tools/generate-llms.js || true && vite build",
-    "preview": "vite preview --host :: --port 3000"
+    "build": "node tools/generate-sitemap.js && node tools/generate-llms.js || true && vite build",
+    "preview": "vite preview --host :: --port 3000",
+    "sitemap": "node tools/generate-sitemap.js"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "^1.3.1",
@@ -49,6 +50,7 @@
     "postcss": "^8.4.31",
     "tailwindcss": "^3.3.3",
     "terser": "^5.39.0",
-    "vite": "^4.4.5"
+    "vite": "^4.4.5",
+    "vite-plugin-sitemap": "^0.8.2"
   }
 }

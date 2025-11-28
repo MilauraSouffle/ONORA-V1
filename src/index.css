@@ -117,6 +117,14 @@ body {
   scrollbar-width: none;  /* Firefox */
 }
 
+/* Optimisations scroll horizontal fluide pour Mac trackpad */
+.onora-desktop-slider {
+  -webkit-overflow-scrolling: touch; /* Momentum scrolling iOS/Mac */
+  overscroll-behavior-x: contain; /* Évite le scroll en cascade */
+  scroll-behavior: auto; /* Scroll instantané géré par JS pour fluidité */
+  will-change: scroll-position; /* Optimisation performance */
+}
+
 /* Utilitaires VisionOS */
 .glass-panel {
   background: rgba(20, 20, 25, 0.6);

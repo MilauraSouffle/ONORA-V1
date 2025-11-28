@@ -53,7 +53,7 @@ export default function Home() {
   };
 
   // Transforme le scroll vertical en horizontal sur desktop,
-  // sauf quand la molette est au-dessus d'une bulle .card-scroll
+  // optimisé pour trackpad Mac (fluide et réactif)
   useEffect(() => {
     const container = desktopScrollRef.current;
     if (!container) return;
@@ -63,11 +63,14 @@ export default function Home() {
       const inCard = e.target.closest(".card-scroll");
       if (inCard) return;
 
-      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+      // Détection : si scroll horizontal prédominant, on laisse faire
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+
+      // Scroll vertical transformé en horizontal avec multiplicateur fluide
       e.preventDefault();
       container.scrollBy({
-        left: e.deltaY * 1.1,
-        behavior: "smooth",
+        left: e.deltaY * 0.4,
+        behavior: "auto", // Scroll instantané pour fluidité trackpad
       });
     };
 
@@ -78,8 +81,9 @@ export default function Home() {
       setActiveDesktopSlide(index);
     };
 
+    // Utilisation de { passive: false } pour pouvoir preventDefault
     container.addEventListener("wheel", handleWheel, { passive: false });
-    container.addEventListener("scroll", handleScroll);
+    container.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
       container.removeEventListener("wheel", handleWheel);
@@ -145,7 +149,7 @@ export default function Home() {
             ref={desktopScrollRef}
             className="
               onora-desktop-slider
-              flex-1 flex overflow-x-auto overflow-hidden snap-x snap-mandatory scroll-smooth
+              flex-1 flex overflow-x-auto overflow-hidden snap-x snap-mandatory
               [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']
             "
           >
@@ -162,9 +166,11 @@ export default function Home() {
                       <div className="relative w-full max-w-xs rounded-[2rem] bg-white/5 border border-white/10 overflow-hidden aspect-square flex items-center justify-center p-8">
                         <img
                           src="/logo/onora.webp"
-                          alt="ONORA.STUDIO – build different."
+                          alt="ONORA.STUDIO – Studio IA et no-code à Metz et Luxembourg"
                           className="w-full h-full object-contain"
                           loading="eager"
+                          width="400"
+                          height="400"
                         />
                       </div>
                       
@@ -172,6 +178,7 @@ export default function Home() {
                       <Link
                         to="/about"
                         className="inline-flex items-center justify-center px-8 py-3.5 rounded-[2rem] bg-white/10 border border-white/20 text-gray-900 font-semibold text-sm md:text-base hover:bg-white/20 active:scale-[0.98] transition-all duration-200"
+                        aria-label="Découvrir le système ONORA et notre approche"
                       >
                         Explorer le système ONORA
                       </Link>
@@ -223,15 +230,16 @@ export default function Home() {
                     {/* Grid logos studios */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 flex-1 items-center">
                       {[
-                        { name: "SKRIIB", logo: "/logos/logo-skriib.png", path: "/studios/skriib" },
-                        { name: "CLiiP", logo: "/logos/logo-cliip.png", path: "/studios/cliip" },
-                        { name: "SIION", logo: "/logos/logo-siion.png", path: "/studios/siion" },
-                        { name: "HACKiinG", logo: "/logos/logo-hackiing.png", path: "/studios/hackiing" },
+                        { name: "SKRIIB", logo: "/logos/logo-skriib.png", path: "/studios/skriib", description: "Architecture digitale et contenu stratégique" },
+                        { name: "CLiiP", logo: "/logos/logo-cliip.png", path: "/studios/cliip", description: "Création rapide et motion design" },
+                        { name: "SIION", logo: "/logos/logo-siion.png", path: "/studios/siion", description: "Data et IA avancée" },
+                        { name: "HACKiinG", logo: "/logos/logo-hackiing.png", path: "/studios/hackiing", description: "Automations et agents IA" },
                       ].map((studio, idx) => (
                         <Link
                           key={studio.name}
                           to={studio.path}
                           className="group flex flex-col items-center gap-3"
+                          aria-label={`Découvrir ${studio.name} - ${studio.description}`}
                         >
                           <motion.div
                             whileHover={{ scale: 1.15 }}
@@ -239,8 +247,11 @@ export default function Home() {
                           >
                             <img
                               src={studio.logo}
-                              alt={studio.name}
+                              alt={`Logo ${studio.name} - ${studio.description}`}
                               className="w-24 h-24 md:w-32 md:h-32 object-contain transition-all duration-300"
+                              loading="lazy"
+                              width="128"
+                              height="128"
                             />
                             <div className="absolute inset-0 opacity-0 group-hover:opacity-30 blur-xl transition-opacity duration-300 pointer-events-none bg-cyan-400" />
                           </motion.div>
@@ -256,6 +267,7 @@ export default function Home() {
                       <Link
                         to="/studios/skriib"
                         className="inline-flex items-center justify-center px-8 py-3.5 rounded-[2rem] bg-white/10 border border-white/20 text-gray-900 font-semibold text-sm md:text-base hover:bg-white/20 active:scale-[0.98] transition-all duration-200"
+                        aria-label="Découvrir tous les studios ONORA : SKRiiB, CLiiP, SiioN et HACKiinG"
                       >
                         Voir les studios ONORA
                       </Link>
@@ -278,7 +290,7 @@ export default function Home() {
                       <span className="inline-block py-1 px-3 rounded-full bg-purple-500/20 border border-purple-500/50 text-xs font-mono tracking-wider uppercase text-purple-300 mb-4">
                         HACKiinG · Sprint
                       </span>
-                      <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+                      <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
                         Arrêtez les réunions.
                         <br />
                         Payez pour voir.
@@ -294,6 +306,7 @@ export default function Home() {
                       <Link
                         to="/studios/hackiing"
                         className="inline-flex items-center justify-center px-8 py-3.5 rounded-[2rem] bg-white/10 border border-white/20 text-gray-900 font-semibold text-sm md:text-base hover:bg-white/20 active:scale-[0.98] transition-all duration-200"
+                        aria-label="Lancer le challenge MVP IA en 48h avec HACKiinG"
                       >
                         Lancer le challenge
                       </Link>
@@ -331,6 +344,7 @@ export default function Home() {
                       <Link
                         to="/usecases"
                         className="inline-flex items-center justify-center px-8 py-3.5 rounded-[2rem] bg-white/10 border border-white/20 text-gray-900 font-semibold text-sm md:text-base hover:bg-white/20 active:scale-[0.98] transition-all duration-200"
+                        aria-label="Découvrir les cas d'usage réels et résultats mesurables ONORA"
                       >
                         Voir les cas réels
                       </Link>

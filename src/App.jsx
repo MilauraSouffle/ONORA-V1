@@ -137,11 +137,14 @@ function App() {
             <button
               onClick={handleLogoClick}
               className="flex items-center gap-2 md:gap-3 hover:opacity-80 transition-opacity cursor-pointer"
+              aria-label="Retourner à l'accueil ONORA"
             >
               <img
                 src="/logo/onora-logo.webp"
-                alt="ONORA"
+                alt="ONORA.STUDIO - Logo principal"
                 className="w-6 h-6 md:w-7 md:h-7 object-contain"
+                width="28"
+                height="28"
               />
               <span className="text-[10px] md:text-[11px] text-gray-900 font-medium">
                 ONORA.STUDIO
