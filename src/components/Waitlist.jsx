@@ -131,12 +131,166 @@ const Waitlist = ({ hideHeader = false }) => {
     );
   }
 
+  // Si hideHeader, on retourne juste le contenu sans wrapper
+  if (hideHeader) {
+    return (
+      <div className="w-full">
+        {/* Contenu sans wrapper section */}
+        <motion.form
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          onSubmit={handleSubmit}
+          className="bg-black/30 backdrop-blur-md rounded-xl p-6 md:p-8 border border-white/10 space-y-6 max-w-2xl mx-auto"
+        >
+          {/* Message d'erreur */}
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/50 rounded-lg p-3 text-sm text-red-400">
+              {error}
+            </div>
+          )}
+
+          <div className="space-y-2">
+            <Label htmlFor="company" className="text-gray-900">
+              Nom de la société *
+            </Label>
+            <Input
+              id="company"
+              type="text"
+              value={formData.company}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  company: e.target.value
+                })
+              }
+              className="bg-white/10 border-white/20 text-gray-900 placeholder:text-gray-900/40"
+              placeholder="Ma Super Entreprise"
+              required
+              disabled={isSubmitting}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="website" className="text-gray-900">
+              Site web *
+            </Label>
+            <Input
+              id="website"
+              type="url"
+              value={formData.website}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  website: e.target.value
+                })
+              }
+              className="bg-white/10 border-white/20 text-gray-900 placeholder:text-gray-900/40"
+              placeholder="https://monsite.lu"
+              required
+              disabled={isSubmitting}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="sector" className="text-gray-900">
+              Secteur d&apos;activité *
+            </Label>
+            <Select
+              value={formData.sector}
+              onValueChange={(value) =>
+                setFormData({
+                  ...formData,
+                  sector: value
+                })
+              }
+              disabled={isSubmitting}
+            >
+              <SelectTrigger className="bg-white/10 border-white/20 text-gray-900">
+                <SelectValue placeholder="Sélectionner un secteur" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="restauration">Restauration</SelectItem>
+                <SelectItem value="commerce">Commerce</SelectItem>
+                <SelectItem value="service">Service</SelectItem>
+                <SelectItem value="artisanat">Artisanat</SelectItem>
+                <SelectItem value="autre">Autre</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="email" className="text-gray-900">
+              Email professionnel *
+            </Label>
+            <Input
+              id="email"
+              type="email"
+              value={formData.email}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  email: e.target.value
+                })
+              }
+              className="bg-white/10 border-white/20 text-gray-900 placeholder:text-gray-900/40"
+              placeholder="contact@monentreprise.lu"
+              required
+              disabled={isSubmitting}
+            />
+          </div>
+
+          {/* Nouveau champ motivation */}
+          <div className="space-y-2">
+            <Label htmlFor="motivation" className="text-gray-900">
+              Pourquoi toi, en 2 phrases max ? *
+            </Label>
+            <textarea
+              id="motivation"
+              value={formData.motivation}
+              onChange={(e) =>
+                setFormData({ ...formData, motivation: e.target.value })
+              }
+              className="bg-white/10 border-white/20 text-gray-900 placeholder:text-gray-900/40 w-full h-28 p-3 rounded-lg resize-none focus:outline-none focus:border-cyan-400 transition-colors"
+              placeholder="Explique-moi en quoi ton business mérite une place dans le système ONORA."
+              required
+              disabled={isSubmitting}
+            />
+            <p className="text-xs text-gray-900/40">
+              Écris avec tes mots. N'utilise pas d'IA, je le verrai. Je veux comprendre qui tu es.
+            </p>
+          </div>
+
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full bg-gradient-to-r from-[#FF7F50] to-[#FFB380] text-gray-900 font-semibold py-6 text-lg hover:shadow-xl hover:shadow-[#FF7F50]/50 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {isSubmitting ? (
+              <span className="flex items-center justify-center gap-2">
+                <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Envoi en cours…
+              </span>
+            ) : (
+              'Lancer mon audit gratuit'
+            )}
+          </Button>
+
+          <p className="text-center text-sm text-gray-900/60">
+            Tu recevras ton audit personnalisé sous 24 à 48h.
+          </p>
+        </motion.form>
+      </div>
+    );
+  }
+
   return (
     <section
       id="waitlist"
-      className={`w-full ${hideHeader ? 'py-0' : 'py-16 md:py-24'} px-4 md:px-6 relative`}
+      className="w-full py-16 md:py-24 px-4 md:px-6 relative"
     >
-      {!hideHeader && <div className="absolute inset-0 bg-black/15 backdrop-blur-sm pointer-events-none" />}
+      <div className="absolute inset-0 bg-black/15 backdrop-blur-sm pointer-events-none" />
       
       <div className="max-w-6xl mx-auto relative z-10">
         {!hideHeader && (

@@ -4,8 +4,8 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import { ArrowLeft, AlertTriangle, CheckCircle2, Zap } from "lucide-react";
+import { AlertTriangle, CheckCircle2, Zap } from "lucide-react";
+import PageLayout from "../components/PageLayout";
 
 const useCases = [
   {
@@ -130,19 +130,9 @@ export default function UseCases() {
         />
       </Helmet>
 
-      <div className="w-full min-h-full py-8 md:py-12 px-4 md:px-6">
-        {/* Bouton retour */}
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 text-gray-900 hover:text-gray-900 transition-colors mb-8 group"
-          aria-label="Retourner à la page d'accueil ONORA"
-        >
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" aria-hidden="true" />
-          <span className="text-sm">Retour à l'accueil</span>
-        </Link>
-
-        {/* Header */}
-        <div className="max-w-7xl mx-auto mb-16">
+      <PageLayout maxWidth="max-w-7xl">
+        <div className="space-y-16">
+          {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -164,10 +154,8 @@ export default function UseCases() {
               Voici ce qui se passe quand on branche le système ONORA.
             </p>
           </motion.div>
-        </div>
 
-        {/* Grid Use Cases */}
-        <div className="max-w-7xl mx-auto">
+          {/* Grid Use Cases */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {useCases.map((item, index) => (
               <motion.div
@@ -253,10 +241,7 @@ export default function UseCases() {
             ))}
           </div>
         </div>
-      </div>
+      </PageLayout>
     </>
   );
 }
-
-
-

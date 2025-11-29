@@ -3,9 +3,9 @@
 
 import React from "react";
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, Twitter, Linkedin, Youtube } from "lucide-react";
+import { Twitter, Linkedin, Youtube } from "lucide-react";
+import PageLayout from "../components/PageLayout";
 
 const socialLinks = [
   {
@@ -48,23 +48,13 @@ export default function Socials() {
         />
       </Helmet>
 
-      <div className="w-full min-h-full py-8 md:py-12 px-4 md:px-6">
-        {/* Bouton retour */}
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 text-gray-900 hover:text-gray-900 transition-colors mb-8 group"
-        >
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-          <span className="text-sm">Retour à l'accueil</span>
-        </Link>
-
-        {/* Contenu */}
-        <div className="max-w-4xl mx-auto">
+      <PageLayout maxWidth="max-w-4xl">
+        <div className="space-y-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-12"
+            className="text-center"
           >
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
               Nos réseaux
@@ -115,11 +105,7 @@ export default function Socials() {
             })}
           </div>
         </div>
-      </div>
+      </PageLayout>
     </>
   );
 }
-
-
-
-
