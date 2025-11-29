@@ -1,19 +1,40 @@
 // src/components/StatusBar.jsx
-// Barre "Pack lancement ONORA" – Version Ticker (Défilement)
-// Design compact, Pastille Orange, Lien Waitlist, Texte défilant infini.
+// Barre "Pack lancement ONORA" – Version Finale & Link Waitlist
+// Icy Glass, Croix Rouge, Texte Stable, Navigation React Router.
+// UPDATE : Pastille "Cyber-Eye" (Orange Incandescent style Humanoïde)
 
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom"; 
 import { motion } from "framer-motion";
 
 export default function StatusBar() {
-  // Texte long pour le défilement
-  const textContent = "Site optimisé, audit notoriété web et automatisation de tes leads pour 200€ au lieu de 2000€ (Offre limitée aux 100 premiers)  ✦  ";
+  // --- GESTION DES TEXTES ADAPTATIFS ---
+  const textWide = "Site optimisé, audit notoriété web et automatisation de tes leads pour 200€ au lieu de 2000€ pour les 100 premiers. ✦ ";
+  const textLaptop = "Site + Audit + Auto Leads : 200€ au lieu de 2000€ (Offre limitée aux 100 premiers) ✦ ";
+  const textMobile = "Pack complet : Site + Audit + Auto pour 200€ ✦ ";
+
+  const [textSource, setTextSource] = useState(textWide);
+
+  // Détection taille écran pour le texte
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 768) {
+        setTextSource(textMobile);
+      } else if (width < 1280) {
+        setTextSource(textLaptop);
+      } else {
+        setTextSource(textWide);
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
-    // Ajout des styles d'animation directement dans le composant
     <>
-      <style>{`
+       <style>{`
         @keyframes scroll-text {
           0% { transform: translateX(0%); }
           100% { transform: translateX(-50%); }
@@ -21,9 +42,8 @@ export default function StatusBar() {
         .animate-scroll-text {
           display: flex;
           width: fit-content;
-          animation: scroll-text 15s linear infinite;
+          animation: scroll-text 20s linear infinite; /* Un peu plus lent pour l'élégance */
         }
-        /* Pause au survol pour lire tranquillement si besoin */
         .animate-scroll-text:hover {
           animation-play-state: paused;
         }
@@ -37,7 +57,7 @@ export default function StatusBar() {
           className="
             pointer-events-auto
             relative
-            w-full max-w-5xl 
+            w-full max-w-5xl
             h-11 md:h-12
             rounded-full
             bg-cyan-50/90
@@ -53,16 +73,29 @@ export default function StatusBar() {
           {/* Reflet vitre */}
           <div className="absolute inset-0 bg-gradient-to-b from-white/40 to-transparent pointer-events-none" />
 
-          {/* --- GAUCHE : PASTILLE ORANGE + PRIX (FIXE) --- */}
-          <div className="relative z-10 flex items-center gap-3 flex-shrink-0 bg-cyan-50/0 pr-2">
-            {/* Pastille ORANGE animée */}
+          {/* --- GAUCHE : PASTILLE CYBER-EYE + PRIX --- */}
+          <div className="relative z-10 flex items-center gap-3 flex-shrink-0 pr-2">
+            
+            {/* === DESIGN "CYBER-EYE" === */}
             <div className="relative flex items-center justify-center w-7 h-7 md:w-8 md:h-8">
+              
+              {/* 1. L'Onde de choc (Ping) - Orange Feu */}
               <span className="absolute inline-flex h-full w-full rounded-full bg-orange-500 opacity-20 animate-ping"></span>
-              <div className="absolute inset-0 rounded-full border border-orange-500/30 opacity-80" />
-              <div className="relative w-full h-full rounded-full bg-orange-100 border border-orange-200 flex items-center justify-center">
-                 <div className="w-2 h-2 rounded-full bg-orange-500 shadow-sm" />
+              
+              {/* 2. Le Halo externe (Glow) - Ambre */}
+              <div className="absolute inset-0 rounded-full bg-orange-400/20 blur-sm"></div>
+
+              {/* 3. L'Anneau Technique - Fin et précis */}
+              <div className="absolute inset-0 rounded-full border border-orange-500/40 opacity-80 shadow-[inset_0_0_4px_rgba(249,115,22,0.4)]" />
+              
+              {/* 4. Le Cœur (Iris) - Dégradé Incandescent */}
+              <div className="relative w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-gradient-to-br from-yellow-300 via-orange-500 to-red-600 shadow-[0_0_8px_rgba(251,146,60,1)] animate-pulse">
+                 {/* Petit reflet blanc pour l'effet "Lentille/Vitre" */}
+                 <div className="absolute top-0.5 right-0.5 w-1 h-1 bg-white rounded-full opacity-60"></div>
               </div>
+
             </div>
+            {/* === FIN DESIGN CYBER-EYE === */}
 
             <div className="flex flex-col leading-none justify-center">
               <span className="text-[9px] font-bold tracking-[0.15em] uppercase text-cyan-900/60 mb-0.5">
@@ -75,6 +108,7 @@ export default function StatusBar() {
                   <span className="text-[10px] text-gray-400 font-medium">
                     2000€
                   </span>
+                  {/* Croix Rouge */}
                   <div className="absolute top-1/2 left-[-10%] w-[120%] h-[1.5px] bg-red-500 -rotate-12 transform -translate-y-1/2 rounded-full opacity-90"></div>
                 </div>
 
@@ -88,29 +122,28 @@ export default function StatusBar() {
             </div>
           </div>
 
-          {/* --- CENTRE : BANDEAU DÉFILANT (SNAKE / TICKER) --- */}
-          {/* Masque de débordement + dégradés sur les côtés pour fondre le texte */}
+          {/* --- CENTRE : BANDEAU DÉFILANT (SNAKE) --- */}
           <div className="relative z-0 flex-1 h-full overflow-hidden flex items-center mask-image-gradient">
-            {/* Dégradés latéraux pour adoucir l'entrée/sortie du texte */}
             <div className="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-cyan-50/90 to-transparent z-10" />
             <div className="absolute right-0 top-0 bottom-0 w-4 bg-gradient-to-l from-cyan-50/90 to-transparent z-10" />
 
-            {/* Conteneur animé qui boucle */}
             <div className="animate-scroll-text whitespace-nowrap">
-              {/* On duplique le texte pour créer la boucle infinie parfaite */}
               <span className="text-[10px] md:text-xs text-gray-900 font-semibold px-4">
-                {textContent}
+                {textSource}
               </span>
               <span className="text-[10px] md:text-xs text-gray-900 font-semibold px-4">
-                {textContent}
+                {textSource}
               </span>
               <span className="text-[10px] md:text-xs text-gray-900 font-semibold px-4">
-                {textContent}
+                {textSource}
+              </span>
+              <span className="text-[10px] md:text-xs text-gray-900 font-semibold px-4">
+                {textSource}
               </span>
             </div>
           </div>
 
-          {/* --- DROITE : CTA LINK (/waitlist) --- */}
+          {/* --- DROITE : CTA LINK --- */}
           <div className="relative z-10 flex items-center justify-end flex-shrink-0 pl-2">
             <Link
               to="/waitlist"
