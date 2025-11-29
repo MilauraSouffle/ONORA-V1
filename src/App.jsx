@@ -20,6 +20,7 @@ import Scan from "./pages/Scan";
 import UseCases from "./pages/UseCases";
 import Login from "./pages/Login";
 import Socials from "./pages/Socials";
+import WaitlistPage from "./pages/WaitlistPage";
 
 function App() {
   // --- LOGIQUE D'INITIALISATION (NO FLASH) ---
@@ -223,6 +224,7 @@ function App() {
                   <Route path="/usecases" element={<UseCases />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/socials" element={<Socials />} />
+                  <Route path="/waitlist" element={<WaitlistPage />} />
                   <Route path="/studios/skriib" element={<Skriib />} />
                   <Route path="/studios/cliip" element={<Cliip />} />
                   <Route path="/studios/siion" element={<Siion />} />

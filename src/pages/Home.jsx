@@ -31,13 +31,10 @@ export default function Home() {
 
   const scrollToWaitlist = () => {
     if (typeof window !== "undefined" && window.innerWidth >= 1024) {
-      // sur desktop, on va d'abord sur la dernière carte
+      // sur desktop, on scrolle vers la dernière carte (slide 5 = index 4)
       scrollToDesktopSlide(4);
-      setTimeout(() => {
-        waitlistRef.current?.scrollIntoView({ behavior: "smooth" });
-      }, 400);
     } else {
-      // mobile : scroll vertical normal
+      // mobile : scroll vertical normal vers le formulaire waitlist
       waitlistRef.current?.scrollIntoView({ behavior: "smooth" });
     }
   };
@@ -55,18 +52,13 @@ export default function Home() {
   const desktopSlidesCount = 5; // Hero, Studios, Sprint, Use Cases, Origin+Waitlist
 
   // Transforme le scroll vertical en horizontal sur desktop,
-  // optimisé pour trackpad Mac avec navigation hook par hook (progressive)
+  // fluide et réactif pour trackpad Mac, souris et tablette
   useEffect(() => {
     const container = desktopScrollRef.current;
     if (!container) return;
 
-    let isScrolling = false;
-    let scrollTimeout = null;
-    let wheelDelta = 0;
-    let lastWheelTime = 0;
-
     const handleWheel = (e) => {
-      // si on scroll dans une bulle de contenu, on laisse le scroll vertical
+      // Si on scroll dans une zone .card-scroll, on laisse le scroll vertical
       const inCard = e.target.closest(".card-scroll");
       if (inCard) return;
 
@@ -74,107 +66,20 @@ export default function Home() {
       if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
 
       e.preventDefault();
+      e.stopPropagation();
 
-      const now = Date.now();
-      const timeSinceLastWheel = now - lastWheelTime;
-      lastWheelTime = now;
+      // Détection du type de périphérique pour ajuster la sensibilité
+      // deltaMode: 0 = pixel, 1 = ligne, 2 = page
+      // Trackpad Mac envoie souvent deltaMode 0 avec petits deltas
+      // Souris envoie deltaMode 1 avec deltas plus grands
+      const isTrackpad = e.deltaMode === 0 && Math.abs(e.deltaY) < 50;
+      const conversionFactor = isTrackpad ? 1.0 : 1.5;
 
-      // Si trop de temps entre les événements, reset
-      if (timeSinceLastWheel > 200) {
-        wheelDelta = 0;
-      }
+      // Conversion vertical -> horizontal
+      const scrollDelta = e.deltaY * conversionFactor;
 
-      // Accumule le delta pour détecter l'intention de scroll
-      wheelDelta += e.deltaY;
-
-      // Clear timeout précédent
-      if (scrollTimeout) {
-        clearTimeout(scrollTimeout);
-      }
-
-      // Détection immédiate si le delta est assez important
-      const immediateThreshold = 80;
-      if (Math.abs(wheelDelta) > immediateThreshold && !isScrolling) {
-        const { scrollLeft, clientWidth } = container;
-        if (!clientWidth) {
-          scrollTimeout = setTimeout(() => {
-            wheelDelta = 0;
-          }, 150);
-          return;
-        }
-
-        const currentIndex = Math.round(scrollLeft / clientWidth);
-        let targetIndex = currentIndex;
-
-        if (wheelDelta > 0) {
-          // Scroll vers le bas → hook suivant
-          targetIndex = Math.min(currentIndex + 1, desktopSlidesCount - 1);
-        } else {
-          // Scroll vers le haut → hook précédent
-          targetIndex = Math.max(currentIndex - 1, 0);
-        }
-
-        // Scroll progressif vers le hook cible (un seul hook à la fois)
-        if (targetIndex !== currentIndex) {
-          isScrolling = true;
-          wheelDelta = 0; // Reset immédiatement pour éviter les sauts multiples
-
-          const targetScroll = targetIndex * clientWidth;
-          
-          container.scrollTo({
-            left: targetScroll,
-            behavior: "smooth",
-          });
-
-          // Reset après l'animation (600ms pour le smooth scroll)
-          setTimeout(() => {
-            isScrolling = false;
-          }, 600);
-        }
-      } else {
-        // Sinon, attend un peu pour accumuler les petits mouvements
-        scrollTimeout = setTimeout(() => {
-          if (isScrolling) {
-            wheelDelta = 0;
-            return;
-          }
-
-          const { scrollLeft, clientWidth } = container;
-          if (!clientWidth) {
-            wheelDelta = 0;
-            return;
-          }
-
-          const currentIndex = Math.round(scrollLeft / clientWidth);
-          let targetIndex = currentIndex;
-
-          // Seuil réduit pour les mouvements accumulés
-          const threshold = 40;
-          if (Math.abs(wheelDelta) > threshold) {
-            if (wheelDelta > 0) {
-              targetIndex = Math.min(currentIndex + 1, desktopSlidesCount - 1);
-            } else {
-              targetIndex = Math.max(currentIndex - 1, 0);
-            }
-
-            if (targetIndex !== currentIndex) {
-              isScrolling = true;
-              const targetScroll = targetIndex * clientWidth;
-              
-              container.scrollTo({
-                left: targetScroll,
-                behavior: "smooth",
-              });
-
-              setTimeout(() => {
-                isScrolling = false;
-              }, 600);
-            }
-          }
-
-          wheelDelta = 0;
-        }, 150);
-      }
+      // Scroll direct et fluide - le CSS snap gère le verrouillage
+      container.scrollLeft += scrollDelta;
     };
 
     const handleScroll = () => {
@@ -189,11 +94,10 @@ export default function Home() {
     container.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
-      if (scrollTimeout) clearTimeout(scrollTimeout);
       container.removeEventListener("wheel", handleWheel);
       container.removeEventListener("scroll", handleScroll);
     };
-  }, [desktopSlidesCount]);
+  }, []);
 
   // Suivi du slider mobile
   useEffect(() => {
@@ -250,7 +154,7 @@ export default function Home() {
           {/* StatusBar flottante avant-plan */}
           <div className="hidden lg:block absolute top-4 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
             <div className="pointer-events-auto">
-              <StatusBar onWaitlistClick={scrollToWaitlist} />
+              <StatusBar />
             </div>
           </div>
 
@@ -258,7 +162,7 @@ export default function Home() {
             ref={desktopScrollRef}
             className="
               onora-desktop-slider
-              flex-1 flex overflow-x-auto overflow-hidden snap-x snap-mandatory
+              flex-1 flex overflow-x-auto overflow-y-hidden snap-x snap-mandatory
               [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']
             "
           >

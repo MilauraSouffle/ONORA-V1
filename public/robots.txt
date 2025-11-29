@@ -7,3 +7,4 @@ Sitemap: https://onora.studio/sitemap.xml
 # Disallow certain paths if needed (ajustez selon vos besoins)
 # Disallow: /login
 # Disallow: /admin
+

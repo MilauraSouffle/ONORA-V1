@@ -17,7 +17,7 @@ import {
 import { useToast } from '@/components/ui/use-toast';
 import { submitWaitlist } from '@/lib/waitlistService';
 
-const Waitlist = () => {
+const Waitlist = ({ hideHeader = false }) => {
   const { toast } = useToast();
 
   const [formData, setFormData] = useState({
@@ -134,36 +134,40 @@ const Waitlist = () => {
   return (
     <section
       id="waitlist"
-      className="w-full py-16 md:py-24 px-4 md:px-6 relative"
+      className={`w-full ${hideHeader ? 'py-0' : 'py-16 md:py-24'} px-4 md:px-6 relative`}
     >
-      <div className="absolute inset-0 bg-black/15 backdrop-blur-sm pointer-events-none" />
+      {!hideHeader && <div className="absolute inset-0 bg-black/15 backdrop-blur-sm pointer-events-none" />}
       
       <div className="max-w-6xl mx-auto relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
-        >
-          <p className="text-xs tracking-[0.35em] uppercase text-gray-900 mb-4">
-            WAITLIST · AUDIT IA
-          </p>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
-            Rejoins la waitlist ONORA
-          </h2>
-          <p className="text-base md:text-lg lg:text-xl text-gray-900 max-w-2xl mx-auto mb-2 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-            Audit site + visibilité + IA offert pour les 100 premiers.
-          </p>
-          <p className="text-sm md:text-base text-gray-900 max-w-2xl mx-auto">
-            Tu recevras ton audit sous 24–48h.
-          </p>
-        </motion.div>
+        {!hideHeader && (
+          <>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-center mb-12"
+            >
+              <p className="text-xs tracking-[0.35em] uppercase text-gray-900 mb-4">
+                WAITLIST · AUDIT IA
+              </p>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
+                Rejoins la waitlist ONORA
+              </h2>
+              <p className="text-base md:text-lg lg:text-xl text-gray-900 max-w-2xl mx-auto mb-2 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+                Audit site + visibilité + IA offert pour les 100 premiers.
+              </p>
+              <p className="text-sm md:text-base text-gray-900 max-w-2xl mx-auto">
+                Tu recevras ton audit sous 24–48h.
+              </p>
+            </motion.div>
 
-        {/* Micro-copie */}
-        <p className="text-center text-xs md:text-sm text-gray-900 mb-4 max-w-2xl mx-auto">
-          On te répond à la main, pas avec un robot.
-        </p>
+            {/* Micro-copie */}
+            <p className="text-center text-xs md:text-sm text-gray-900 mb-4 max-w-2xl mx-auto">
+              On te répond à la main, pas avec un robot.
+            </p>
+          </>
+        )}
 
         <motion.form
           initial={{ opacity: 0, y: 30 }}
