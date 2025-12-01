@@ -149,15 +149,18 @@ export default function Home() {
                 ))}
             </div>
 
-            {/* Souris (Indicateur) */}
-            <motion.div
-              className="w-5 h-8 rounded-full border border-white/20 bg-black/20 backdrop-blur-md flex justify-center p-1 shadow-xl"
+           {/* 2. La Souris (Indicateur) */}
+           <motion.div
+              // C'EST ICI QUE ÇA SE PASSE :
+              // Change 'border-white/20' en 'border-white' (ou 'border-white/80')
+              // Change 'bg-white/60' en 'bg-white' pour la petite molette à l'intérieur
+              className="w-5 h-8 rounded-full border-2 border-white bg-black/20 backdrop-blur-md flex justify-center p-1 shadow-xl"
               initial={{ opacity: 0 }}
-              animate={{ opacity: 0.6 }}
+              animate={{ opacity: 1 }} // Tu peux mettre opacity: 1 au lieu de 0.6 ici aussi
               transition={{ delay: 1 }}
             >
               <motion.div
-                className="w-0.5 h-1.5 rounded-full bg-white/60"
+                className="w-0.5 h-1.5 rounded-full bg-white" 
                 animate={{ y: [0, 8, 0], opacity: [1, 0, 1] }}
                 transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
               />
