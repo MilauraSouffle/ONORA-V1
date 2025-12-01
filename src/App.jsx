@@ -21,6 +21,11 @@ import UseCases from "./pages/UseCases";
 import Login from "./pages/Login";
 import Socials from "./pages/Socials";
 import WaitlistPage from "./pages/WaitlistPage";
+// Nouvelles pages
+import Studios from "./pages/Studios";
+import Sprint48h from "./pages/Sprint48h";
+import Patrice from "./pages/Patrice";
+import Links from "./pages/Links";
 
 function App() {
   // --- LOGIQUE D'INITIALISATION (NO FLASH) ---
@@ -216,19 +221,26 @@ function App() {
             >
               <Routes>
                 <Route path="/" element={<Home />} />
+                {/* Nouvelles routes principales */}
+                <Route path="/studios" element={<Studios />} />
+                <Route path="/sprint-48h" element={<Sprint48h />} />
+                <Route path="/patrice" element={<Patrice />} />
+                <Route path="/links" element={<Links />} />
+                {/* Routes studios individuels */}
+                <Route path="/studios/skriib" element={<Skriib />} />
+                <Route path="/studios/cliip" element={<Cliip />} />
+                <Route path="/studios/siion" element={<Siion />} />
+                <Route path="/studios/hackiing" element={<Hackiing />} />
+                {/* Routes existantes */}
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/legal" element={<Legal />} />
                 <Route path="/merci" element={<Merci />} />
-                  <Route path="/scan" element={<Scan />} />
-                  <Route path="/usecases" element={<UseCases />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/socials" element={<Socials />} />
-                  <Route path="/waitlist" element={<WaitlistPage />} />
-                  <Route path="/studios/skriib" element={<Skriib />} />
-                  <Route path="/studios/cliip" element={<Cliip />} />
-                  <Route path="/studios/siion" element={<Siion />} />
-                  <Route path="/studios/hackiing" element={<Hackiing />} />
+                <Route path="/scan" element={<Scan />} />
+                <Route path="/usecases" element={<UseCases />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/socials" element={<Socials />} />
+                <Route path="/waitlist" element={<WaitlistPage />} />
               </Routes>
             </div>
             

@@ -3,6 +3,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { AlertTriangle, CheckCircle2, Zap, ArrowRight } from "lucide-react";
 
 const useCases = [
@@ -217,12 +218,12 @@ export default function NoPortfolio() {
           <p className="text-gray-900 mb-6 text-sm">
             Vous avez un problème similaire ?
           </p>
-          <a
-            href="#waitlist"
+          <Link
+            to="/usecases"
             className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white text-black font-bold text-sm tracking-widest uppercase hover:bg-gray-200 hover:scale-105 transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.3)]"
           >
-            Lancer un diagnostic <ArrowRight className="w-4 h-4" />
-          </a>
+            Voir les cas réels <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
 
       </div>

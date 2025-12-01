@@ -236,53 +236,43 @@ export default function Home() {
                         Nos studios d&apos;IA augmentée
                       </h2>
                       <p className="text-base md:text-lg text-gray-900">
-                        Quatre modules pour booster ton business de tous les côtés.
+                        ONORA est structuré en 4 studios spécialisés qui travaillent ensemble pour créer des systèmes intelligents et performants.
                       </p>
                     </div>
 
-                    {/* Grid logos studios */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 flex-1 items-center">
+                    {/* Grid wordmark logos studios (2x2) - NON CLIQUABLES */}
+                    <div className="grid grid-cols-2 gap-8 md:gap-12 flex-1 items-center">
                       {[
-                        { name: "SKRIIB", logo: "/logos/logo-skriib.png", path: "/studios/skriib", description: "Architecture digitale et contenu stratégique" },
-                        { name: "CLiiP", logo: "/logos/logo-cliip.png", path: "/studios/cliip", description: "Création rapide et motion design" },
-                        { name: "SIION", logo: "/logos/logo-siion.png", path: "/studios/siion", description: "Data et IA avancée" },
-                        { name: "HACKiinG", logo: "/logos/logo-hackiing.png", path: "/studios/hackiing", description: "Automations et agents IA" },
-                      ].map((studio, idx) => (
-                        <Link
+                        { name: "SKRiiB", wordmark: "/logos/skriib-title.webp", description: "Sites + contenu qui convertissent." },
+                        { name: "CLiiP", wordmark: "/logos/cliip-title.webp", description: "Création rapide, visuels & vidéos." },
+                        { name: "SIION", wordmark: "/logos/siion-title.webp", description: "Données, dashboards & IA avancée." },
+                        { name: "HACKiiNG", wordmark: "/logos/hackiing-title.webp", description: "Automations et agents IA." },
+                      ].map((studio) => (
+                        <div
                           key={studio.name}
-                          to={studio.path}
-                          className="group flex flex-col items-center gap-3"
-                          aria-label={`Découvrir ${studio.name} - ${studio.description}`}
+                          className="flex flex-col items-center gap-4"
                         >
-                          <motion.div
-                            whileHover={{ scale: 1.15 }}
-                            className="relative"
-                          >
-                            <img
-                              src={studio.logo}
-                              alt={`Logo ${studio.name} - ${studio.description}`}
-                              className="w-24 h-24 md:w-32 md:h-32 object-contain transition-all duration-300"
-                              loading="lazy"
-                              width="128"
-                              height="128"
-                            />
-                            <div className="absolute inset-0 opacity-0 group-hover:opacity-30 blur-xl transition-opacity duration-300 pointer-events-none bg-cyan-400" />
-                          </motion.div>
-                          <span className="text-sm md:text-base font-medium text-gray-800 text-center">
-                            {studio.name}
-                          </span>
-                        </Link>
+                          <img
+                            src={studio.wordmark}
+                            alt={`Wordmark ${studio.name}`}
+                            className="w-full max-w-xs h-auto object-contain"
+                            loading="lazy"
+                          />
+                          <p className="text-sm md:text-base text-gray-900/80 text-center font-medium">
+                            {studio.description}
+                          </p>
+                        </div>
                       ))}
                     </div>
 
                     {/* CTA */}
                     <div className="pt-4 text-center">
                       <Link
-                        to="/studios/skriib"
+                        to="/studios"
                         className="inline-flex items-center justify-center px-8 py-3.5 rounded-[2rem] bg-white/10 border border-white/20 text-gray-900 font-semibold text-sm md:text-base hover:bg-white/20 active:scale-[0.98] transition-all duration-200"
                         aria-label="Découvrir tous les studios ONORA : SKRiiB, CLiiP, SiioN et HACKiinG"
                       >
-                        Voir les studios ONORA
+                        Découvrir les studios ONORA
                       </Link>
                     </div>
                   </div>
@@ -298,30 +288,63 @@ export default function Home() {
               {/* Bulle centrée */}
               <div className="relative z-10 w-full flex items-center justify-center flex-1 max-w-7xl">
                 <VisionBubble>
-                  <div className="space-y-8 text-center h-full flex flex-col justify-center">
-                    <div>
-                      <span className="inline-block py-1 px-3 rounded-full bg-purple-500/20 border border-purple-500/50 text-xs font-mono tracking-wider uppercase text-purple-300 mb-4">
-                        HACKiinG · Sprint
-                      </span>
-                      <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-                        Arrêtez les réunions.
-                        <br />
-                        Payez pour voir.
-                      </h2>
-                      <p className="text-xl md:text-2xl font-bold text-gray-900 mb-2">
-                        MVP IA en 48h Chrono.
+                  <div className="space-y-8 h-full flex flex-col justify-center">
+                    {/* Header */}
+                    <div className="text-center">
+                      <p className="text-xs tracking-[0.5em] uppercase text-gray-900 mb-4 font-medium">
+                        HACKiinG · SPRINT 48H
                       </p>
-                      <p className="text-base md:text-lg text-gray-900 max-w-2xl mx-auto leading-relaxed">
-                        Je livre un agent fonctionnel sur votre stack. Vous testez. Satisfait ou Remboursé. <span className="font-bold text-gray-900">290€ HT+</span>
+                      <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 tracking-tight">
+                        MVP IA en 48h
+                      </h2>
+                      <p className="text-sm text-gray-900 tracking-wide mb-8">
+                        calibré sur ton business
                       </p>
                     </div>
-                    <div className="pt-4">
+
+                    {/* Contenu principal */}
+                    <div className="grid md:grid-cols-2 gap-8 items-center">
+                      {/* GAUCHE : Gros chiffres */}
+                      <div className="flex flex-col items-center justify-center space-y-6 text-center">
+                        <div>
+                          <div className="text-7xl md:text-8xl font-light text-gray-900 tracking-tight mb-2">
+                            48H
+                          </div>
+                          <div className="text-3xl md:text-4xl font-light text-purple-400 tracking-tight">
+                            290€
+                          </div>
+                        </div>
+                        <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/10 bg-white/5 backdrop-blur-md">
+                          <motion.div
+                            className="w-4 h-4 rounded-full bg-purple-400"
+                            animate={{ opacity: [1, 0.5, 1] }}
+                            transition={{ duration: 2, repeat: Infinity }}
+                          />
+                          <span className="text-xs tracking-[0.3em] uppercase text-gray-900 font-medium">
+                            MVP PROTOCOL READY
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* DROITE : Description */}
+                      <div className="space-y-4">
+                        <p className="text-base md:text-lg text-gray-900 leading-relaxed">
+                          Je livre un agent fonctionnel sur votre stack. Vous testez. Satisfait ou Remboursé.
+                        </p>
+                        <p className="text-sm text-gray-900/80">
+                          Automatisation complète de vos processus métier en 48 heures chrono.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* CTA */}
+                    <div className="pt-4 text-center">
                       <Link
-                        to="/studios/hackiing"
+                        to="/sprint-48h"
                         className="inline-flex items-center justify-center px-8 py-3.5 rounded-[2rem] bg-white/10 border border-white/20 text-gray-900 font-semibold text-sm md:text-base hover:bg-white/20 active:scale-[0.98] transition-all duration-200"
-                        aria-label="Lancer le challenge MVP IA en 48h avec HACKiinG"
+                        aria-label="Lancer un Sprint 48h avec HACKiinG"
                       >
-                        Lancer le challenge
+                        Lancer un Sprint 48h
                       </Link>
                     </div>
                   </div>
@@ -330,40 +353,13 @@ export default function Home() {
               
             </section>
 
-            {/* SLIDE 4 – USE CASES TEASER */}
-            <section className="w-full h-full flex-shrink-0 snap-start flex flex-col items-center justify-center px-6 py-6 relative">
+            {/* SLIDE 4 – MVP IA 48H */}
+            <section className="w-full h-full flex-shrink-0 snap-start flex flex-col items-center justify-center px-6 py-6 relative overflow-hidden">
               <div className="absolute inset-0 bg-black/8 backdrop-blur-sm pointer-events-none" />
               
-              {/* Bulle centrée */}
-              <div className="relative z-10 w-full flex items-center justify-center flex-1 max-w-7xl">
-                <VisionBubble>
-                  <div className="space-y-8 text-center h-full flex flex-col justify-center">
-                    <div>
-                      <span className="inline-block py-1 px-3 rounded-full bg-white/5 border border-white/10 text-xs font-mono tracking-wider uppercase text-gray-900 mb-4">
-                        Use Cases · Reality Check
-                      </span>
-                      <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-                        Pas de portfolio.
-                        <br />
-                        <span className="text-gray-900">
-                          Des résultats.
-                        </span>
-                      </h2>
-                      <p className="text-base md:text-lg text-gray-900 max-w-2xl mx-auto leading-relaxed">
-                        Ici on ne vous montre pas de &quot;portfolio&quot; de nos réalisations. Mais des résultats et des cas d&apos;usages concrets où chaque entrepreneur, commerçant et indépendant se retrouve.
-                      </p>
-                    </div>
-                    <div className="pt-4">
-                      <Link
-                        to="/usecases"
-                        className="inline-flex items-center justify-center px-8 py-3.5 rounded-[2rem] bg-white/10 border border-white/20 text-gray-900 font-semibold text-sm md:text-base hover:bg-white/20 active:scale-[0.98] transition-all duration-200"
-                        aria-label="Découvrir les cas d'usage réels et résultats mesurables ONORA"
-                      >
-                        Voir les cas réels
-                      </Link>
-                    </div>
-                  </div>
-                </VisionBubble>
+              {/* Contenu HackiingSprint */}
+              <div className="relative z-10 w-full h-full flex items-center justify-center overflow-y-auto">
+                <HackiingSprint onCtaClick={() => scrollToDesktopSlide(4)} />
               </div>
               
             </section>
@@ -436,6 +432,17 @@ export default function Home() {
                         accès aux mêmes leviers que les grandes. Sans bullshit. Sans
                         promesses vides. Avec des résultats mesurables.
                       </p>
+                    </div>
+
+                    {/* CTA */}
+                    <div className="pt-4 text-center">
+                      <Link
+                        to="/patrice"
+                        className="inline-flex items-center justify-center px-8 py-3.5 rounded-[2rem] bg-white/10 border border-white/20 text-gray-900 font-semibold text-sm md:text-base hover:bg-white/20 active:scale-[0.98] transition-all duration-200"
+                        aria-label="Découvrir Patrice - Source Code Origin"
+                      >
+                        Découvrir Patrice
+                      </Link>
                     </div>
                   </div>
                 </VisionBubble>
