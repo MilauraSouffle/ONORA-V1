@@ -1,8 +1,9 @@
 // src/pages/Home.jsx
-// VERSION FINALE UX :
-// - Navigation Verticale à Droite (Points + Souris) pour éviter le Dock.
-// - Scroll Souris (Molette) forcé en Horizontal.
-// - Layout Desktop/Mobile unifié et propre.
+// VERSION FINALE UX & NAVIGATION
+// - Scroll Souris : Mode "Cran par Cran" (Séquentiel) pour éviter les bugs.
+// - Scroll Trackpad : Mode "Fluide" conservé.
+// - Navigation Droite : Points + Souris animée.
+// - Design : Dark Glass appliqué partout.
 
 import React, { useRef, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
@@ -22,9 +23,11 @@ export default function Home() {
   const desktopScrollRef = useRef(null);
   const mobileHeroRef = useRef(null);
   
-  // État pour savoir quel slide est actif (pour allumer le bon point)
+  // Pour gérer le "cooldown" du scroll souris
+  const lastScrollTime = useRef(0);
+
   const [activeDesktopSlide, setActiveDesktopSlide] = useState(0);
-  const desktopSlidesCount = 5; // Hero, Studios, Sprint, UseCases, Origin
+  const desktopSlidesCount = 5; 
 
   const scrollToWaitlist = () => {
     if (typeof window !== "undefined" && window.innerWidth >= 1024) {
@@ -44,39 +47,59 @@ export default function Home() {
     });
   };
 
-  // --- MOTEUR DE SCROLL (WHEELJACK) ---
+  // --- MOTEUR DE SCROLL HYBRIDE (Trackpad vs Souris) ---
   useEffect(() => {
     const container = desktopScrollRef.current;
     if (!container) return;
 
-    // 1. Gestion de la Molette (Souris)
     const handleWheel = (e) => {
-      // Si on est dans une zone de texte scrollable (ex: code origin), on ne hijack pas le scroll
+      // 1. Ignorer si on scroll dans une carte interne
       const inCard = e.target.closest(".card-scroll");
       if (inCard) return;
 
-      // Si c'est déjà un scroll horizontal (Trackpad), on laisse faire
+      // 2. Ignorer si c'est un scroll horizontal natif (Trackpad latéral)
       if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
 
-      // SINON : On annule le scroll vertical natif et on le transforme en horizontal
       e.preventDefault();
       e.stopPropagation();
 
-      // Facteur d'accélération pour que ce soit agréable à la souris
-      const scrollSpeed = 1.8; 
-      container.scrollLeft += e.deltaY * scrollSpeed;
+      // 3. DÉTECTION : Trackpad ou Souris ?
+      // Les trackpads envoient des petits deltas fréquents avec deltaMode 0.
+      // Les souris envoient souvent des deltas plus gros ou deltaMode 1.
+      const isTrackpad = Math.abs(e.deltaY) < 40 && e.deltaMode === 0;
+
+      if (isTrackpad) {
+        // --- MODE FLUIDE (Trackpad) ---
+        // On convertit simplement le Y en X pour un feeling naturel
+        container.scrollLeft += e.deltaY * 1.5;
+      } else {
+        // --- MODE SÉQUENTIEL (Souris) ---
+        // On change de slide franchement, avec un délai pour éviter de sauter 3 slides d'un coup
+        const now = Date.now();
+        if (now - lastScrollTime.current < 600) return; // 600ms de pause entre deux actions
+
+        const direction = e.deltaY > 0 ? 1 : -1;
+        const width = container.clientWidth;
+        // On calcule sur quel slide on est actuellement
+        const current = Math.round(container.scrollLeft / width);
+        // On cible le suivant ou le précédent
+        const target = Math.min(Math.max(current + direction, 0), desktopSlidesCount - 1);
+
+        if (target !== current) {
+            lastScrollTime.current = now;
+            scrollToDesktopSlide(target);
+        }
+      }
     };
 
-    // 2. Détection du Slide Actif (Pour les points)
+    // Mise à jour des points de navigation
     const handleScroll = () => {
         const scrollLeft = container.scrollLeft;
         const width = container.clientWidth;
-        // Calcul de l'index (arrondi)
         const index = Math.round(scrollLeft / width);
         setActiveDesktopSlide(index);
     };
 
-    // Ajout des écouteurs (passive: false est CRUCIAL pour preventDefault)
     container.addEventListener("wheel", handleWheel, { passive: false });
     container.addEventListener("scroll", handleScroll, { passive: true });
 
@@ -95,7 +118,7 @@ export default function Home() {
 
       <div className="w-full h-full flex flex-col relative">
         
-        {/* STATUS BAR - Globale */}
+        {/* STATUS BAR (Fixe) */}
         <StatusBar />
 
         {/* ================================================================= */}
@@ -103,12 +126,12 @@ export default function Home() {
         {/* ================================================================= */}
         <div className="hidden lg:flex flex-col flex-1 h-full overflow-hidden relative">
           
-          {/* --- NAVIGATION LATÉRALE DROITE (Points + Souris) --- */}
-          {/* Fixée à droite, centrée verticalement, z-index max pour passer au dessus des cartes */}
-          <div className="absolute right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col items-center gap-8 pointer-events-none">
+          {/* --- NAVIGATION LATÉRALE DROITE --- */}
+          {/* Fixée à droite pour ne pas gêner le Dock en bas */}
+          <div className="absolute right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col items-center gap-6 pointer-events-none">
             
-            {/* 1. Les Points (Indicateurs) */}
-            <div className="flex flex-col gap-4 pointer-events-auto">
+            {/* Points */}
+            <div className="flex flex-col gap-3 pointer-events-auto">
                 {Array.from({ length: desktopSlidesCount }).map((_, idx) => (
                     <button
                         key={idx}
@@ -117,8 +140,8 @@ export default function Home() {
                             transition-all duration-500 ease-out rounded-full shadow-lg border border-white/10 backdrop-blur-sm
                             ${
                                 activeDesktopSlide === idx
-                                ? "h-10 w-3 bg-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.8)] scale-110" // Actif : Pilule cyan
-                                : "h-3 w-3 bg-white/20 hover:bg-white/50 hover:scale-125" // Inactif : Point discret
+                                ? "h-8 w-2 bg-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.8)] scale-110" // Actif : Pilule verticale
+                                : "h-2 w-2 bg-white/20 hover:bg-white/50 hover:scale-125" // Inactif
                             }
                         `}
                         aria-label={`Aller au slide ${idx + 1}`}
@@ -126,23 +149,23 @@ export default function Home() {
                 ))}
             </div>
 
-            {/* 2. La Souris (Indicateur de Scroll) */}
+            {/* Souris (Indicateur) */}
             <motion.div
-              className="w-6 h-10 rounded-full border-2 border-white/30 bg-black/20 backdrop-blur-md flex justify-center p-1 shadow-xl"
+              className="w-5 h-8 rounded-full border border-white/20 bg-black/20 backdrop-blur-md flex justify-center p-1 shadow-xl"
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              animate={{ opacity: 0.6 }}
               transition={{ delay: 1 }}
             >
               <motion.div
-                className="w-1 h-2 rounded-full bg-white/80"
-                animate={{ y: [0, 12, 0], opacity: [1, 0, 1] }}
+                className="w-0.5 h-1.5 rounded-full bg-white/60"
+                animate={{ y: [0, 8, 0], opacity: [1, 0, 1] }}
                 transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
               />
             </motion.div>
 
           </div>
-          {/* --- FIN NAVIGATION LATÉRALE --- */}
 
+          {/* --- SLIDER --- */}
           <div
             ref={desktopScrollRef}
             className="
@@ -272,6 +295,7 @@ export default function Home() {
         {/* LAYOUT MOBILE (Vertical) */}
         {/* ================================================================= */}
         <div className="flex flex-col flex-1 lg:hidden pt-40 pb-10 space-y-12">
+          {/* Contenu Mobile inchangé et sécurisé */}
           
           {/* 1. HERO MOBILE */}
           <div className="px-4">
@@ -335,7 +359,7 @@ export default function Home() {
 
           {/* 5. ORIGIN MOBILE */}
           <div className="px-4">
-             <VisionBubble padding="p-0" className="!bg-transparent !shadow-none !border-none">
+             <VisionBubble padding="p-6">
                 <SourceCodeOrigin />
              </VisionBubble>
           </div>
