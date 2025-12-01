@@ -1,62 +1,75 @@
 // src/components/PageLayout.jsx
-// Composant réutilisable pour le layout VisionOS de toutes les pages
+// Layout standardisé pour les pages internes (About, Waitlist, Studios...)
+// FIX : Pleine largeur, alignement sous StatusBar, Design Glass Transparent
 
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
-import StatusBar from "./StatusBar";
 
-export default function PageLayout({ children, maxWidth = "max-w-5xl" }) {
+export default function PageLayout({ children, maxWidth = "max-w-[95%]" }) {
   return (
-    <>
-      {/* StatusBar GLOBAL - Fixed Top sur toutes les pages */}
-      <div className="fixed top-0 left-0 right-0 z-[60]">
-        <StatusBar />
-      </div>
-
-      {/* Contenu principal avec padding-top pour compenser la StatusBar */}
-      <main className="pt-20 md:pt-24 min-h-screen w-full flex items-center justify-center px-4 md:px-6 lg:px-8 py-4 md:py-6">
-        {/* Fenêtre spatiale flottante VisionOS */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6 }}
-          className={`relative mx-auto w-full max-w-6xl xl:max-w-7xl 2xl:max-w-[1400px] rounded-3xl bg-white/10 backdrop-blur-xl shadow-xl min-h-auto lg:min-h-[calc(100vh-160px)] overflow-hidden`}
-          style={{
-            boxShadow: '0 25px 50px -12px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.05) inset'
-          }}
-        >
-          {/* Header avec bouton retour */}
-          <div className="h-16 flex items-center justify-between px-6 border-b border-white/10 bg-white/5 backdrop-blur-md">
-            <Link
-              to="/"
-              className="flex items-center gap-2 text-gray-900 hover:text-gray-900 transition-colors"
-              aria-label="Retourner à la page d'accueil ONORA"
-            >
-              <ArrowLeft className="w-5 h-5" aria-hidden="true" />
-              <span className="text-sm font-medium">Retour</span>
-            </Link>
-            <div className="flex items-center gap-3">
-              <img
-                src="/logo/onora-logo.png"
-                alt="ONORA"
-                className="w-6 h-6 object-contain opacity-60"
-              />
+    // 1. LE CONTENEUR GLOBAL
+    // - pt-[110px] : On pousse vers le bas pour être SOUS la Status Bar (56px + 12px marge + 40px buffer)
+    // - pb-6 : Marge en bas
+    // - px-4 : Marge sur les côtés
+    <div className="fixed inset-0 w-full h-full flex justify-center items-start pt-[110px] pb-6 px-4 z-10 pointer-events-none">
+      
+      {/* 2. LA FENÊTRE (MODAL) */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.98, y: 10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className={`
+          pointer-events-auto
+          relative 
+          w-full ${maxWidth}
+          h-full              /* Prend toute la hauteur disponible */
+          rounded-[2.5rem]    /* Gros arrondi comme la Home */
+          
+          /* DESIGN GLASS TRANSPARENT (Le même que la Home) */
+          bg-white/5
+          backdrop-blur-3xl 
+          border border-white/15
+          shadow-[0_30px_80px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.05)_inset]
+          
+          overflow-hidden 
+          flex flex-col
+        `}
+      >
+        {/* HEADER DE LA FENÊTRE (Fixe) */}
+        <div className="h-20 flex-shrink-0 flex items-center justify-between px-8 border-b border-white/10 bg-white/5 backdrop-blur-md z-20">
+          <Link
+            to="/"
+            className="flex items-center gap-3 text-white/80 hover:text-white transition-colors group"
+            aria-label="Retourner à la page d'accueil ONORA"
+          >
+            <div className="p-2 rounded-full bg-white/10 group-hover:bg-white/20 transition-colors border border-white/10">
+                <ArrowLeft className="w-5 h-5" aria-hidden="true" />
             </div>
+            <span className="text-base font-medium tracking-wide">Retour au Système</span>
+          </Link>
+          
+          <div className="flex items-center gap-3 opacity-50">
+            <img
+              src="/logo/onora-logo.webp"
+              alt="ONORA"
+              className="w-6 h-6 object-contain"
+            />
           </div>
+        </div>
 
-          {/* Contenu scrollable */}
-          <div className="overflow-y-auto max-h-[calc(90vh-4rem)] dashboard-scroll">
-            <div className="p-8 md:p-12">
-              {children}
-            </div>
+        {/* ZONE DE CONTENU (Scrollable) */}
+        <div className="flex-1 overflow-y-auto overflow-x-hidden dashboard-scroll relative">
+          {/* PADDING CONTENU : 
+             - pb-40 : Espace vide en bas pour le Dock
+          */}
+          <div className="p-8 md:p-16 pb-48 max-w-7xl mx-auto">
+            {children}
           </div>
-        </motion.div>
-      </main>
-    </>
+        </div>
+
+      </motion.div>
+    </div>
   );
 }
-
-
-
