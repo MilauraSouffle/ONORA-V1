@@ -3,9 +3,10 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import { CheckCircle2, Loader2, Zap } from "lucide-react";
 
-export default function HackiingSprint({ onCtaClick }) {
+export default function HackiingSprint({ onCtaClick, to }) {
   const [selectedProblem, setSelectedProblem] = useState(null);
   const [isCalculating, setIsCalculating] = useState(false);
   const [result, setResult] = useState(null);
@@ -202,17 +203,34 @@ export default function HackiingSprint({ onCtaClick }) {
 
         {/* CTA */}
         <div className="mt-12 text-center">
-          <motion.button
-            onClick={onCtaClick}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="inline-flex items-center justify-center px-8 py-4 rounded-[2rem] border border-white/10 bg-white/8 backdrop-blur-2xl text-sm tracking-[0.3em] uppercase text-gray-900 font-medium hover:bg-white/12 hover:border-white/20 transition-all duration-300"
-            style={{
-              boxShadow: '0 25px 50px -12px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.05) inset'
-            }}
-          >
-            Lancer un Sprint 48h
-          </motion.button>
+          {to ? (
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <Link
+                to={to}
+                className="inline-flex items-center justify-center px-8 py-4 rounded-[2rem] border border-white/10 bg-white/8 backdrop-blur-2xl text-sm tracking-[0.3em] uppercase text-gray-900 font-medium hover:bg-white/12 hover:border-white/20 transition-all duration-300"
+                style={{
+                  boxShadow: '0 25px 50px -12px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.05) inset'
+                }}
+              >
+                Lancer un Sprint 48h
+              </Link>
+            </motion.div>
+          ) : (
+            <motion.button
+              onClick={onCtaClick}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="inline-flex items-center justify-center px-8 py-4 rounded-[2rem] border border-white/10 bg-white/8 backdrop-blur-2xl text-sm tracking-[0.3em] uppercase text-gray-900 font-medium hover:bg-white/12 hover:border-white/20 transition-all duration-300"
+              style={{
+                boxShadow: '0 25px 50px -12px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.05) inset'
+              }}
+            >
+              Lancer un Sprint 48h
+            </motion.button>
+          )}
         </div>
       </div>
     </section>
