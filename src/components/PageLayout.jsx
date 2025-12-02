@@ -1,20 +1,23 @@
 // src/components/PageLayout.jsx
-// Version FINALE : Plein écran, Ancrage précis Haut/Bas pour éviter le Dock
+// Layout standardisé pour les pages internes
+// AMÉLIORATIONS :
+// - Marges validées (60px haut / 70px bas)
+// - Vrai bouton "Retour" (Historique navigateur)
+// - Logo ONORA bien visible et opaque
 
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // On utilise useNavigate au lieu de Link
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 
-export default function PageLayout({ children, maxWidth = "max-w-[98%]" }) { // 98% de largeur = quasi plein écran
+export default function PageLayout({ children, maxWidth = "max-w-[98%]" }) {
+  const navigate = useNavigate();
+
   return (
-    // CONTENEUR FIXE
-    // - pt-[110px] : Sous la StatusBar
-    // - pb-[100px] : S'arrête AVANT le Dock (environ 90-100px du bas)
-    // - px-2 : Marge latérale minime
-    <div className="fixed inset-0 w-full h-full flex justify-center items-start pt-[110px] pb-[110px] px-2 z-10 pointer-events-none">
+    // 1. CONTENEUR GLOBAL (Avec tes marges validées 60/70)
+    <div className="fixed inset-0 w-full h-full flex justify-center items-start pt-[60px] pb-[70px] px-2 z-10 pointer-events-none">
       
-      {/* FENÊTRE */}
+      {/* 2. LA FENÊTRE (MODAL) */}
       <motion.div
         initial={{ opacity: 0, scale: 0.98, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -23,10 +26,10 @@ export default function PageLayout({ children, maxWidth = "max-w-[98%]" }) { // 
           pointer-events-auto
           relative 
           w-full ${maxWidth}
-          h-full              /* Prend toute la hauteur définie par les paddings */
-          rounded-[2rem]      /* Arrondi cohérent */
+          h-full
+          rounded-[2.5rem]
           
-          /* STYLE GLASS TRANSPARENT (Identique Home) */
+          /* DESIGN GLASS TRANSPARENT */
           bg-white/5
           backdrop-blur-3xl 
           border border-white/15
@@ -36,31 +39,35 @@ export default function PageLayout({ children, maxWidth = "max-w-[98%]" }) { // 
           flex flex-col
         `}
       >
-        {/* HEADER */}
-        <div className="h-16 flex-shrink-0 flex items-center justify-between px-6 md:px-8 border-b border-white/10 bg-white/5 backdrop-blur-md z-20">
-          <Link
-            to="/"
-            className="flex items-center gap-3 text-white/80 hover:text-white transition-colors group"
-            aria-label="Retourner à la page d'accueil ONORA"
+        {/* HEADER DE LA FENÊTRE */}
+        <div className="h-20 flex-shrink-0 flex items-center justify-between px-6 md:px-8 border-b border-white/10 bg-white/5 backdrop-blur-md z-20">
+          
+          {/* GAUCHE : VRAI BOUTON RETOUR (Navigue en arrière) */}
+          <button
+            onClick={() => navigate(-1)} // Retour à la page précédente
+            className="flex items-center gap-3 text-white/80 hover:text-white transition-colors group cursor-pointer"
+            aria-label="Retour à la page précédente"
           >
             <div className="p-2 rounded-full bg-white/10 group-hover:bg-white/20 transition-colors border border-white/10">
-                <ArrowLeft className="w-4 h-4" aria-hidden="true" />
+                <ArrowLeft className="w-5 h-5" aria-hidden="true" />
             </div>
-            <span className="text-sm font-medium tracking-wide">Retour au Système</span>
-          </Link>
+            <span className="text-base font-medium tracking-wide">Retour</span>
+          </button>
           
-          <div className="flex items-center gap-3 opacity-50">
+          {/* DROITE : LOGO ONORA (Plus grand & Opaque) */}
+          <div className="flex items-center gap-3">
             <img
               src="/logo/onora-logo.webp"
               alt="ONORA"
-              className="w-6 h-6 object-contain"
+              // Modif ici : w-8 h-8 (plus grand) et opacity-100 (bien visible)
+              className="w-12 h-12 object-contain opacity-100 drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]"
             />
           </div>
         </div>
 
-        {/* CONTENU SCROLLABLE */}
+        {/* ZONE DE CONTENU */}
         <div className="flex-1 overflow-y-auto overflow-x-hidden dashboard-scroll relative">
-          <div className="p-8 md:p-12 max-w-7xl mx-auto">
+          <div className="p-8 md:p-16 max-w-7xl mx-auto">
             {children}
           </div>
         </div>

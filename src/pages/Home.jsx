@@ -136,43 +136,89 @@ export default function Home() {
               pb-[200px] /* Espace réservé pour le Dock */
             "
           >
-            {/* --- SLIDE 1 --- */}
-            <section className="w-full h-full flex-shrink-0 snap-center px-8">
-              {/* h-full ici va prendre 100% de l'espace RESTANT (écran - 120px - 110px) */}
-              <VisionBubble className="h-full">
-                <div className="grid gap-12 grid-cols-[0.8fr_1.2fr] items-center h-full relative">
-                   <div className="absolute -top-6 right-0 z-20 flex items-center gap-3 px-4 py-2 bg-black/50 border border-white/10 rounded-full backdrop-blur-md shadow-lg">
-                    <div className="relative flex h-3 w-3">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-3 w-3 bg-orange-500 shadow-[0_0_10px_#f97316]"></span>
-                    </div>
-                    <span className="text-[10px] font-bold tracking-widest text-white uppercase font-mono">Intelligence : Activée</span>
-                  </div>
-                  <div className="flex flex-col items-center justify-center">
-                    <div className="relative w-[280px] 2xl:w-[350px] aspect-square rounded-[2.5rem] bg-white/5 border border-white/10 overflow-hidden flex items-center justify-center p-10 shadow-2xl">
-                      <img src="/logo/onora.webp" alt="ONORA" className="w-full h-full object-contain drop-shadow-2xl" />
-                    </div>
-                  </div>
-                  <div className="flex flex-col space-y-8">
-                    <h1 className="text-5xl xl:text-6xl 2xl:text-7xl font-extrabold text-white leading-[1.1] tracking-tight uppercase drop-shadow-lg">
-                      L&apos;Agence Marketing<br/>est Obsolète.<br/>
-                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">Activez le système.</span>
-                    </h1>
-                    <div className="space-y-4">
-                        <p className="text-lg text-gray-300 font-medium">L&apos;IA est un moteur surpuissant, mais elle a besoin d&apos;un pilote.</p>
-                        <p className="text-lg text-gray-400 max-w-2xl">
-                          OnORA est votre Studio Augmenté, fusionnant <span className="font-bold text-white">20 ans d&apos;expérience</span> avec la vitesse de l&apos;IA. 
-                        </p>
-                    </div>
-                    <div className="pt-2">
-                        <Link to="/about" className="inline-flex items-center justify-center px-10 py-4 rounded-full bg-white text-black font-bold text-base tracking-wide hover:scale-105 transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)]">
-                          EXPLORER LE SYSTÈME ONORA
-                        </Link>
-                    </div>
-                  </div>
-                </div>
-              </VisionBubble>
-            </section>
+            // src/pages/Home.jsx (Extrait du Slide 1)
+
+{/* --- SLIDE 1 : LE SYSTÈME (CORRIGÉ) --- */}
+<section className="w-full h-full flex-shrink-0 snap-center px-8">
+  <VisionBubble className="h-full relative overflow-hidden">
+    
+    {/* 1. BULLE HAUT-DROITE (Design Pillule Screen 1) */}
+    <div className="absolute top-8 right-8 z-20 flex items-center gap-3 px-5 py-2.5 bg-white/40 backdrop-blur-md border border-white/40 rounded-full shadow-sm">
+      <span className="relative flex h-3 w-3">
+        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-500 opacity-75"></span>
+        <span className="relative inline-flex rounded-full h-3 w-3 bg-orange-500"></span>
+      </span>
+      <span className="text-[11px] font-bold tracking-wider text-gray-900 uppercase font-mono">
+        Les agences sont obsolètes. ONORA – System activé.
+      </span>
+    </div>
+
+    {/* GRILLE PRINCIPALE */}
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center h-full w-full relative z-10">
+      
+      {/* COLONNE GAUCHE : Logo -> CTA -> Texte */}
+      <div className="flex flex-col items-start justify-center h-full pl-4 md:pl-8 pt-8">
+        
+        {/* A. LOGO (Gros & Haut Gauche) */}
+        <div className="mb-6">
+          <img 
+            src="/logo/onora.webp" 
+            alt="ONORA" 
+            className="w-48 object-contain" 
+          />
+        </div>
+
+        {/* B. CTA (Sous le logo) */}
+        <div className="mb-10">
+          <Link 
+            to="/about" 
+            className="group relative inline-flex items-center justify-center px-8 py-3.5 rounded-[2rem] border border-gray-900/20 bg-transparent text-gray-900 font-bold text-sm tracking-wide overflow-hidden hover:bg-white/10 transition-all"
+          >
+            {/* Animation Souffle Bleuté */}
+            <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent opacity-0 group-hover:animate-shine" />
+            <span className="relative z-10">DÉCOUVRIR LE SYSTÈME</span>
+          </Link>
+        </div>
+
+        {/* C. TEXTE (Noir & Bleu Foncé - Lisible) */}
+        <div className="space-y-6">
+          <h1 className="text-5xl xl:text-6xl font-extrabold text-blue-950 leading-none tracking-tight uppercase">
+            ONORA.
+          </h1>
+          <div className="space-y-4 text-gray-900 text-lg leading-relaxed font-medium">
+            <p>
+              T’en as marre de payer <span className="font-black">5 000 €/mois</span> à une agence pour 3 posts et un rapport que personne ne lit ?
+            </p>
+            <p>
+              Ici c’est pas une agence. C’est un <span className="text-blue-800 font-bold">système IA complet</span> qui fait tourner ton marketing, tes ventes et tes automations tout seul.
+            </p>
+            <p>
+              T’es indépendant, commerçant, artisan, PME, trader ?<br />
+              <span className="font-black text-xl">Tu branches ton business, tu respires enfin.</span>
+            </p>
+            <p className="text-sm text-gray-700 border-l-4 border-gray-900/20 pl-4 italic">
+              Contenu, pubs, tunnels, suivi client… tout est déjà là et ça bosse 24/7.
+            </p>
+            <p className="font-bold text-blue-900">
+              Résultat : plus de clients, moins de galères, et toi tu récupères ta vie.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      {/* COLONNE DROITE : La Maison */}
+      <div className="hidden lg:flex items-center justify-center h-full relative">
+        <img 
+          src="/Le systeme ONORA.webp" 
+          alt="Système ONORA Maison" 
+          className="w-full h-full max-h-[600px] object-contain drop-shadow-2xl" 
+        />
+      </div>
+
+    </div>
+  </VisionBubble>
+</section>
 
             {/* --- SLIDE 2 --- */}
             <section className="w-full h-full flex-shrink-0 snap-center px-8">
@@ -247,7 +293,7 @@ export default function Home() {
         </div>
 
         {/* MOBILE (Inchangé) */}
-        <div className="flex flex-col flex-1 lg:hidden pt-40 pb-28 space-y-8 overflow-y-auto">
+        <div className="flex flex-col flex-1 lg:hidden pt-20 pb-28 space-y-8 overflow-y-auto">
           <div className="px-4"><VisionBubble padding="p-8"><div className="flex flex-col items-center text-center gap-6"><div className="w-24 h-24 rounded-[1.5rem] bg-white/5 border border-white/10 flex items-center justify-center p-4"><img src="/logo/onora.webp" alt="ONORA" className="w-full h-full object-contain" /></div><div className="space-y-3"><h1 className="text-2xl font-bold text-white leading-tight">L'Agence Marketing est Obsolète.</h1><p className="text-sm text-gray-400">L&apos;IA n&apos;est rien sans vision. OnORA fusionne 20 ans d&apos;XP et la puissance de l&apos;IA.</p></div><Link to="/about" className="w-full py-3 rounded-xl bg-white text-black font-bold text-sm text-center">Explorer le système</Link></div></VisionBubble></div>
           <div className="px-4"><VisionBubble padding="p-6"><h2 className="text-xl font-bold text-white mb-6 text-center">Les studios</h2><div className="grid grid-cols-2 gap-3">{[{ name: "SKRiiB", desc: "Contenu" },{ name: "CLiiP", desc: "Visuels" },{ name: "SIION", desc: "Data" },{ name: "HACKiiNG", desc: "Automations" },].map(s => (<div key={s.name} className="bg-white/5 p-3 rounded-xl border border-white/10 text-center"><span className="block font-bold text-white text-sm">{s.name}</span><span className="text-[10px] text-gray-400">{s.desc}</span></div>))}</div><div className="mt-6 text-center"><Link to="/studios" className="text-sm font-semibold text-white underline">Voir tout</Link></div></VisionBubble></div>
           <div className="w-full"><HackiingSprint onCtaClick={() => waitlistRef.current?.scrollIntoView()} /></div>
