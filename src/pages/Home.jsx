@@ -138,87 +138,192 @@ export default function Home() {
           >
             // src/pages/Home.jsx (Extrait du Slide 1)
 
-{/* --- SLIDE 1 : LE SYSTÈME (CORRIGÉ) --- */}
-<section className="w-full h-full flex-shrink-0 snap-center px-8">
-  <VisionBubble className="h-full relative overflow-hidden">
-    
-    {/* 1. BULLE HAUT-DROITE (Design Pillule Screen 1) */}
-    <div className="absolute top-8 right-8 z-20 flex items-center gap-3 px-5 py-2.5 bg-white/40 backdrop-blur-md border border-white/40 rounded-full shadow-sm">
-      <span className="relative flex h-3 w-3">
-        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-500 opacity-75"></span>
-        <span className="relative inline-flex rounded-full h-3 w-3 bg-orange-500"></span>
-      </span>
-      <span className="text-[11px] font-bold tracking-wider text-gray-900 uppercase font-mono">
-        Les agences sont obsolètes. ONORA – System activé.
-      </span>
-    </div>
+{/* --- SLIDE 1 : HERO - THE NEURAL SYSTEM --- */}
+<section className="w-full h-full flex-shrink-0 snap-center px-4 md:px-8">
+              <VisionBubble className="h-full relative overflow-hidden flex flex-col items-center justify-center">
+                
+                {/* 1. BULLE STATUS (Haut-Droite) */}
+                <div className="absolute top-6 right-6 z-40 flex items-center gap-3 px-5 py-2.5 bg-emerald-500/10 backdrop-blur-md border border-emerald-500/30 rounded-full shadow-lg animate-fade-in">
+                    <span className="relative flex h-3 w-3">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-500 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.6)]"></span>
+                    </span>
+                    <span className="text-[11px] font-bold tracking-widest text-emerald-600 uppercase font-mono pt-0.5">
+                      System Status: ONLINE
+                    </span>
+                </div>
 
-    {/* GRILLE PRINCIPALE */}
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center h-full w-full relative z-10">
-      
-      {/* COLONNE GAUCHE : Logo -> CTA -> Texte */}
-      <div className="flex flex-col items-start justify-center h-full pl-4 md:pl-8 pt-8">
-        
-        {/* A. LOGO (Gros & Haut Gauche) */}
-        <div className="mb-6">
-          <img 
-            src="/logo/onora.webp" 
-            alt="ONORA" 
-            className="w-48 object-contain" 
-          />
-        </div>
+                {/* GRILLE PRINCIPALE */}
+                <div className="w-full max-w-[1400px] mx-auto h-full grid grid-cols-1 lg:grid-cols-[0.35fr_1.65fr] gap-4 relative z-10">
+                  
+                  {/* --- COLONNE GAUCHE : LOGO + CTA (INTACTE & VERROUILLÉE) --- */}
+                  <div className="flex flex-col items-start justify-start pt-12 pl-4 relative z-20 h-full">
+                    
+                    {/* Logo (Gros) */}
+                    <img src="/logo/onora.webp" alt="ONORA" className="w-48 md:w-56 object-contain mb-8 origin-top-left" />
 
-        {/* B. CTA (Sous le logo) */}
-        <div className="mb-10">
-          <Link 
-            to="/about" 
-            className="group relative inline-flex items-center justify-center px-8 py-3.5 rounded-[2rem] border border-gray-900/20 bg-transparent text-gray-900 font-bold text-sm tracking-wide overflow-hidden hover:bg-white/10 transition-all"
-          >
-            {/* Animation Souffle Bleuté */}
-            <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent opacity-0 group-hover:animate-shine" />
-            <span className="relative z-10">DÉCOUVRIR LE SYSTÈME</span>
-          </Link>
-        </div>
+                    {/* CTA */}
+                    <Link 
+                      to="/about" 
+                      className="group relative inline-flex items-center justify-center px-8 py-3.5 rounded-[2rem] border border-gray-900/20 bg-white/10 text-gray-900 font-bold text-sm tracking-wide overflow-hidden hover:bg-white/30 transition-all shadow-sm w-max mb-8"
+                    >
+                        <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent opacity-0 group-hover:animate-shine" />
+                        <span className="relative z-10">DÉCOUVRIR LE SYSTÈME</span>
+                    </Link>
 
-        {/* C. TEXTE (Noir & Bleu Foncé - Lisible) */}
-        <div className="space-y-6">
-          <h1 className="text-5xl xl:text-6xl font-extrabold text-blue-950 leading-none tracking-tight uppercase">
-            ONORA.
-          </h1>
-          <div className="space-y-4 text-gray-900 text-lg leading-relaxed font-medium">
-            <p>
-              T’en as marre de payer <span className="font-black">5 000 €/mois</span> à une agence pour 3 posts et un rapport que personne ne lit ?
-            </p>
-            <p>
-              Ici c’est pas une agence. C’est un <span className="text-blue-800 font-bold">système IA complet</span> qui fait tourner ton marketing, tes ventes et tes automations tout seul.
-            </p>
-            <p>
-              T’es indépendant, commerçant, artisan, PME, trader ?<br />
-              <span className="font-black text-xl">Tu branches ton business, tu respires enfin.</span>
-            </p>
-            <p className="text-sm text-gray-700 border-l-4 border-gray-900/20 pl-4 italic">
-              Contenu, pubs, tunnels, suivi client… tout est déjà là et ça bosse 24/7.
-            </p>
-            <p className="font-bold text-blue-900">
-              Résultat : plus de clients, moins de galères, et toi tu récupères ta vie.
-            </p>
-          </div>
-        </div>
+                     {/* TEXTE PUNCHY */}
+                     <div className="space-y-4 max-w-lg">
+                        <h1 className="text-4xl md:text-5xl font-extrabold text-blue-950 leading-none uppercase tracking-tight">
+                          ONORA.
+                        </h1>
+                        <p className="text-gray-900 text-base md:text-lg font-medium leading-relaxed">
+                          T’en as marre de payer <span className="font-black">5 000 €/mois</span> à une agence ? <br/>
+                          Activez le <span className="text-blue-800 font-extrabold">système IA complet</span> qui pilote votre business 24/7.
+                        </p>
+                     </div>
 
-      </div>
+                  </div>
 
-      {/* COLONNE DROITE : La Maison */}
-      <div className="hidden lg:flex items-center justify-center h-full relative">
-        <img 
-          src="/Le systeme ONORA.webp" 
-          alt="Système ONORA Maison" 
-          className="w-full h-full max-h-[600px] object-contain drop-shadow-2xl" 
-        />
-      </div>
+                  {/* --- COLONNE DROITE : LE "NEURAL DASHBOARD" INTERACTIF --- */}
+                  <div className="hidden lg:flex items-center justify-center relative w-full h-full perspective-1000">
+                      
+                      {/* LE DASHBOARD FLOTTANT */}
+                      <div className="relative w-[750px] h-[500px] bg-white/40 backdrop-blur-2xl border border-white/60 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] overflow-hidden flex flex-col transform transition-transform hover:scale-[1.01] duration-500">
+                          
+                          {/* Header du Dashboard */}
+                          <div className="h-14 border-b border-white/30 flex items-center justify-between px-6 bg-white/20">
+                              <div className="flex items-center gap-2">
+                                  <div className="w-3 h-3 rounded-full bg-red-400"></div>
+                                  <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+                                  <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                              </div>
+                              <div className="text-[10px] font-mono text-gray-500 uppercase tracking-widest bg-white/30 px-3 py-1 rounded-full">
+                                  ONORA SYSTEM V.2.0 • LIVE MONITORING
+                              </div>
+                              <div className="flex items-center gap-2 text-gray-400">
+                                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+                              </div>
+                          </div>
 
-    </div>
-  </VisionBubble>
-</section>
+                          {/* Corps du Dashboard : Grille de Modules */}
+                          <div className="flex-1 p-6 grid grid-cols-2 grid-rows-2 gap-4">
+                              
+                              {/* MODULE 1 : ACQUISITION (Actif) */}
+                              <div className="group relative bg-white/50 border border-white/60 rounded-2xl p-5 hover:bg-white/80 transition-all cursor-default overflow-hidden">
+                                  <div className="absolute top-0 right-0 p-3 opacity-50 group-hover:opacity-100 transition-opacity">
+                                      <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                                  </div>
+                                  <div className="flex items-center gap-4 mb-4">
+                                      <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600">
+                                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+                                      </div>
+                                      <div>
+                                          <p className="text-xs font-bold text-gray-400 uppercase">Acquisition</p>
+                                          <p className="text-lg font-black text-blue-900">+48 Leads</p>
+                                      </div>
+                                  </div>
+                                  {/* Fake Graph */}
+                                  <div className="h-16 w-full flex items-end gap-1">
+                                      {[40, 60, 45, 70, 85, 60, 90, 75, 100].map((h, i) => (
+                                          <div key={i} style={{ height: `${h}%` }} className="flex-1 bg-blue-200 rounded-t-sm group-hover:bg-blue-500 transition-colors delay-[${i*50}ms]"></div>
+                                      ))}
+                                  </div>
+                                  <p className="text-[10px] text-gray-500 mt-2 font-mono">Autopilot: ON • Last run: 2m ago</p>
+                              </div>
+
+                              {/* MODULE 2 : CONTENT (En cours) */}
+                              <div className="group bg-white/50 border border-white/60 rounded-2xl p-5 hover:bg-white/80 transition-all cursor-default">
+                                  <div className="flex items-center gap-4 mb-3">
+                                      <div className="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center text-purple-600">
+                                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                                      </div>
+                                      <div>
+                                          <p className="text-xs font-bold text-gray-400 uppercase">Contenu IA</p>
+                                          <p className="text-sm font-bold text-purple-900">3 Posts Générés</p>
+                                      </div>
+                                  </div>
+                                  <div className="space-y-2">
+                                      <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
+                                          <div className="h-full bg-purple-500 w-[80%] rounded-full relative overflow-hidden">
+                                              <div className="absolute inset-0 bg-white/30 animate-[shimmer_1s_infinite]"></div>
+                                          </div>
+                                      </div>
+                                      <div className="flex justify-between text-[9px] font-mono text-gray-500">
+                                          <span>LinkedIn: Ready</span>
+                                          <span>SEO: Optimized</span>
+                                      </div>
+                                  </div>
+                              </div>
+
+                              {/* MODULE 3 : CONVERSION (Target) */}
+                              <div className="group bg-white/50 border border-white/60 rounded-2xl p-5 hover:bg-white/80 transition-all cursor-default">
+                                  <div className="flex items-center justify-between mb-4">
+                                      <div className="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center text-orange-600">
+                                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                      </div>
+                                      <span className="text-xl font-black text-gray-800">2.4%</span>
+                                  </div>
+                                  <p className="text-xs font-bold text-gray-500 uppercase mb-2">Taux de Conversion</p>
+                                  <div className="flex items-center gap-2 text-[10px] text-green-600 bg-green-50 px-2 py-1 rounded-md w-max">
+                                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
+                                      <span>+12% vs last week</span>
+                                  </div>
+                              </div>
+
+                              {/* MODULE 4 : DATA CENTER (Le Cerveau) */}
+                              <div className="group bg-gray-900 border border-gray-800 rounded-2xl p-5 text-white flex flex-col justify-between relative overflow-hidden">
+                                  <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
+                                  {/* Cercle animé */}
+                                  <div className="absolute -right-6 -bottom-6 w-24 h-24 bg-blue-500 blur-[40px] opacity-40 animate-pulse"></div>
+                                  
+                                  <div className="relative z-10">
+                                      <p className="text-[10px] font-mono text-gray-400 uppercase mb-1">ONORA CORE</p>
+                                      <p className="text-sm font-medium text-gray-200">Processing Data...</p>
+                                  </div>
+
+                                  <div className="relative z-10 font-mono text-[9px] text-green-400 space-y-1 opacity-80">
+                                      <p>> Analyze_Competitors.exe</p>
+                                      <p>> Optimization_Complete</p>
+                                      <p className="animate-pulse">> Awaiting User Command_</p>
+                                  </div>
+                              </div>
+
+                          </div>
+                      </div>
+
+                  </div>
+
+                  {/* MOBILE (Simplifié : Juste le Core) */}
+                  <div className="lg:hidden w-full flex items-center justify-center mt-6">
+                      <div className="w-full max-w-xs bg-white/40 backdrop-blur-xl border border-white/50 rounded-2xl p-6 shadow-xl">
+                          <div className="flex items-center gap-4 mb-4">
+                              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
+                              </div>
+                              <div>
+                                  <p className="font-bold text-gray-900">Dashboard IA</p>
+                                  <p className="text-xs text-gray-500">Votre business en autopilot.</p>
+                              </div>
+                          </div>
+                          <div className="space-y-2">
+                             <div className="flex justify-between text-xs font-medium text-gray-700">
+                                 <span>Traffic</span>
+                                 <span className="text-green-600">+24%</span>
+                             </div>
+                             <div className="h-1.5 w-full bg-gray-200 rounded-full"><div className="h-full w-[70%] bg-blue-500 rounded-full"></div></div>
+                             
+                             <div className="flex justify-between text-xs font-medium text-gray-700 mt-2">
+                                 <span>Leads</span>
+                                 <span className="text-green-600">+12%</span>
+                             </div>
+                             <div className="h-1.5 w-full bg-gray-200 rounded-full"><div className="h-full w-[50%] bg-purple-500 rounded-full"></div></div>
+                          </div>
+                      </div>
+                  </div>
+
+                </div>
+              </VisionBubble>
+            </section>
 
             {/* --- SLIDE 2 --- */}
             <section className="w-full h-full flex-shrink-0 snap-center px-8">
